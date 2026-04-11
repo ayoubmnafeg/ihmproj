@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sovereign Ledger | Anonymous Discourse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#fff7f6",
+                        "surface-container": "#e8eff3",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#d9e4ea",
+                        "surface": "#f7f9fb",
+                        "tertiary-fixed": "#dfd5f7",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-on-surface": "#9a9d9f",
+                        "tertiary-container": "#dfd5f7",
+                        "on-secondary": "#f8f8ff",
+                        "on-primary-fixed": "#0732a3",
+                        "secondary-fixed": "#d5e3fc",
+                        "background": "#f7f9fb",
+                        "secondary": "#526074",
+                        "secondary-fixed-dim": "#c7d5ed",
+                        "on-surface": "#2a3439",
+                        "on-primary-container": "#2747b6",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "on-tertiary-fixed": "#3c3650",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-container-low": "#f0f4f7",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "outline": "#717c82",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#566166",
+                        "error": "#9f403d",
+                        "surface-dim": "#cfdce3",
+                        "on-background": "#2a3439",
+                        "surface-tint": "#3755c3",
+                        "on-secondary-fixed": "#324053",
+                        "inverse-primary": "#6d89fa",
+                        "tertiary": "#625b77",
+                        "on-tertiary-container": "#4f4964",
+                        "on-primary": "#f8f7ff",
+                        "primary": "#3755c3",
+                        "primary-fixed": "#dde1ff",
+                        "primary-dim": "#2848b7",
+                        "tertiary-dim": "#564f6b",
+                        "error-container": "#fe8983",
+                        "on-tertiary": "#fdf7ff",
+                        "surface-container-high": "#e1e9ee",
+                        "on-secondary-fixed-variant": "#4e5c71",
+                        "error-dim": "#4e0309",
+                        "outline-variant": "#a9b4b9",
+                        "primary-container": "#dde1ff",
+                        "secondary-dim": "#465468",
+                        "on-error-container": "#752121",
+                        "on-secondary-container": "#455367",
+                        "secondary-container": "#d5e3fc",
+                        "primary-fixed-dim": "#cad2ff",
+                        "on-primary-fixed-variant": "#3352c0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #3755c3 0%, #2848b7 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-xl shadow-sm flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tight text-slate-900">Sovereign Ledger</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-blue-700 font-bold border-b-2 border-blue-700 label-md tracking-wider" href="#">Explore</a>
+<a class="text-slate-600 font-medium hover:text-blue-600 transition-colors label-md tracking-wider" href="#">Trending</a>
+<a class="text-slate-600 font-medium hover:text-blue-600 transition-colors label-md tracking-wider" href="#">Latest</a>
+</div>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="w-full bg-surface-container-high border-none rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Search the ledger..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-600 hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-slate-600 hover:text-primary transition-colors">shield_person</button>
+<div class="h-6 w-[1px] bg-outline-variant/30 mx-2"></div>
+<button class="text-slate-600 font-medium hover:text-blue-600 transition-colors px-4 py-2">Login</button>
+<button class="btn-gradient text-on-primary px-6 py-2 rounded-xl font-bold transition-all scale-95 active:opacity-80">Create Post</button>
+</div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col p-4 gap-2 h-[calc(100vh-4rem)] w-64 fixed bg-slate-100/50 backdrop-blur-xl">
+<div class="mb-6 px-4 py-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div>
+<p class="text-lg font-black text-slate-900 leading-tight">The Ledger</p>
+<p class="text-xs text-slate-500 font-medium">Governance Portal</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-white/50 text-blue-700 font-semibold rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/50 rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="text-sm font-medium">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/50 rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="text-sm font-medium">Bookmarks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/50 rounded-xl hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="text-sm font-medium">Moderation</span>
+</a>
+</div>
+<div class="mt-auto pt-6 border-t border-transparent flex flex-col gap-1">
+<button class="w-full bg-secondary-container text-on-secondary-container rounded-xl py-3 px-4 flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">sensors</span>
+<span class="text-xs font-bold uppercase tracking-wider">System Status</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-64 p-8">
+<header class="max-w-4xl mx-auto mb-12">
+<h1 class="text-5xl font-extrabold tracking-tight text-on-surface mb-4">Architectural Whisper</h1>
+<p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed">Secure discourse through authoritative minimalism. Your identity is protected by the structure of the interface.</p>
+</header>
+<!-- Feed Grid -->
+<div class="max-w-4xl mx-auto flex flex-col gap-8">
+<!-- Post Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:translate-y-[-2px] group">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person_off</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Anonymous Resident</p>
+<p class="text-xs text-on-surface-variant">Posted in <span class="text-primary font-medium">#UrbanPlanning</span> • 2h ago</p>
+</div>
+</div>
+<h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">The paradox of density in modern high-rises</h2>
+<p class="text-on-surface-variant leading-relaxed mb-6">
+                        We often talk about vertical living as a solution to urban sprawl, but we rarely discuss the social isolation it mandates. When we don't share hallways or porches, the architectural design creates a digital-only social fabric. How do we reclaim communal space without sacrificing the anonymity we cherish in the city?
+                    </p>
+<div class="flex items-center justify-between pt-6 border-t border-surface-container">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-primary-container/20">thumb_up</button>
+<span class="text-sm font-bold text-on-surface-variant">1.2k</span>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2 rounded-full hover:bg-error-container/20">thumb_down</button>
+</div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-primary-container/20">
+<span class="material-symbols-outlined">mode_comment</span>
+<span class="text-sm font-bold">142</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2">bookmark</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2">report</button>
+</div>
+</div>
+</article>
+<!-- Post Card 2 (With Image) -->
+<article class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:translate-y-[-2px] group">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person_off</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Digital Ghost</p>
+<p class="text-xs text-on-surface-variant">Posted in <span class="text-primary font-medium">#CyberSecurity</span> • 4h ago</p>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-6 mb-6">
+<div class="flex-1">
+<h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Quantum resistance and the ledger</h2>
+<p class="text-on-surface-variant leading-relaxed mb-4">
+                                As we move closer to viable quantum computing, the standard encryption protocols we rely on for anonymity will become the very chains that expose us. We need to start pivoting to lattice-based cryptography before the harvest-now-decrypt-later attacks become permanent.
+                            </p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-xs font-bold rounded-full">CRYPTO</span>
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-xs font-bold rounded-full">PRIVACY</span>
+</div>
+</div>
+<div class="md:w-1/3">
+<div class="w-full h-48 rounded-xl overflow-hidden bg-surface-container">
+<img alt="abstract representation of digital encryption" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500" data-alt="abstract artistic representation of digital encryption with glowing blue and purple nodes connected by thin white light lines on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeVBd2A-LzJYnV2YHYhKEWeFtQZ_uoLVfw-ndlNBTOX89LXjqeEzdETiYBq1vTJhus4H6VNRjvUMQwxt8H_6gbfcs3bbN6HtyFbMs5yTkgDb_PJwCDCRbOEZstnSTnA9xX3IEUefzDT1OuJ1zn2eq59cYuW6eLA5F5OdkCSq3i_g3beWZk8_eJgIq4pSnC0ImdrkN_0NdEyKoLnBPlLufRxaBMkM55-Vh_hddNvnUy1I6SegzSjOzosAooMesku6VI-lQK_UmfJJ-y"/>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-surface-container">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2">thumb_up</button>
+<span class="text-sm font-bold text-on-surface-variant">856</span>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2">thumb_down</button>
+</div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors p-2">
+<span class="material-symbols-outlined">mode_comment</span>
+<span class="text-sm font-bold">56</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2">bookmark</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2">report</button>
+</div>
+</div>
+</article>
+<!-- Post Card 3 -->
+<article class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:translate-y-[-2px] group">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person_off</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Truth Seeker</p>
+<p class="text-xs text-on-surface-variant">Posted in <span class="text-primary font-medium">#Philosophy</span> • 6h ago</p>
+</div>
+</div>
+<h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Why total anonymity is a prerequisite for total honesty</h2>
+<p class="text-on-surface-variant leading-relaxed mb-6">
+                        When we attach our names to our ideas, we are no longer defending the idea; we are defending our social status. Only when the speaker is absent can the speech be judged purely on its merits.
+                    </p>
+<div class="flex items-center justify-between pt-6 border-t border-surface-container">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2">thumb_up</button>
+<span class="text-sm font-bold text-on-surface-variant">3.4k</span>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2">thumb_down</button>
+</div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors p-2">
+<span class="material-symbols-outlined">mode_comment</span>
+<span class="text-sm font-bold">312</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2">bookmark</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-error transition-colors p-2">report</button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Right Sidebar (Trends/Stats) -->
+<aside class="hidden xl:block w-80 p-8 sticky top-16 h-fit">
+<div class="bg-surface-container-low rounded-xl p-6 mb-6">
+<h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Trending Topics</h3>
+<ul class="space-y-4">
+<li>
+<a class="group block" href="#">
+<p class="text-xs text-on-surface-variant mb-1">#GlobalPolitics</p>
+<p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">The shifting sands of the Arctic council</p>
+<p class="text-xs text-on-surface-variant">2.4k active participants</p>
+</a>
+</li>
+<li>
+<a class="group block" href="#">
+<p class="text-xs text-on-surface-variant mb-1">#MedTech</p>
+<p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Longevity protocols: Fact vs Fiction</p>
+<p class="text-xs text-on-surface-variant">1.8k active participants</p>
+</a>
+</li>
+<li>
+<a class="group block" href="#">
+<p class="text-xs text-on-surface-variant mb-1">#DeepWeb</p>
+<p class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">New onion protocols in testing</p>
+<p class="text-xs text-on-surface-variant">900 active participants</p>
+</a>
+</li>
+</ul>
+</div>
+<div class="bg-primary/5 rounded-xl p-6 border border-primary/10">
+<h3 class="text-sm font-black text-primary uppercase tracking-widest mb-2">Governance Alert</h3>
+<p class="text-sm text-on-surface-variant leading-snug mb-4">A new protocol amendment has been proposed for the reputation weighting system. Review it in the Admin Panel.</p>
+<button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity">Review Proposals</button>
+</div>
+</aside>
+</div>
+<!-- Mobile Navigation (Footer style for small screens) -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-surface-container px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold">Explore</span>
+</button>
+<button class="flex flex-col items-center gap-1 bg-primary text-white p-3 rounded-full -translate-y-8 shadow-lg">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[10px] font-bold">Alerts</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</div>
+</body></html>

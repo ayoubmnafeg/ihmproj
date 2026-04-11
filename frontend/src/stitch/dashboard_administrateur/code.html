@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sovereign Ledger - Admin Dashboard</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#fff7f6",
+                    "surface-container": "#e8eff3",
+                    "surface-bright": "#f7f9fb",
+                    "surface-variant": "#d9e4ea",
+                    "surface": "#f7f9fb",
+                    "tertiary-fixed": "#dfd5f7",
+                    "inverse-surface": "#0b0f10",
+                    "inverse-on-surface": "#9a9d9f",
+                    "tertiary-container": "#dfd5f7",
+                    "on-secondary": "#f8f8ff",
+                    "on-primary-fixed": "#0732a3",
+                    "secondary-fixed": "#d5e3fc",
+                    "background": "#f7f9fb",
+                    "secondary": "#526074",
+                    "secondary-fixed-dim": "#c7d5ed",
+                    "on-surface": "#2a3439",
+                    "on-primary-container": "#2747b6",
+                    "on-tertiary-fixed-variant": "#59526e",
+                    "on-tertiary-fixed": "#3c3650",
+                    "surface-container-highest": "#d9e4ea",
+                    "surface-container-low": "#f0f4f7",
+                    "tertiary-fixed-dim": "#d0c7e8",
+                    "outline": "#717c82",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#566166",
+                    "error": "#9f403d",
+                    "surface-dim": "#cfdce3",
+                    "on-background": "#2a3439",
+                    "surface-tint": "#3755c3",
+                    "on-secondary-fixed": "#324053",
+                    "inverse-primary": "#6d89fa",
+                    "tertiary": "#625b77",
+                    "on-tertiary-container": "#4f4964",
+                    "on-primary": "#f8f7ff",
+                    "primary": "#3755c3",
+                    "primary-fixed": "#dde1ff",
+                    "primary-dim": "#2848b7",
+                    "tertiary-dim": "#564f6b",
+                    "error-container": "#fe8983",
+                    "on-tertiary": "#fdf7ff",
+                    "surface-container-high": "#e1e9ee",
+                    "on-secondary-fixed-variant": "#4e5c71",
+                    "error-dim": "#4e0309",
+                    "outline-variant": "#a9b4b9",
+                    "primary-container": "#dde1ff",
+                    "secondary-dim": "#465468",
+                    "on-error-container": "#752121",
+                    "on-secondary-container": "#455367",
+                    "secondary-container": "#d5e3fc",
+                    "primary-fixed-dim": "#cad2ff",
+                    "on-primary-fixed-variant": "#3352c0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.75rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bg-primary-gradient {
+            background: linear-gradient(135deg, #3755c3 0%, #2848b7 100%);
+        }
+        /* No-Line Rule: boundaries defined by tonal shifts */
+        .glass-sidebar {
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex h-screen w-64 glass-sidebar bg-slate-100/50 dark:bg-slate-900/50 flex-col p-4 gap-2 h-full">
+<!-- Header Branding -->
+<div class="px-4 py-8 mb-4">
+<h1 class="text-lg font-black text-slate-900 dark:text-slate-100 leading-none">The Ledger</h1>
+<p class="text-xs text-slate-500 font-medium tracking-widest mt-1">Governance Portal</p>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:translate-x-1 transition-transform duration-200 rounded-xl hover:bg-slate-200/50" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:translate-x-1 transition-transform duration-200 rounded-xl hover:bg-slate-200/50" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-sm font-medium">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:translate-x-1 transition-transform duration-200 rounded-xl hover:bg-slate-200/50" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-sm font-medium">Bookmarks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:translate-x-1 transition-transform duration-200 rounded-xl hover:bg-slate-200/50" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="text-sm font-medium">Moderation</span>
+</a>
+<!-- Active State: Admin Panel -->
+<a class="flex items-center gap-3 px-4 py-3 bg-white/50 dark:bg-slate-800/50 text-blue-700 dark:text-blue-400 font-semibold rounded-xl translate-x-1" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="text-sm font-medium">Admin Panel</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:translate-x-1 transition-transform duration-200 rounded-xl hover:bg-slate-200/50" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-sm font-medium">Audit Logs</span>
+</a>
+</nav>
+<!-- CTA & Footer -->
+<div class="mt-auto space-y-1">
+<button class="w-full mb-6 flex items-center justify-between px-4 py-3 bg-surface-container rounded-xl text-on-secondary-container text-xs font-bold uppercase tracking-tighter">
+                System Status
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+</button>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<div class="px-4 py-6 flex items-center gap-3 border-t-0 mt-2">
+<div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional portrait of an administrative user with clean lighting and neutral studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXjBfQtIli-eBQFmRhNVPJmyxSAuJQI9ZAMVKpmno6-JMTjRLubEBB4SklD_YoynZQKVb-ah8upichKLBUWjKgyWFVBBsknb5OlvnriUlbYIx_7sdxBIRDWoeech6CgxaEmCFodN2yriy84uBIUtNJlr0EPcevO0v3UVr_BHTJHhF-7joocp1FgsxeIGsbog1IpNuYKih3iMuAO3_xm3fCC9WoQes5w-hmEodFKxGrxSKqmQVyPCGj5dkvkS98TDUq1CkZ6GqyLwmn"/>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-900">Chief Auditor</p>
+<p class="text-[10px] text-slate-400">Level 4 Access</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 h-screen overflow-y-auto bg-surface-bright custom-scrollbar">
+<!-- TopAppBar (Shared Component Integration) -->
+<header class="sticky top-0 z-10 flex justify-between items-center px-8 h-16 w-full bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex items-center gap-8">
+<div class="md:hidden">
+<span class="material-symbols-outlined text-on-surface">menu</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 hidden md:block">Analytics Dashboard</h2>
+<!-- Navigation Links from JSON -->
+<nav class="hidden lg:flex gap-6">
+<a class="text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 pb-1 text-sm tracking-wider" href="#">Explore</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 dark:hover:text-blue-300 transition-colors text-sm tracking-wider" href="#">Trending</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 dark:hover:text-blue-300 transition-colors text-sm tracking-wider" href="#">Latest</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-slate-500 hover:text-primary transition-colors">shield_person</button>
+<button class="bg-primary-gradient text-white px-5 py-2 rounded-xl text-xs font-bold tracking-wide shadow-lg shadow-primary/20 hover:scale-95 transition-all">Create Post</button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<p class="text-primary font-bold text-xs uppercase tracking-[0.2em] mb-2">Platform Overview</p>
+<h1 class="text-4xl font-extrabold text-on-surface leading-tight">System Sovereignty</h1>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                        Last 30 Days
+                    </button>
+<button class="bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Report
+                    </button>
+</div>
+</section>
+<!-- Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-primary-container/30 rounded-lg">
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Active Anons</p>
+<h3 class="text-2xl font-extrabold mt-1">42,892</h3>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-tertiary-container/30 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">forum</span>
+</div>
+<span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-full">+8.2%</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Daily Threads</p>
+<h3 class="text-2xl font-extrabold mt-1">1,402</h3>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-error-container/20 rounded-lg">
+<span class="material-symbols-outlined text-error">report</span>
+</div>
+<span class="text-error text-xs font-bold bg-error-container/10 px-2 py-1 rounded-full">+24%</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Pending Flags</p>
+<h3 class="text-2xl font-extrabold mt-1">158</h3>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-secondary-container/50 rounded-lg">
+<span class="material-symbols-outlined text-secondary">security</span>
+</div>
+<span class="text-slate-500 text-xs font-bold bg-slate-100 px-2 py-1 rounded-full">Stable</span>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">Filter Hits</p>
+<h3 class="text-2xl font-extrabold mt-1">12,401</h3>
+</div>
+</div>
+</section>
+<!-- Main Analytics Area -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Large Chart Placeholder (Tonal Layering) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl min-h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-lg font-bold">Activity Projection</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-xs font-medium text-on-surface-variant">Posts</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-tertiary"></span>
+<span class="text-xs font-medium text-on-surface-variant">Votes</span>
+</div>
+</div>
+</div>
+<div class="flex-1 relative flex items-end gap-2 px-2">
+<!-- Simulated Chart Visuals -->
+<div class="flex-1 bg-surface-container-low h-32 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-12 rounded-t-lg transition-all group-hover:h-16"></div>
+</div>
+<div class="flex-1 bg-surface-container-low h-48 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-24 rounded-t-lg transition-all group-hover:h-32"></div>
+</div>
+<div class="flex-1 bg-surface-container-low h-64 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-40 rounded-t-lg transition-all group-hover:h-48"></div>
+</div>
+<div class="flex-1 bg-surface-container-low h-40 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-20 rounded-t-lg transition-all group-hover:h-24"></div>
+</div>
+<div class="flex-1 bg-surface-container-low h-72 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-56 rounded-t-lg transition-all group-hover:h-64"></div>
+</div>
+<div class="flex-1 bg-surface-container-low h-52 rounded-t-lg relative group transition-all hover:bg-primary-container/40">
+<div class="absolute bottom-0 w-full bg-primary h-32 rounded-t-lg transition-all group-hover:h-40"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4 px-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+</div>
+</div>
+<!-- Side Panels (Asymmetric Column) -->
+<div class="space-y-6">
+<!-- Reported Content Preview -->
+<div class="bg-surface-container-lowest p-6 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-bold uppercase tracking-widest">Report Queue</h3>
+<a class="text-primary text-xs font-bold hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-surface-container-low rounded-xl flex gap-3 items-start">
+<span class="material-symbols-outlined text-error text-lg">warning</span>
+<div>
+<p class="text-xs font-bold leading-tight">Doxxing Attempt in /r/politics</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Reported 2m ago by anon_77</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl flex gap-3 items-start">
+<span class="material-symbols-outlined text-secondary text-lg">error_outline</span>
+<div>
+<p class="text-xs font-bold leading-tight">Spam Bot - Crypto Links</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Reported 14m ago by System</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl flex gap-3 items-start opacity-60">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">check_circle</span>
+<div>
+<p class="text-xs font-bold leading-tight line-through">Offensive Avatar</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Dismissed by Mod_Luna</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Category Management -->
+<div class="bg-primary-gradient p-6 rounded-xl text-white shadow-xl shadow-primary/30">
+<h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">category</span>
+                            Top Categories
+                        </h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+<span class="text-xs font-medium">/r/deep-state</span>
+<span class="text-xs font-bold">12.4k</span>
+</div>
+<div class="flex justify-between items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+<span class="text-xs font-medium">/r/tech-leaks</span>
+<span class="text-xs font-bold">8.1k</span>
+</div>
+<div class="flex justify-between items-center bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+<span class="text-xs font-medium">/r/whistleblower</span>
+<span class="text-xs font-bold">5.3k</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-xs font-bold bg-white text-primary rounded-lg hover:bg-white/90 transition-colors">
+                            Manage All
+                        </button>
+</div>
+</div>
+</section>
+<!-- Bottom Row: Statistics & Mod Performance -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Word Filters Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4">Live Filter Hits</h3>
+<div class="flex-1 space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold px-2 py-1 bg-surface-container text-on-surface rounded">Toxicity</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 65%"></div>
+</div>
+<span class="text-[10px] font-bold">65%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold px-2 py-1 bg-surface-container text-on-surface rounded">Spam</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 42%"></div>
+</div>
+<span class="text-[10px] font-bold">42%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold px-2 py-1 bg-surface-container text-on-surface rounded">Doxxing</span>
+<div class="flex-1 mx-4 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full" style="width: 12%"></div>
+</div>
+<span class="text-[10px] font-bold">12%</span>
+</div>
+</div>
+</div>
+<!-- Admin Action History -->
+<div class="bg-surface-container-lowest p-6 rounded-xl">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4">Audit Snippet</h3>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">block</span>
+</div>
+<div>
+<p class="text-xs font-bold">User anon_492 banned</p>
+<p class="text-[10px] text-on-surface-variant">By Auditor_12 • 5m ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">history</span>
+</div>
+<div>
+<p class="text-xs font-bold">Filter "Election" updated</p>
+<p class="text-[10px] text-on-surface-variant">By System • 1h ago</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Mod Requests -->
+<div class="bg-surface-container-high p-6 rounded-xl border-0">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold">Mod Applications</h3>
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full">3 New</span>
+</div>
+<div class="relative overflow-hidden group p-4 rounded-xl bg-surface-container-lowest transition-transform hover:-translate-y-1">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-bold text-xs">A</div>
+<p class="text-xs font-bold">Anon_889</p>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-2 italic">"I have 5 years experience moderating decentralized communities and understanding..."</p>
+<div class="mt-4 flex gap-2">
+<button class="flex-1 py-1.5 bg-primary text-white text-[10px] font-bold rounded-lg">Review</button>
+<button class="flex-1 py-1.5 bg-surface-container text-on-surface text-[10px] font-bold rounded-lg">Deny</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- FAB for quick Admin Actions -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary-gradient text-white rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

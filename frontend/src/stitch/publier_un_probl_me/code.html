@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Post | Sovereign Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#fff7f6",
+                        "surface-container": "#e8eff3",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#d9e4ea",
+                        "surface": "#f7f9fb",
+                        "tertiary-fixed": "#dfd5f7",
+                        "inverse-surface": "#0b0f10",
+                        "inverse-on-surface": "#9a9d9f",
+                        "tertiary-container": "#dfd5f7",
+                        "on-secondary": "#f8f8ff",
+                        "on-primary-fixed": "#0732a3",
+                        "secondary-fixed": "#d5e3fc",
+                        "background": "#f7f9fb",
+                        "secondary": "#526074",
+                        "secondary-fixed-dim": "#c7d5ed",
+                        "on-surface": "#2a3439",
+                        "on-primary-container": "#2747b6",
+                        "on-tertiary-fixed-variant": "#59526e",
+                        "on-tertiary-fixed": "#3c3650",
+                        "surface-container-highest": "#d9e4ea",
+                        "surface-container-low": "#f0f4f7",
+                        "tertiary-fixed-dim": "#d0c7e8",
+                        "outline": "#717c82",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#566166",
+                        "error": "#9f403d",
+                        "surface-dim": "#cfdce3",
+                        "on-background": "#2a3439",
+                        "surface-tint": "#3755c3",
+                        "on-secondary-fixed": "#324053",
+                        "inverse-primary": "#6d89fa",
+                        "tertiary": "#625b77",
+                        "on-tertiary-container": "#4f4964",
+                        "on-primary": "#f8f7ff",
+                        "primary": "#3755c3",
+                        "primary-fixed": "#dde1ff",
+                        "primary-dim": "#2848b7",
+                        "tertiary-dim": "#564f6b",
+                        "error-container": "#fe8983",
+                        "on-tertiary": "#fdf7ff",
+                        "surface-container-high": "#e1e9ee",
+                        "on-secondary-fixed-variant": "#4e5c71",
+                        "error-dim": "#4e0309",
+                        "outline-variant": "#a9b4b9",
+                        "primary-container": "#dde1ff",
+                        "secondary-dim": "#465468",
+                        "on-error-container": "#752121",
+                        "on-secondary-container": "#455367",
+                        "secondary-container": "#d5e3fc",
+                        "primary-fixed-dim": "#cad2ff",
+                        "on-primary-fixed-variant": "#3352c0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #3755c3 0%, #2848b7 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopNavBar Shell -->
+<nav class="bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Sovereign Ledger</span>
+<div class="hidden md:flex gap-6">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 transition-colors" href="#">Explore</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 transition-colors" href="#">Trending</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-blue-600 transition-colors" href="#">Latest</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-blue-700 dark:text-blue-400 font-bold border-b-2 border-blue-700 px-2 py-1 scale-95 active:opacity-80 transition-all">Create Post</button>
+<div class="flex items-center gap-3 ml-4">
+<span class="material-symbols-outlined text-slate-600" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-600" data-icon="shield_person">shield_person</span>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="User profile" data-alt="close-up portrait of a professional individual with soft studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMbWowWbLWxaTcNiXu20ADUdWydh659eTDsXyAlxpfhIrFEtzAruhiB_aq-D9PVt9PN3Lt1JYd-MqyDx3YPjex-57C98ZelL1qFxzTvE-_tethgBSlH01a22ilJJ_mRMD8HlAFb60-U7HmDyeFirsSNtDv7frzSp37kvnKWqhDDsx7DCeYGDCQK-8HqCFTK8tWFq6wRTpcfxLxTKwVQ6A1e9HG3X-z59AqykcNjMqt1z02bCCBro6vFw-oIdM5BOkW8M2HRVeAc3TB"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-12 px-6 max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
+<!-- Form Section: Left Column -->
+<div class="flex-1">
+<header class="mb-10">
+<h1 class="text-5xl font-extrabold tracking-tight text-on-surface mb-3">Initialize Entry</h1>
+<p class="text-on-surface-variant font-body text-lg max-w-lg leading-relaxed">
+                    Securely broadcast your findings to the ledger. Your identity remains protected by Sovereign architecture.
+                </p>
+</header>
+<form class="space-y-8">
+<!-- Title & Description -->
+<div class="space-y-6">
+<div class="group">
+<label class="block text-sm font-label font-semibold tracking-wider text-on-surface-variant mb-2 uppercase">Subject Headline</label>
+<input class="w-full bg-surface-container-high border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 transition-all px-0 py-4 text-xl font-headline font-bold text-on-surface placeholder:text-outline-variant/50" placeholder="A concise summary of the observation..." type="text"/>
+</div>
+<div class="group">
+<label class="block text-sm font-label font-semibold tracking-wider text-on-surface-variant mb-2 uppercase">Problem Description</label>
+<textarea class="w-full bg-surface-container-high border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 transition-all p-4 text-on-surface leading-relaxed placeholder:text-outline-variant/50 rounded-xl" placeholder="Detail the technical specifications, anomalies, or discourse points here. Use professional terminology for clarity..." rows="6"></textarea>
+</div>
+</div>
+<!-- Category Multi-Select -->
+<div>
+<label class="block text-sm font-label font-semibold tracking-wider text-on-surface-variant mb-4 uppercase">Taxonomy Categories</label>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="px-4 py-2 bg-primary-container text-on-primary-container rounded-full text-sm font-medium flex items-center gap-2">
+                            Governance <button class="material-symbols-outlined text-sm" type="button">close</button>
+</span>
+<span class="px-4 py-2 bg-primary-container text-on-primary-container rounded-full text-sm font-medium flex items-center gap-2">
+                            Audit Trace <button class="material-symbols-outlined text-sm" type="button">close</button>
+</span>
+</div>
+<div class="relative">
+<select class="w-full bg-surface-container-high border-0 rounded-xl py-3 px-4 text-on-surface appearance-none focus:ring-2 focus:ring-primary/20">
+<option value="">Select additional categories...</option>
+<option>System Infrastructure</option>
+<option>Policy Violation</option>
+<option>Security Patch</option>
+<option>Financial Transparency</option>
+</select>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined pointer-events-none text-outline">expand_more</span>
+</div>
+</div>
+<!-- Image Upload Zone -->
+<div>
+<label class="block text-sm font-label font-semibold tracking-wider text-on-surface-variant mb-4 uppercase">Visual Evidence (Optional)</label>
+<div class="border-2 border-dashed border-surface-variant rounded-xl p-12 text-center bg-surface-container-low/50 hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="flex flex-col items-center gap-3">
+<div class="h-16 w-16 rounded-full bg-surface-container-highest flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">cloud_upload</span>
+</div>
+<p class="text-on-surface font-semibold">Drop encrypted assets or click to browse</p>
+<p class="text-on-surface-variant text-sm">Supports PNG, JPG, or RAW up to 25MB</p>
+</div>
+</div>
+</div>
+<!-- Anonymity Toggle -->
+<div class="flex items-center justify-between p-6 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-tertiary-container text-on-tertiary-container rounded-lg">
+<span class="material-symbols-outlined">incognito</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Confirm Anonymity</p>
+<p class="text-sm text-on-surface-variant">Your user ID will be hashed and replaced with a unique alias.</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex gap-4 pt-4">
+<button class="flex-1 btn-gradient text-white font-headline font-extrabold py-4 rounded-xl text-lg shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity" type="submit">
+                        Publish Entry
+                    </button>
+<button class="px-8 py-4 bg-surface-container-high text-on-surface font-bold rounded-xl hover:bg-surface-variant transition-colors" type="button">
+                        Save Draft
+                    </button>
+</div>
+</form>
+</div>
+<!-- Sidebar / Guidance: Right Column -->
+<aside class="md:w-80 space-y-8">
+<div class="p-8 bg-surface-container-low rounded-xl">
+<h3 class="font-headline font-bold text-xl mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+                    Ledger Protocols
+                </h3>
+<ul class="space-y-4 text-sm text-on-surface-variant leading-relaxed font-body">
+<li class="flex gap-3">
+<span class="text-primary font-bold">01.</span>
+                        Avoid direct mentions of proprietary identities or personal names.
+                    </li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">02.</span>
+                        Ensure all visual evidence is scrubbed of metadata before upload.
+                    </li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">03.</span>
+                        Moderation logs will reflect any violations of the Sovereign Privacy Act.
+                    </li>
+</ul>
+</div>
+<!-- Contextual Card -->
+<div class="relative h-64 rounded-xl overflow-hidden group">
+<img alt="Security concept" class="absolute inset-0 object-cover w-full h-full brightness-50 group-hover:scale-110 transition-transform duration-700" data-alt="abstract digital encryption nodes with glowing blue lines connecting geometric patterns on dark futuristic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7DQbZly1DxhvtUa6AXD_OFCD2x861vjYk32q5cOimT06bG7MElvrffJr4_b7OYHth7A_cWb6hq01uDO0HDHnyMlrJOt5AuB-slGyDkYK3FpmRS7yeW8I9eA9CxBZA-HH1aX0LdZuT5-_z7ipIwatw06JGIqLa8ouu5uWqBpm2bHThzJPgW1YKo6WLEiDZtG05HBlh0wHFHA2HU4eklccatNXY1YSJPYZCcBUlYVysnUmifFnPh61cZ2MgAZrOHXvWFqipxO5GligY"/>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<p class="text-white/70 text-xs font-label tracking-widest uppercase mb-1">Architecture</p>
+<h4 class="text-white font-headline font-bold text-lg">Quantum-Leap Encryption</h4>
+<p class="text-white/80 text-sm mt-2 font-body">Every post is fragmented across 4096 nodes.</p>
+</div>
+</div>
+<!-- Admin Shortcut Panel -->
+<div class="p-6 bg-surface-container-high rounded-xl backdrop-blur-md bg-opacity-40">
+<div class="flex items-center gap-3 mb-6">
+<div class="h-10 w-10 bg-on-surface text-surface rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">history_edu</span>
+</div>
+<div>
+<p class="font-bold text-sm">The Ledger</p>
+<p class="text-xs text-on-surface-variant">Governance Portal</p>
+</div>
+</div>
+<button class="w-full py-2 bg-white/50 text-primary text-xs font-bold rounded-lg border-2 border-primary/10 hover:bg-white transition-colors">
+                    View System Status
+                </button>
+</div>
+</aside>
+</main>
+<!-- SideNavBar (Suppressed on Mobile, logic for Desktop) -->
+<div class="hidden lg:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-20 flex-col items-center py-8 gap-8 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-xl border-r-0">
+<div class="p-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="p-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined">grid_view</span>
+</div>
+<div class="p-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined">bookmark</span>
+</div>
+<div class="mt-auto space-y-6 flex flex-col items-center">
+<div class="p-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<div class="p-3 text-slate-500 hover:bg-slate-200/50 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+</div>
+</div>
+</div>
+</body></html>

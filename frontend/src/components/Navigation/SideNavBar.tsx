@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/auth/use-auth";
 
 export function SideNavBar() {
   const pathname = usePathname();
+  const { status } = useAuth();
 
   const navItems = [
     { name: "Home", href: "/", icon: "home" },
-    { name: "Categories", href: "/categories", icon: "grid_view" },
-    { name: "Bookmarks", href: "/bookmarks", icon: "bookmark" },
-    { name: "Moderation", href: "/moderation", icon: "gavel" },
-    { name: "Admin Panel", href: "/dashboard", icon: "admin_panel_settings" },
+    ...(status === "authenticated"
+      ? [{ name: "Create", href: "/create", icon: "add_circle" }]
+      : []),
   ];
 
   return (
@@ -19,13 +20,15 @@ export function SideNavBar() {
       <div className="mb-6 px-4 py-2 mt-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-primary">
-              account_balance
-            </span>
+            <span className="material-symbols-outlined text-primary">forum</span>
           </div>
           <div>
-            <p className="text-lg font-black text-slate-900 leading-tight headline">The Ledger</p>
-            <p className="text-xs text-slate-500 font-medium tracking-widest mt-1">Governance Portal</p>
+            <p className="text-lg font-black text-slate-900 leading-tight headline">
+              The Ledger
+            </p>
+            <p className="text-xs text-slate-500 font-medium tracking-widest mt-1">
+              Public Feed
+            </p>
           </div>
         </div>
       </div>
@@ -33,6 +36,7 @@ export function SideNavBar() {
       <div className="flex flex-col gap-1 flex-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
+
           return (
             <Link
               key={item.name}
@@ -55,20 +59,6 @@ export function SideNavBar() {
           System Status
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
         </button>
-        <Link
-          href="/settings"
-          className="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-200/50 hover:text-slate-700 rounded-xl transition-all"
-        >
-          <span className="material-symbols-outlined">settings</span>
-          <span className="text-sm font-medium">Settings</span>
-        </Link>
-        <Link
-          href="/support"
-          className="flex items-center gap-3 px-4 py-2 text-slate-500 hover:bg-slate-200/50 hover:text-slate-700 rounded-xl transition-all"
-        >
-          <span className="material-symbols-outlined">help</span>
-          <span className="text-sm font-medium">Support</span>
-        </Link>
       </div>
     </aside>
   );

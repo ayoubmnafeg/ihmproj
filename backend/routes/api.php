@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 // ── Public ──────────────────────────────────────────────────────────────────
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login',    [AuthController::class, 'login']);
+Route::get('/publications',           [PublicationController::class, 'index']);
+Route::get('/publications/{publication}',    [PublicationController::class, 'show']);
 
 // ── Authenticated ────────────────────────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
@@ -29,9 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update']);
 
     // Publications
-    Route::get('/publications',           [PublicationController::class, 'index']);
     Route::post('/publications',          [PublicationController::class, 'store']);
-    Route::get('/publications/{publication}',    [PublicationController::class, 'show']);
     Route::patch('/publications/{publication}',  [PublicationController::class, 'update']);
     Route::delete('/publications/{publication}', [PublicationController::class, 'destroy']);
 

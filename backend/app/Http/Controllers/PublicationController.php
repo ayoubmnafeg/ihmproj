@@ -6,6 +6,7 @@ use App\Models\Content;
 use App\Models\Publication;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PublicationController extends Controller
 {
@@ -34,7 +35,13 @@ class PublicationController extends Controller
             'author_id' => $request->user()->id,
         ]);
 
-        $publication = Publication::create(array_merge(['id' => $content->id], $data));
+        DB::table('publications')->insert(array_merge([
+            'id' => $content->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ], $data));
+
+        $publication = Publication::query()->where('publications.id', $content->id)->firstOrFail();
 
         return response()->json($publication->load(['author.profile', 'category']), 201);
     }

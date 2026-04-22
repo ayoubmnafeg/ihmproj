@@ -13,7 +13,7 @@ class PublicationController extends Controller
 {
     public function index(): View
     {
-        $publications = Publication::with(['author', 'category', 'comments.author'])
+        $publications = Publication::with(['author.profile', 'category', 'comments.author.profile'])
             ->withCount('comments')
             ->where('contents.status', 'visible')
             ->latest('contents.created_at')

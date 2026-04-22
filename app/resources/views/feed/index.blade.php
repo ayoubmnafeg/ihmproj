@@ -35,86 +35,20 @@
         </div>
         <!-- loader wrapper -->
 
-        <!-- story carousel -->
-        <div class="card w-100 shadow-none bg-transparent bg-transparent-card border-0 p-0 mb-0">
-            <div class="owl-carousel category-card owl-theme overflow-hidden nav-none">
-                <div class="item">
-                    <div data-bs-toggle="modal" data-bs-target="#Modalstory" class="card w125 h200 d-block border-0 shadow-none rounded-xxxl bg-dark overflow-hidden mb-3 mt-3">
-                        <div class="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
-                            <a href="#">
-                                <span class="btn-round-lg bg-white"><i class="feather-plus font-lg"></i></span>
-                                <div class="clearfix"></div>
-                                <h4 class="fw-700 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Add Story </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div data-bs-toggle="modal" data-bs-target="#Modalstory" class="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3" style="background-image: url({{ asset('images/s-1.jpg') }});">
-                        <div class="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
-                            <a href="#">
-                                <figure class="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="{{ asset('images/user-11.png') }}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss"></figure>
-                                <div class="clearfix"></div>
-                                <h4 class="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Victor Exrixon </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div data-bs-toggle="modal" data-bs-target="#Modalstory" class="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3" style="background-image: url({{ asset('images/s-2.jpg') }});">
-                        <div class="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
-                            <a href="#">
-                                <figure class="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="{{ asset('images/user-12.png') }}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss"></figure>
-                                <div class="clearfix"></div>
-                                <h4 class="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Surfiya Zakir </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div data-bs-toggle="modal" data-bs-target="#Modalstory" class="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3" style="background-image: url({{ asset('images/s-5.jpg') }});">
-                        <div class="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
-                            <a href="#">
-                                <figure class="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="{{ asset('images/user-3.png') }}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss"></figure>
-                                <div class="clearfix"></div>
-                                <h4 class="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">David Goria </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div data-bs-toggle="modal" data-bs-target="#Modalstory" class="card w125 h200 d-block border-0 shadow-xss rounded-xxxl bg-gradiant-bottom overflow-hidden cursor-pointer mb-3 mt-3" style="background-image: url({{ asset('images/s-6.jpg') }});">
-                        <div class="card-body d-block p-3 w-100 position-absolute bottom-0 text-center">
-                            <a href="#">
-                                <figure class="avatar ms-auto me-auto mb-0 position-relative w50 z-index-1"><img src="{{ asset('images/user-2.png') }}" alt="image" class="float-right p-0 bg-white rounded-circle w-100 shadow-xss"></figure>
-                                <div class="clearfix"></div>
-                                <h4 class="fw-600 position-relative z-index-1 ls-1 font-xssss text-white mt-2 mb-1">Seary Victor </h4>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- create post -->
-        <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
-            <div class="card-body p-0">
-                <a href="#" class="font-xssss fw-600 text-grey-500 card-body p-0 d-flex align-items-center"><i class="btn-round-sm font-xs text-primary feather-edit-3 me-2 bg-greylight"></i>Create Post</a>
+        <!-- create post trigger -->
+        <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-3 pe-4 pb-3 mb-3">
+            <div class="card-body p-0 d-flex align-items-center">
+                <figure class="avatar me-3 mb-0"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#createPostModal"
+                    class="flex-grow-1 text-start bor-0 rounded-xxl p-2 ps-4 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg bg-transparent"
+                    style="cursor:pointer;">
+                    What's on your mind, {{ auth()->user()->profile->display_name ?? 'there' }}?
+                </button>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#createPostModal" class="d-flex align-items-center ms-3 text-grey-600"><i class="feather-video font-md text-danger me-1"></i></a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#createPostModal" class="d-flex align-items-center ms-2 text-grey-600"><i class="feather-image font-md text-success me-1"></i></a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#createPostModal" class="d-flex align-items-center ms-2 text-grey-600"><i class="feather-smile font-md text-warning"></i></a>
             </div>
-            <form method="POST" action="{{ route('publications.store') }}">
-                @csrf
-                <div class="card-body p-0 mt-3 position-relative">
-                    <figure class="avatar position-absolute ms-2 mt-1 top-5"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w30"></figure>
-                    <input type="text" name="title" class="bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg mb-2" placeholder="Post title" required>
-                    <textarea name="text" class="h100 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" cols="30" rows="10" placeholder="What's on your mind?" required></textarea>
-                </div>
-                <div class="card-body d-flex p-0 mt-0">
-                    <a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-danger feather-video me-2"></i><span class="d-none-xs">Live Video</span></a>
-                    <a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-success feather-image me-2"></i><span class="d-none-xs">Photo/Video</span></a>
-                    <a href="#" class="d-flex align-items-center font-xssss fw-600 ls-1 text-grey-700 text-dark pe-4"><i class="font-md text-warning feather-camera me-2"></i><span class="d-none-xs">Feeling/Activity</span></a>
-                    <button type="submit" class="ms-auto p-2 lh-20 w100 bg-primary-gradiant text-white text-center font-xssss fw-600 ls-1 rounded-xl border-0 cursor-pointer">Post</button>
-                </div>
-            </form>
         </div>
 
         <!-- publications -->
@@ -123,7 +57,7 @@
             <div class="card-body p-0 d-flex">
                 <figure class="avatar me-3"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
                 <h4 class="fw-700 text-grey-900 font-xssss mt-1">
-                    <a href="{{ route('profile.show', $publication->author_id) }}" class="text-grey-900">{{ $publication->author->name ?? 'Unknown' }}</a>
+                    <a href="{{ route('profile.show', $publication->author_id) }}" class="text-grey-900">{{ $publication->author->profile->display_name ?? 'Unknown' }}</a>
                     <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                         {{ $publication->created_at->diffForHumans() }}
                         @if($publication->category) &middot; {{ $publication->category->name }} @endif
@@ -219,7 +153,7 @@
                 <div class="d-flex align-items-start mb-2">
                     <figure class="avatar me-2 mb-0"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w30"></figure>
                     <div class="bg-greylight theme-dark-bg rounded-xxl p-2 flex-fill">
-                        <h5 class="fw-700 text-grey-900 font-xssss mb-1">{{ $comment->author->name ?? 'Unknown' }}</h5>
+                        <h5 class="fw-700 text-grey-900 font-xssss mb-1">{{ $comment->author->profile->display_name ?? 'Unknown' }}</h5>
                         <p class="fw-500 text-grey-500 font-xssss mb-0 lh-24">{{ $comment->text }}</p>
                     </div>
                     @if(auth()->id() === $comment->author_id || auth()->user()->isAdmin())
@@ -267,6 +201,7 @@
 
     <!-- right sidebar -->
     <div class="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
+
         <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
             <div class="card-body d-flex align-items-center p-4">
                 <h4 class="fw-700 mb-0 font-xssss text-grey-900">Friend Request</h4>
@@ -290,28 +225,6 @@
             </div>
         </div>
 
-        <div class="card w-100 shadow-xss rounded-xxl border-0 p-0">
-            <div class="card-body d-flex align-items-center p-4 mb-0">
-                <h4 class="fw-700 mb-0 font-xssss text-grey-900">Confirm Friend</h4>
-                <a href="{{ route('members.index') }}" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-            </div>
-            <div class="card-body bg-transparent-card d-flex p-3 bg-greylight ms-3 me-3 rounded-3">
-                <figure class="avatar me-2 mb-0"><img src="{{ asset('images/user-7.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">Anthony Daugloi <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">12 mutual friends</span></h4>
-                <a href="#" class="btn-round-sm bg-white text-grey-900 feather-chevron-right font-xss ms-auto mt-2"></a>
-            </div>
-            <div class="card-body bg-transparent-card d-flex p-3 bg-greylight m-3 rounded-3" style="margin-bottom: 0 !important;">
-                <figure class="avatar me-2 mb-0"><img src="{{ asset('images/user-8.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2"> David Agfree <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">12 mutual friends</span></h4>
-                <a href="#" class="btn-round-sm bg-white text-grey-900 feather-plus font-xss ms-auto mt-2"></a>
-            </div>
-            <div class="card-body bg-transparent-card d-flex p-3 bg-greylight m-3 rounded-3">
-                <figure class="avatar me-2 mb-0"><img src="{{ asset('images/user-12.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">Hugury Daugloi <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">12 mutual friends</span></h4>
-                <a href="#" class="btn-round-sm bg-white text-grey-900 feather-plus font-xss ms-auto mt-2"></a>
-            </div>
-        </div>
-
         <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
             <div class="card-body d-flex align-items-center p-4">
                 <h4 class="fw-700 mb-0 font-xssss text-grey-900">Suggest Group</h4>
@@ -332,44 +245,38 @@
             </div>
         </div>
 
-        <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
-            <div class="card-body d-flex align-items-center p-4">
-                <h4 class="fw-700 mb-0 font-xssss text-grey-900">Suggest Pages</h4>
-                <a href="#" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-            </div>
-            <div class="card-body d-flex pt-4 ps-4 pe-4 pb-0 overflow-hidden border-top-xs bor-0">
-                <img src="{{ asset('images/g-2.jpg') }}" alt="img" class="img-fluid rounded-xxl mb-2">
-            </div>
-            <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
-                <a href="#" class="p-2 lh-28 w-100 bg-grey text-grey-800 text-center font-xssss fw-700 rounded-xl"><i class="feather-external-link font-xss me-2"></i> Like Page</a>
-            </div>
-            <div class="card-body d-flex pt-0 ps-4 pe-4 pb-0 overflow-hidden">
-                <img src="{{ asset('images/g-3.jpg') }}" alt="img" class="img-fluid rounded-xxl mb-2 bg-lightblue">
-            </div>
-            <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
-                <a href="#" class="p-2 lh-28 w-100 bg-grey text-grey-800 text-center font-xssss fw-700 rounded-xl"><i class="feather-external-link font-xss me-2"></i> Like Page</a>
-            </div>
-        </div>
-
-        <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3">
-            <div class="card-body d-flex align-items-center p-4">
-                <h4 class="fw-700 mb-0 font-xssss text-grey-900">Event</h4>
-                <a href="#" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-            </div>
-            <div class="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                <div class="bg-success me-2 p-3 rounded-xxl"><h4 class="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span class="ls-1 d-block font-xsss text-white fw-600">FEB</span>22</h4></div>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">Meeting with clients <span class="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span></h4>
-            </div>
-            <div class="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                <div class="bg-warning me-2 p-3 rounded-xxl"><h4 class="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span class="ls-1 d-block font-xsss text-white fw-600">APR</span>30</h4></div>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">Developer Programe <span class="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span></h4>
-            </div>
-            <div class="card-body d-flex pt-0 ps-4 pe-4 pb-3 overflow-hidden">
-                <div class="bg-primary me-2 p-3 rounded-xxl"><h4 class="fw-700 font-lg ls-3 lh-1 text-white mb-0"><span class="ls-1 d-block font-xsss text-white fw-600">APR</span>23</h4></div>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-2">Aniversary Event <span class="d-block font-xsssss fw-500 mt-1 lh-4 text-grey-500">41 madison ave, floor 24 new work, NY 10010</span></h4>
-            </div>
-        </div>
     </div>
 
 </div>
 @endsection
+
+@push('modals')
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-xxl border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-700 font-md text-grey-900" id="createPostModalLabel">Create post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="d-flex align-items-center mb-3">
+                    <figure class="avatar me-3 mb-0"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
+                    <div>
+                        <h5 class="fw-700 font-xss text-grey-900 mb-0">{{ auth()->user()->profile->display_name ?? '' }}</h5>
+                    </div>
+                </div>
+                <form method="POST" action="{{ route('publications.store') }}" id="createPostForm">
+                    @csrf
+                    <input type="text" name="title" class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg mb-2" placeholder="Post title" required>
+                    <textarea name="text" class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" rows="5" placeholder="What's on your mind, {{ auth()->user()->profile->display_name ?? 'there' }}?" required></textarea>
+                    <div class="d-flex align-items-center border-light-md rounded-xxl p-2 mt-3">
+                        <span class="font-xssss fw-600 text-grey-500 me-auto">Add to your post</span>
+                        <a href="#" class="ms-3 text-grey-600"><i class="feather-image font-md text-success"></i></a>
+                    </div>
+                    <button type="submit" class="w-100 mt-3 p-2 lh-20 bg-primary-gradiant text-white text-center font-xssss fw-600 ls-1 rounded-xl border-0 cursor-pointer">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endpush

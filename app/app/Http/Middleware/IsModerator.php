@@ -11,7 +11,7 @@ class IsModerator
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user()?->isAdmin() && ! $request->user()?->isModerator()) {
-            return response()->json(['message' => 'Forbidden.'], 403);
+            abort(403);
         }
 
         return $next($request);

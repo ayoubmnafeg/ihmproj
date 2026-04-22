@@ -4,52 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Report;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-    public function store(Request $request, Content $content): JsonResponse
+    public function index(): View
     {
-        $data = $request->validate([
-            'reason'  => 'required|string|in:spam,harassment,misinformation,hate_speech,other',
-            'details' => 'nullable|string|max:1000',
-        ]);
-
-        $report = Report::create([
-            'reason'      => $data['reason'],
-            'details'     => $data['details'] ?? null,
-            'status'      => 'pending',
-            'reporter_id' => $request->user()->id,
-            'target_id'   => $content->id,
-        ]);
-
-        return response()->json($report, 201);
-    }
-
-    // Moderator: list all pending reports
-    public function index(Request $request): JsonResponse
-    {
-        $reports = Report::with(['reporter.profile', 'target', 'reviewer.profile'])
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+        $reports = Report::with(['content', 'reporter.profile'])
             ->latest()
             ->paginate(20);
 
-        return response()->json($reports);
+        return view('moderator.reports', compact('reports'));
     }
 
-    // Moderator: update report status
-    public function update(Request $request, Report $report): JsonResponse
+    public function store(Request $request, Content $content): RedirectResponse
     {
         $data = $request->validate([
-            'status' => 'required|string|in:reviewed,dismissed,actioned',
+            'reason' => 'required|string|max:500',
         ]);
 
-        $report->update([
-            'status'      => $data['status'],
-            'reviewed_by' => $request->user()->id,
+        Report::create([
+            'content_id' => $content->id,
+            'reporter_id' => $request->user()->id,
+            'reason' => $data['reason'],
         ]);
 
-        return response()->json($report->load(['reporter.profile', 'target', 'reviewer.profile']));
+        return back()->with('success', 'Report submitted.');
+    }
+
+    public function update(Request $request, Report $report): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => 'required|string|in:pending,reviewed,dismissed',
+        ]);
+
+        $report->update($data);
+
+        return back()->with('success', 'Report updated.');
     }
 }

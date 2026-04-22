@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'display_name', 'avatar_url', 'bio'])]
+#[Fillable(['user_id', 'display_name', 'avatar_url', 'bio', 'gender'])]
 class Profile extends Model
 {
     use HasUuids;

@@ -3,68 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function showLogin(): View
     {
-        $data = $request->validate([
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'email'    => $data['email'],
-            'password' => $data['password'],
-            'status'   => 'active',
-        ]);
-
-        $user->profile()->create([
-            'display_name' => explode('@', $data['email'])[0],
-        ]);
-
-        $token = $user->createToken('api')->plainTextToken;
-
-        return response()->json(['token' => $token, 'user' => $user->load('profile')], 201);
+        return view('auth.login');
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'email'    => 'required|email',
+        $credentials = $request->validate([
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $data['email'])->first();
-
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()->withErrors(['email' => 'The provided credentials are incorrect.'])->withInput();
         }
 
-        if ($user->status === 'banned') {
-            return response()->json(['message' => 'Your account has been banned.'], 403);
+        if (Auth::user()->status === 'banned') {
+            Auth::logout();
+            $request->session()->invalidate();
+
+            return back()->withErrors(['email' => 'Your account has been banned.'])->withInput();
         }
 
-        $token = $user->createToken('api')->plainTextToken;
+        $request->session()->regenerate();
 
-        return response()->json(['token' => $token, 'user' => $user->load('profile')]);
+        return redirect()->intended(route('feed.index'));
     }
 
-    public function logout(Request $request): JsonResponse
+    public function showRegister(): View
     {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out.']);
+        return view('auth.register');
     }
 
-    public function me(Request $request): JsonResponse
+    public function register(Request $request): RedirectResponse
     {
-        return response()->json($request->user()->load('profile'));
+        $data = $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'gender' => 'nullable|in:male,female',
+            'display_name' => 'required|string|max:30|unique:profiles,display_name|regex:/^[a-zA-Z0-9_]+$/',
+        ]);
+
+        $user = User::create([
+            'email' => $data['email'],
+            'password' => $data['password'],
+            'status' => 'active',
+        ]);
+
+        $user->profile()->create([
+            'display_name' => $data['display_name'],
+            'gender' => $data['gender'] ?? null,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('feed.index');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }

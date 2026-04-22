@@ -3,28 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
 use App\Models\PlatformStatistics;
-use App\Models\Publication;
-use App\Models\Report;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StatisticsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json(PlatformStatistics::latest('recorded_at')->paginate(30));
+        $stats = PlatformStatistics::latest()->first();
+
+        return view('admin.analytics', compact('stats'));
     }
 
-    public function snapshot(): JsonResponse
+    public function snapshot(): RedirectResponse
     {
-        $stat = PlatformStatistics::create([
-            'total_publications' => Publication::count(),
-            'total_reports'      => Report::count(),
-            'total_responses'    => Comment::count(),
-            'recorded_at'        => now(),
+        PlatformStatistics::create([
+            'total_users' => \App\Models\User::count(),
+            'total_publications' => \App\Models\Publication::count(),
+            'total_comments' => \App\Models\Comment::count(),
+            'total_reports' => \App\Models\Report::count(),
         ]);
 
-        return response()->json($stat, 201);
+        return back()->with('success', 'Snapshot taken.');
     }
 }

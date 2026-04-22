@@ -34,6 +34,7 @@
 - `resources/views/admin/categories.blade.php`
 - `resources/views/admin/moderators.blade.php`
 - `resources/views/errors/404.blade.php`
+- `resources/views/moderator/reports.blade.php`
 - `app/Http/Controllers/StaticController.php`
 - `app/Http/Controllers/MemberController.php`
 
@@ -1654,6 +1655,7 @@ git commit -m "feat: add members blade view"
 - Create: `resources/views/groups/index.blade.php`
 - Create: `resources/views/groups/show.blade.php`
 - Create: `resources/views/admin/badges.blade.php`
+- Create: `resources/views/moderator/reports.blade.php`
 
 - [ ] **Step 1: Create each static view**
 
@@ -1735,10 +1737,36 @@ Create `resources/views/admin/badges.blade.php`:
 @endsection
 ```
 
+Create `resources/views/moderator/reports.blade.php`:
+```blade
+@extends('layouts.app')
+@section('content')
+<div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+    <h4 class="fw-700 font-xs mb-4">Reports</h4>
+    @if(session('success'))
+        <div class="alert alert-success font-xsss">{{ session('success') }}</div>
+    @endif
+    @foreach($reports as $report)
+    <div class="card border-0 shadow-xss rounded-xxl p-3 mb-2">
+        <p class="font-xssss fw-600 mb-1">{{ $report->reason }}</p>
+        <p class="font-xssss text-grey-500 mb-1">Reported by: {{ $report->reporter->profile->display_name ?? $report->reporter->email }}</p>
+        <form method="POST" action="{{ route('reports.update', $report->id) }}" class="d-inline">
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="status" value="reviewed">
+            <button type="submit" class="btn btn-sm bg-current text-white font-xssss border-0">Mark Reviewed</button>
+        </form>
+    </div>
+    @endforeach
+    <div class="d-flex justify-content-center mt-3">{{ $reports->links() }}</div>
+</div>
+@endsection
+```
+
 - [ ] **Step 2: Commit**
 
 ```bash
-git add resources/views/settings/ resources/views/notifications/ resources/views/messages/ resources/views/groups/ resources/views/admin/badges.blade.php
+git add resources/views/settings/ resources/views/notifications/ resources/views/messages/ resources/views/groups/ resources/views/admin/badges.blade.php resources/views/moderator/reports.blade.php
 git commit -m "feat: add static placeholder blade views"
 ```
 
@@ -2088,32 +2116,4 @@ git commit -m "feat: add 404 error blade view"
 - ✅ Admin views → Task 14
 - ✅ 404 view → Task 15
 
-**One gap found and fixed:** `ReportController@index` returns `view('moderator.reports', ...)` but no `moderator/reports.blade.php` view is listed. Since there's no moderator template page in the template set, this view needs to be created as a simple placeholder. Added to Task 13 static views scope — add this file:
-
-Create `resources/views/moderator/reports.blade.php`:
-```blade
-@extends('layouts.app')
-@section('content')
-<div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
-    <h4 class="fw-700 font-xs mb-4">Reports</h4>
-    @if(session('success'))
-        <div class="alert alert-success font-xsss">{{ session('success') }}</div>
-    @endif
-    @foreach($reports as $report)
-    <div class="card border-0 shadow-xss rounded-xxl p-3 mb-2">
-        <p class="font-xssss fw-600 mb-1">{{ $report->reason }}</p>
-        <p class="font-xssss text-grey-500 mb-1">Reported by: {{ $report->reporter->profile->display_name ?? $report->reporter->email }}</p>
-        <form method="POST" action="{{ route('reports.update', $report->id) }}" class="d-inline">
-            @csrf
-            @method('PATCH')
-            <input type="hidden" name="status" value="reviewed">
-            <button type="submit" class="btn btn-sm bg-current text-white font-xssss border-0">Mark Reviewed</button>
-        </form>
-    </div>
-    @endforeach
-    <div class="d-flex justify-content-center mt-3">{{ $reports->links() }}</div>
-</div>
-@endsection
-```
-
-Add this to Task 13 Step 1 before committing.
+**Gap resolved in-plan:** `resources/views/moderator/reports.blade.php` is now included directly in Task 13 and in the file map, so all controller-referenced Blade views are covered by the plan.

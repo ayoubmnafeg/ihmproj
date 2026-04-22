@@ -4,44 +4,39 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json(Category::all());
+        $categories = Category::latest()->get();
+
+        return view('admin.categories', compact('categories'));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string',
-            'is_active'   => 'boolean',
-        ]);
+        $data = $request->validate(['name' => 'required|string|max:255|unique:categories,name']);
+        Category::create($data);
 
-        return response()->json(Category::create($data), 201);
+        return back()->with('success', 'Category created.');
     }
 
-    public function update(Request $request, Category $category): JsonResponse
+    public function update(Request $request, Category $category): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'sometimes|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string',
-            'is_active'   => 'boolean',
-        ]);
-
+        $data = $request->validate(['name' => 'required|string|max:255|unique:categories,name,'.$category->id]);
         $category->update($data);
 
-        return response()->json($category);
+        return back()->with('success', 'Category updated.');
     }
 
-    public function destroy(Category $category): JsonResponse
+    public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
 
-        return response()->json(['message' => 'Category deleted.']);
+        return back()->with('success', 'Category deleted.');
     }
 }

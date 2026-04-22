@@ -5,54 +5,45 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Content;
 use App\Models\Publication;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    public function index(Publication $publication): JsonResponse
-    {
-        $comments = Comment::with(['author.profile', 'replies.author.profile'])
-            ->where('comments.publication_id', $publication->id)
-            ->whereNull('comments.parent_id')
-            ->where('contents.status', 'visible')
-            ->latest('contents.created_at')
-            ->paginate(30);
-
-        return response()->json($comments);
-    }
-
-    public function store(Request $request, Publication $publication): JsonResponse
+    public function store(Request $request, Publication $publication): RedirectResponse
     {
         $data = $request->validate([
-            'text'      => 'required|string',
+            'text' => 'required|string',
             'parent_id' => 'nullable|uuid|exists:comments,id',
         ]);
 
         $content = Content::create([
-            'type'      => 'comment',
-            'status'    => 'visible',
+            'type' => 'comment',
+            'status' => 'visible',
             'author_id' => $request->user()->id,
         ]);
 
-        $comment = Comment::create([
-            'id'             => $content->id,
-            'text'           => $data['text'],
+        DB::table('comments')->insert([
+            'id' => $content->id,
+            'text' => $data['text'],
             'publication_id' => $publication->id,
-            'parent_id'      => $data['parent_id'] ?? null,
+            'parent_id' => $data['parent_id'] ?? null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        return response()->json($comment->load('author.profile'), 201);
+        return back()->with('success', 'Comment posted.');
     }
 
-    public function destroy(Request $request, Comment $comment): JsonResponse
+    public function destroy(Request $request, Comment $comment): RedirectResponse
     {
         if ($request->user()->id !== $comment->author_id && ! $request->user()->isAdmin()) {
-            return response()->json(['message' => 'Forbidden.'], 403);
+            abort(403);
         }
 
         Content::where('id', $comment->id)->update(['status' => 'deleted']);
 
-        return response()->json(['message' => 'Comment deleted.']);
+        return back()->with('success', 'Comment deleted.');
     }
 }

@@ -5,36 +5,31 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Moderator;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ModeratorController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
         $moderators = Moderator::with('user.profile')->get();
 
-        return response()->json($moderators);
+        return view('admin.moderators', compact('moderators'));
     }
 
-    public function assign(Request $request): JsonResponse
+    public function assign(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'user_id' => 'required|uuid|exists:users,id',
-        ]);
+        $data = $request->validate(['user_id' => 'required|uuid|exists:users,id']);
+        Moderator::firstOrCreate(['user_id' => $data['user_id']]);
 
-        $moderator = Moderator::firstOrCreate(
-            ['user_id' => $data['user_id']],
-            ['assigned_since' => now()]
-        );
-
-        return response()->json($moderator->load('user.profile'), 201);
+        return back()->with('success', 'Moderator assigned.');
     }
 
-    public function remove(User $user): JsonResponse
+    public function remove(User $user): RedirectResponse
     {
         Moderator::where('user_id', $user->id)->delete();
 
-        return response()->json(['message' => 'Moderator role removed.']);
+        return back()->with('success', 'Moderator removed.');
     }
 }

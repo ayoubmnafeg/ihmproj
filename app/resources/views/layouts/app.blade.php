@@ -19,6 +19,33 @@
     <style>
         .modal { z-index: 1000000 !important; }
         .modal-backdrop { z-index: 999999 !important; }
+        #notification-menu {
+            width: 320px;
+            min-width: 320px;
+            max-width: 90vw;
+        }
+        #notification-menu .card {
+            padding-left: 52px !important;
+        }
+        #notification-menu .card h5 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #notification-menu .card h5 span {
+            float: none !important;
+            flex-shrink: 0;
+        }
+        #notification-menu .card h6 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body class="color-theme-blue mont-font">
@@ -43,7 +70,35 @@
             </div>
         </form>
 
-        <a href="{{ route('notifications.index') }}" class="p-2 text-center ms-auto menu-icon"><i class="feather-bell font-xl text-current"></i></a>
+        <div class="dropdown p-2 text-center ms-auto menu-icon d-inline-block">
+            <a href="#" class="position-relative d-inline-block" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="dot-count bg-warning"></span>
+                <i class="feather-bell font-xl text-current"></i>
+            </a>
+            <div id="notification-menu" class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
+                <h4 class="fw-700 font-xss mb-4">Notification</h4>
+                <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+                    <img src="{{ asset('images/user-8.png') }}" alt="user" class="w40 position-absolute left-0">
+                    <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Hendrix Stamp <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 3 min</span></h5>
+                    <h6 class="text-grey-500 fw-500 font-xssss lh-4">There are many variations of pass..</h6>
+                </div>
+                <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+                    <img src="{{ asset('images/user-4.png') }}" alt="user" class="w40 position-absolute left-0">
+                    <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Goria Coast <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 2 min</span></h5>
+                    <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
+                </div>
+                <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+                    <img src="{{ asset('images/user-7.png') }}" alt="user" class="w40 position-absolute left-0">
+                    <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Surfiya Zakir <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 1 min</span></h5>
+                    <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
+                </div>
+                <div class="card bg-transparent-card w-100 border-0 ps-5">
+                    <img src="{{ asset('images/user-6.png') }}" alt="user" class="w40 position-absolute left-0">
+                    <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Victor Exrixon <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 30 sec</span></h5>
+                    <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
+                </div>
+            </div>
+        </div>
         <a href="{{ route('messages.index') }}" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="feather-message-square font-xl text-current"></i></a>
         <button id="dark-mode-toggle" class="p-2 text-center ms-3 menu-icon border-0 bg-transparent cursor-pointer" title="Toggle dark mode" style="outline:none;">
             <i id="dark-mode-icon" class="feather-moon font-xl text-current"></i>
@@ -261,6 +316,7 @@
 (function () {
     var btn = document.getElementById('profile-avatar-btn');
     var dropdown = document.getElementById('profile-dropdown');
+    if (!btn || !dropdown) return;
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
         dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';

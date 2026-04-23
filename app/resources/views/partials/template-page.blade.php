@@ -15,7 +15,6 @@
         'default-message.html' => auth()->check() ? route('messages.index') : route('login'),
         'default-group.html' => auth()->check() ? route('groups.index') : route('login'),
         'group-page.html' => auth()->check() ? route('groups.show', 1) : route('login'),
-        'default-badge.html' => auth()->check() ? route('admin.badges.index') : route('login'),
         'default-analytics.html' => auth()->check() ? route('admin.analytics.index') : route('login'),
         '404.html' => auth()->check() ? route('feed.index') : route('login'),
     ];

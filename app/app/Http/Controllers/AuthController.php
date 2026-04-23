@@ -41,7 +41,11 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('feed.index'));
+        $defaultRedirect = Auth::user()->isAdmin()
+            ? route('admin.dashboard')
+            : route('feed.index');
+
+        return redirect()->intended($defaultRedirect);
     }
 
     public function showRegister(): View

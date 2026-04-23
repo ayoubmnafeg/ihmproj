@@ -14,8 +14,9 @@ class ModeratorController extends Controller
     public function index(): View
     {
         $moderators = Moderator::with('user.profile')->get();
+        $assignableUsers = User::with('profile')->latest()->take(100)->get();
 
-        return view('admin.moderators', compact('moderators'));
+        return view('admin.moderators', compact('moderators', 'assignableUsers'));
     }
 
     public function assign(Request $request): RedirectResponse

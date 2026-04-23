@@ -36,8 +36,4 @@ class StaticController extends Controller
         return view('groups.show');
     }
 
-    public function badges(): View
-    {
-        return view('admin.badges');
-    }
 }

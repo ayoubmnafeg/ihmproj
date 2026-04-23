@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ModeratorController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UserController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaticController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -26,7 +28,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/', [PublicationController::class, 'index'])->name('feed.index');
+    Route::get('/', function (Request $request, PublicationController $publicationController) {
+        if ($request->user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return $publicationController->index();
+    })->name('feed.index');
     Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
     Route::post('/publications', [PublicationController::class, 'store'])->name('publications.store');
     Route::delete('/publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
@@ -59,6 +67,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role.admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::patch('/reports/{report}', [ReportController::class, 'update'])->name('reports.update');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
         Route::post('/users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
@@ -76,6 +87,5 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/analytics', [StatisticsController::class, 'index'])->name('analytics.index');
         Route::post('/statistics/snapshot', [StatisticsController::class, 'snapshot'])->name('statistics.snapshot');
-        Route::get('/badges', [StaticController::class, 'badges'])->name('badges.index');
     });
 });

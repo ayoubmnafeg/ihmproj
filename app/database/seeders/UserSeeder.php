@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Profile;
 use Database\Factories\CommentFactory;
@@ -25,6 +26,24 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             Profile::factory()->create(['user_id' => $user->id]);
         }
+
+        $adminUser = User::query()->firstOrCreate(
+            ['email' => 'admin@ihm.local'],
+            [
+                'password' => Hash::make('admin123456'),
+                'status' => 'active',
+            ]
+        );
+
+        Profile::query()->firstOrCreate(
+            ['user_id' => $adminUser->id],
+            [
+                'display_name' => 'admin',
+                'gender' => null,
+            ]
+        );
+
+        Admin::query()->firstOrCreate(['user_id' => $adminUser->id]);
 
         // Seed 200 categories with Tunisia-related themes.
         $topicBuckets = [
@@ -195,6 +214,9 @@ class UserSeeder extends Seeder
             foreach ($users->take(4) as $sampleUser) {
                 $this->command->line('- ' . ($sampleUser->profile->display_name ?? 'unknown_user'));
             }
+
+            $this->command->newLine();
+            $this->command->info('Admin login: admin / admin123456');
         }
     }
 }

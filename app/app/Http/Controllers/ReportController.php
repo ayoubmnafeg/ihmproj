@@ -12,11 +12,15 @@ class ReportController extends Controller
 {
     public function index(): View
     {
-        $reports = Report::with(['content', 'reporter.profile'])
+        $reports = Report::with(['target', 'reporter.profile'])
             ->latest()
             ->paginate(20);
 
-        return view('moderator.reports', compact('reports'));
+        $view = request()->routeIs('admin.*')
+            ? 'admin.reports'
+            : 'moderator.reports';
+
+        return view($view, compact('reports'));
     }
 
     public function store(Request $request, Content $content): RedirectResponse

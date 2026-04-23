@@ -6,6 +6,7 @@ use Livewire\Component;
 new class extends Component
 {
     public string $scope = 'all';
+    public ?string $userId = null;
     public int $perPage = 20;
     public bool $hasMore = true;
 
@@ -34,6 +35,10 @@ new class extends Component
 
         if ($this->scope === 'mine') {
             $query->where('contents.author_id', auth()->id());
+        }
+
+        if ($this->scope === 'user' && $this->userId) {
+            $query->where('contents.author_id', $this->userId);
         }
 
         $publications = $query->take($this->perPage + 1)->get();

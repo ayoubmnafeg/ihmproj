@@ -74,10 +74,9 @@
                     <ul class="mb-1 top-content">
                         <li class="logo d-none d-xl-block d-lg-block"></li>
                         <li><a href="{{ route('feed.index') }}" class="nav-content-bttn open-font"><i class="feather-tv btn-round-md bg-blue-gradiant me-3"></i><span>Newsfeed</span></a></li>
-                        <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-user-plus btn-round-md bg-red-gradiant me-3"></i><span>Friend Request</span></a></li>
-                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-zap btn-round-md bg-mini-gradiant me-3"></i><span>Suggest Group</span></a></li>
-                        <li><a href="{{ route('admin.badges.index') }}" class="nav-content-bttn open-font"><i class="feather-award btn-round-md bg-red-gradiant me-3"></i><span>Badges</span></a></li>
-                        <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>Author Profile </span></a></li>
+                        <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>My Profile</span></a></li>
+                        <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-users btn-round-md bg-red-gradiant me-3"></i><span>Friends</span></a></li>
+                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-zap btn-round-md bg-mini-gradiant me-3"></i><span>Groups</span></a></li>
                     </ul>
                 </div>
                 @yield('left_sidebar_extras')
@@ -111,47 +110,41 @@
 
             <div class="section full pe-3 ps-4 pt-4 position-relative feed-body">
                 <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">CONTACTS</h4>
+                @php
+                    $contacts = \App\Models\User::with('profile')
+                        ->where('status', 'active')
+                        ->where('id', '!=', auth()->id())
+                        ->where(function ($query) {
+                            $query->whereHas('sentFriendRequests', function ($requestQuery) {
+                                $requestQuery->where('receiver_id', auth()->id())
+                                    ->where('status', 'accepted');
+                            })->orWhereHas('receivedFriendRequests', function ($requestQuery) {
+                                $requestQuery->where('sender_id', auth()->id())
+                                    ->where('status', 'accepted');
+                            });
+                        })
+                        ->latest()
+                        ->take(8)
+                        ->get();
+                @endphp
                 <ul class="list-group list-group-flush">
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-8.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Hurin Seary</a></h3>
-                        <span class="badge badge-primary text-white badge-pill fw-500 mt-0">2</span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-7.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Victor Exrixon</a></h3>
-                        <span class="bg-success ms-auto btn-round-xss"></span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-6.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Surfiya Zakir</a></h3>
-                        <span class="bg-warning ms-auto btn-round-xss"></span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-5.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Goria Coast</a></h3>
-                        <span class="bg-success ms-auto btn-round-xss"></span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-4.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Hurin Seary</a></h3>
-                        <span class="badge mt-0 text-grey-500 badge-pill pe-0 font-xsssss">4:09 pm</span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-3.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">David Goria</a></h3>
-                        <span class="badge mt-0 text-grey-500 badge-pill pe-0 font-xsssss">2 days</span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-2.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Seary Victor</a></h3>
-                        <span class="bg-success ms-auto btn-round-xss"></span>
-                    </li>
-                    <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                        <figure class="avatar float-left mb-0 me-2"><img src="{{ asset('images/user-12.png') }}" alt="image" class="w35"></figure>
-                        <h3 class="fw-700 mb-0 mt-0"><a class="font-xssss text-grey-600 d-block text-dark model-popup-chat" href="#">Ana Seary</a></h3>
-                        <span class="bg-success ms-auto btn-round-xss"></span>
-                    </li>
+                    @forelse($contacts as $contact)
+                        <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
+                            <figure class="avatar float-left mb-0 me-2">
+                                <img src="{{ $contact->profile->avatar_url ?: asset('images/user-12.png') }}" alt="image" class="w35">
+                            </figure>
+                            <h3 class="fw-700 mb-0 mt-0">
+                                <a class="font-xssss text-grey-600 d-block text-dark" href="{{ route('profile.show', $contact->id) }}">
+                                    {{ $contact->profile->display_name ?: ('anon_' . $contact->id) }}
+                                </a>
+                            </h3>
+                            <span class="bg-success ms-auto btn-round-xss"></span>
+                        </li>
+                    @empty
+                        <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">
+                            <span class="font-xssss text-grey-500">No friends to show yet.</span>
+                        </li>
+                    @endforelse
                 </ul>
             </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,20 +18,25 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $data = $request->validate([
+            'username' => 'required|string|max:30',
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
-            return back()->withErrors(['email' => 'The provided credentials are incorrect.'])->withInput();
+        $profile = Profile::query()
+            ->select(['id', 'user_id'])
+            ->where('display_name', $data['username'])
+            ->first();
+
+        if (! $profile || ! Auth::attempt(['email' => $profile->user->email, 'password' => $data['password']], $request->boolean('remember'))) {
+            return back()->withErrors(['username' => 'The provided credentials are incorrect.'])->withInput();
         }
 
         if (Auth::user()->status === 'banned') {
             Auth::logout();
             $request->session()->invalidate();
 
-            return back()->withErrors(['email' => 'Your account has been banned.'])->withInput();
+            return back()->withErrors(['username' => 'Your account has been banned.'])->withInput();
         }
 
         $request->session()->regenerate();

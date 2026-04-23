@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\MemberController;
+use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ReactionController;
@@ -36,7 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/contents/{content}/reactions', [ReactionController::class, 'toggle'])->name('reactions.toggle');
     Route::post('/contents/{content}/reports', [ReportController::class, 'store'])->name('reports.store');
 
-    Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/members', [FriendRequestController::class, 'index'])->name('members.index');
+    Route::post('/friend-requests/{user}', [FriendRequestController::class, 'store'])->name('friend-requests.store');
+    Route::patch('/friend-requests/{friendRequest}', [FriendRequestController::class, 'update'])->name('friend-requests.update');
 
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\FriendRequest;
 use App\Models\Publication;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,14 @@ class PublicationController extends Controller
             ->latest('contents.created_at')
             ->paginate(20);
 
-        return view('feed.index', compact('publications'));
+        $incomingFriendRequests = FriendRequest::with('sender.profile')
+            ->where('receiver_id', auth()->id())
+            ->where('status', 'pending')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('feed.index', compact('publications', 'incomingFriendRequests'));
     }
 
     public function store(Request $request): RedirectResponse

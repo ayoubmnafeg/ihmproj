@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FriendRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,33 @@ class ProfileController extends Controller
     {
         $user->load('profile');
 
-        return view('profile.show', compact('user'));
+        $friendRequestStatus = null;
+        $outgoingPendingRequestId = null;
+
+        if (auth()->id() !== $user->id) {
+            $friendRequest = FriendRequest::where(function ($query) use ($user) {
+                $query->where('sender_id', auth()->id())
+                    ->where('receiver_id', $user->id);
+            })->orWhere(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', auth()->id());
+            })->first();
+
+            if ($friendRequest) {
+                if ($friendRequest->status === 'accepted') {
+                    $friendRequestStatus = 'friends';
+                } elseif ($friendRequest->status === 'pending') {
+                    if ($friendRequest->sender_id === auth()->id()) {
+                        $friendRequestStatus = 'outgoing_pending';
+                        $outgoingPendingRequestId = $friendRequest->id;
+                    } else {
+                        $friendRequestStatus = 'incoming_pending';
+                    }
+                }
+            }
+        }
+
+        return view('profile.show', compact('user', 'friendRequestStatus', 'outgoingPendingRequestId'));
     }
 
     public function edit(Request $request): View

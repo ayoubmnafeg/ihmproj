@@ -17,10 +17,10 @@
     @csrf
 
     <div class="form-group icon-input mb-3">
-        <i class="font-sm ti-email text-grey-500 pe-0"></i>
-        <input type="email" name="email" value="{{ old('email') }}"
+        <i class="font-sm ti-user text-grey-500 pe-0"></i>
+        <input type="text" name="username" value="{{ old('username') }}"
                class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
-               placeholder="Your Email Address" required>
+               placeholder="Your Username" required>
     </div>
 
     <div class="form-group icon-input mb-1">

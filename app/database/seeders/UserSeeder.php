@@ -8,27 +8,70 @@ use Database\Factories\CommentFactory;
 use Database\Factories\PublicationFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 100 users with profiles
-        $users = User::factory(100)->create();
+        $now = now();
+
+        // Smaller dataset for faster local seeding.
+        $users = User::factory(24)->create([
+            'password' => Hash::make('123456789'),
+        ]);
 
         foreach ($users as $user) {
             Profile::factory()->create(['user_id' => $user->id]);
         }
 
+        // Seed a mix of accepted friendships and pending friend requests.
+        $friendPairs = [];
+        $friendRequestRows = [];
+
+        foreach ($users as $user) {
+            $friendCandidates = $users
+                ->where('id', '!=', $user->id)
+                ->shuffle()
+                ->take(rand(4, 10));
+
+            foreach ($friendCandidates as $friend) {
+                $pair = [$user->id, $friend->id];
+                $normalizedPair = $pair;
+                sort($normalizedPair);
+                $pairKey = implode('|', $normalizedPair);
+
+                if (isset($friendPairs[$pairKey])) {
+                    continue;
+                }
+
+                $friendPairs[$pairKey] = true;
+                $status = rand(1, 100) <= 65 ? 'accepted' : 'pending';
+
+                $friendRequestRows[] = [
+                    'id' => Str::uuid()->toString(),
+                    'sender_id' => $pair[0],
+                    'receiver_id' => $pair[1],
+                    'status' => $status,
+                    'responded_at' => $status === 'accepted' ? $now : null,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        if (! empty($friendRequestRows)) {
+            DB::table('friend_requests')->insert($friendRequestRows);
+        }
+
         $pubFactory     = new PublicationFactory();
         $commentFactory = new CommentFactory();
-        $now            = now();
 
-        // 3-7 publications per user
+        // 2-4 publications per user
         $publicationIds = [];
         foreach ($users as $user) {
-            $count = rand(3, 10);
+            $count = rand(2, 4);
             for ($i = 0; $i < $count; $i++) {
                 $id         = Str::uuid()->toString();
                 $attrs      = $pubFactory->definition();
@@ -56,9 +99,9 @@ class UserSeeder extends Seeder
             }
         }
 
-        // 2-5 comments per publication from random users
+        // 1-8 comments per publication from random users
         foreach ($publicationIds as $pubId) {
-            $count = rand(2, 100);
+            $count = rand(1, 8);
             for ($i = 0; $i < $count; $i++) {
                 $id    = Str::uuid()->toString();
                 $attrs = $commentFactory->definition();
@@ -80,6 +123,15 @@ class UserSeeder extends Seeder
                     'created_at'     => $now,
                     'updated_at'     => $now,
                 ]);
+            }
+        }
+
+        if ($this->command) {
+            $this->command->newLine();
+            $this->command->info('Seeded usernames (use password: 123456789):');
+
+            foreach ($users->take(4) as $sampleUser) {
+                $this->command->line('- ' . ($sampleUser->profile->display_name ?? 'unknown_user'));
             }
         }
     }

@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
     Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
     Route::post('/groups/{category}/follow', [GroupController::class, 'follow'])->name('groups.follow');
-    Route::get('/groups/{id}', [StaticController::class, 'groupShow'])->name('groups.show');
+    Route::get('/groups/{category}', [GroupController::class, 'show'])->name('groups.show');
 
     Route::middleware('role.mod')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

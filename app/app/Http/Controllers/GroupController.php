@@ -39,11 +39,39 @@ class GroupController extends Controller
 
     public function follow(Request $request, Category $category): RedirectResponse
     {
+        $alreadyFollowing = $request->user()
+            ->followedCategories()
+            ->where('categories.id', $category->id)
+            ->exists();
+
+        if ($alreadyFollowing) {
+            $request->user()
+                ->followedCategories()
+                ->detach($category->id);
+
+            return back()->with('success', 'Category unfollowed successfully.');
+        }
+
         $request->user()
             ->followedCategories()
             ->syncWithoutDetaching([$category->id]);
 
-        return redirect()->route('groups.index')->with('success', 'Category followed successfully.');
+        return back()->with('success', 'Category followed successfully.');
+    }
+
+    public function show(Category $category): View
+    {
+        $category->loadCount('followers', 'publications');
+
+        $isFollowing = auth()->user()
+            ->followedCategories()
+            ->where('categories.id', $category->id)
+            ->exists();
+
+        return view('groups.show', [
+            'group' => $category,
+            'isFollowing' => $isFollowing,
+        ]);
     }
 }
 

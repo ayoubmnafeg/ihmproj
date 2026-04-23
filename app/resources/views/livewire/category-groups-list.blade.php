@@ -61,15 +61,17 @@
             </div>
         @endforelse
 
-        <div class="col-md-12 pe-2 ps-2" x-ref="bottomLoader">
-            <div class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-0">
-                <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
-                    <div class="stage">
-                        <div class="dot-typing"></div>
+        @if($hasMore)
+            <div class="col-md-12 pe-2 ps-2" x-ref="bottomLoader">
+                <div class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-0">
+                    <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
+                        <div class="stage">
+                            <div class="dot-typing"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 

@@ -2,6 +2,8 @@
 
 use App\Models\Content;
 use App\Models\MediaAttachment;
+use App\Models\Poll;
+use App\Models\PollOption;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -18,6 +20,8 @@ new class extends Component
     public ?string $selectedCategoryId = null;
     public bool $expanded = false;
     public array $images = [];
+    public bool $isPoll = false;
+    public array $pollOptions = ['', ''];
 
     public function expand(): void
     {
@@ -34,6 +38,42 @@ new class extends Component
         if (!empty($this->images)) {
             $this->expanded = true;
         }
+    }
+
+    public function startPoll(): void
+    {
+        $this->expanded = true;
+        $this->isPoll = true;
+        $this->images = [];
+
+        if (count($this->pollOptions) < 2) {
+            $this->pollOptions = ['', ''];
+        }
+    }
+
+    public function removePoll(): void
+    {
+        $this->isPoll = false;
+        $this->pollOptions = ['', ''];
+    }
+
+    public function addPollOption(): void
+    {
+        if (count($this->pollOptions) >= 6) {
+            return;
+        }
+
+        $this->pollOptions[] = '';
+    }
+
+    public function removePollOption(int $index): void
+    {
+        if (count($this->pollOptions) <= 2 || !isset($this->pollOptions[$index])) {
+            return;
+        }
+
+        unset($this->pollOptions[$index]);
+        $this->pollOptions = array_values($this->pollOptions);
     }
 
     public function removeImage(int $index): void
@@ -68,10 +108,13 @@ new class extends Component
 
         $data = $this->validate([
             'title' => 'required|string|max:255',
-            'text' => 'required|string',
+            'text' => 'required_unless:isPoll,true|nullable|string',
             'images' => 'nullable|array|max:6',
             'images.*' => 'image|max:5120',
             'selectedCategoryId' => 'nullable|uuid|exists:categories,id',
+            'isPoll' => 'boolean',
+            'pollOptions' => 'required_if:isPoll,true|array|min:2|max:6',
+            'pollOptions.*' => 'required_if:isPoll,true|string|max:100',
         ]);
 
         if (! $effectiveCategoryId) {
@@ -89,35 +132,69 @@ new class extends Component
             return;
         }
 
-        $content = Content::create([
-            'type' => 'publication',
-            'status' => 'visible',
-            'author_id' => auth()->id(),
-        ]);
-
-        $mediaType = !empty($data['images']) ? 'image' : null;
-
-        DB::table('publications')->insert([
-            'id' => $content->id,
-            'title' => $data['title'],
-            'text' => $data['text'],
-            'media_type' => $mediaType,
-            'category_id' => $effectiveCategoryId,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        foreach (($data['images'] ?? []) as $image) {
-            $path = $image->store('publications', 'public');
-
-            MediaAttachment::create([
-                'type' => 'image',
-                'url' => Storage::url($path),
-                'publication_id' => $content->id,
-            ]);
+        if ($this->isPoll && !empty($data['images'])) {
+            $this->addError('images', 'A poll post cannot include images.');
+            return;
         }
 
-        $this->reset(['title', 'text', 'images']);
+        $pollOptions = collect($data['pollOptions'] ?? [])
+            ->map(fn ($option) => trim((string) $option))
+            ->filter()
+            ->values();
+
+        if ($this->isPoll && $pollOptions->count() < 2) {
+            $this->addError('pollOptions', 'Please provide at least 2 poll options.');
+            return;
+        }
+
+        DB::transaction(function () use ($data, $effectiveCategoryId, $pollOptions): void {
+            $content = Content::create([
+                'type' => 'publication',
+                'status' => 'visible',
+                'author_id' => auth()->id(),
+            ]);
+
+            $mediaType = $this->isPoll
+                ? 'poll'
+                : (!empty($data['images']) ? 'image' : null);
+
+            DB::table('publications')->insert([
+                'id' => $content->id,
+                'title' => $data['title'],
+                'text' => $this->isPoll ? '' : ($data['text'] ?? ''),
+                'media_type' => $mediaType,
+                'category_id' => $effectiveCategoryId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            foreach (($data['images'] ?? []) as $image) {
+                $path = $image->store('publications', 'public');
+
+                MediaAttachment::create([
+                    'type' => 'image',
+                    'url' => Storage::url($path),
+                    'publication_id' => $content->id,
+                ]);
+            }
+
+            if ($this->isPoll) {
+                $poll = Poll::create([
+                    'publication_id' => $content->id,
+                    'question' => trim($data['title']),
+                ]);
+
+                foreach ($pollOptions as $label) {
+                    PollOption::create([
+                        'poll_id' => $poll->id,
+                        'label' => $label,
+                    ]);
+                }
+            }
+        });
+
+        $this->reset(['title', 'text', 'images', 'isPoll']);
+        $this->pollOptions = ['', ''];
         $this->expanded = false;
         session()->flash('success', 'Publication posted.');
 
@@ -156,6 +233,14 @@ new class extends Component
                         class="d-flex align-items-center ms-3 text-grey-600 border-0 bg-transparent"
                     >
                         <i class="feather-image font-md text-success me-1"></i>
+                    </button>
+                    <button
+                        type="button"
+                        wire:click="startPoll"
+                        class="d-flex align-items-center ms-2 text-grey-600 border-0 bg-transparent"
+                        title="Start a poll"
+                    >
+                        <i class="feather-bar-chart-2 font-md text-primary"></i>
                     </button>
                     <button type="button" wire:click="expand" class="d-flex align-items-center ms-2 text-grey-600 border-0 bg-transparent"><i class="feather-smile font-md text-warning"></i></button>
                 </div>
@@ -229,18 +314,54 @@ new class extends Component
                             <input type="hidden" wire:model="selectedCategoryId">
                         @endif
 
-                        <div
-                            x-data="createPostQuillEditor(@entangle('text').live)"
-                            x-init="init()"
-                            class="create-post-editor-wrap"
-                        >
-                            <div wire:ignore>
-                                <div x-ref="editor" class="create-post-quill"></div>
+                        @if(!$isPoll)
+                            <div
+                                x-data="createPostQuillEditor(@entangle('text').live)"
+                                x-init="init()"
+                                class="create-post-editor-wrap"
+                            >
+                                <div wire:ignore>
+                                    <div x-ref="editor" class="create-post-quill"></div>
+                                </div>
                             </div>
-                        </div>
-                        @error('text')
-                            <div class="text-danger font-xssss mt-2">{{ $message }}</div>
-                        @enderror
+                            @error('text')
+                                <div class="text-danger font-xssss mt-2">{{ $message }}</div>
+                            @enderror
+                        @endif
+
+                        @if($isPoll)
+                            <div class="create-post-poll-box mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h4 class="fw-700 text-grey-900 font-xssss mb-0">Poll</h4>
+                                    <button type="button" wire:click="removePoll" class="border-0 bg-transparent text-danger font-xssss fw-600 p-0">Remove poll</button>
+                                </div>
+                                <div class="font-xssss text-grey-500 mb-2">Poll question will use the post title.</div>
+
+                                @foreach($pollOptions as $index => $option)
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            wire:model="pollOptions.{{ $index }}"
+                                            class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-700 fw-500 border-light-md theme-dark-bg"
+                                            placeholder="Option {{ $index + 1 }}"
+                                        >
+                                        @if(count($pollOptions) > 2)
+                                            <button type="button" wire:click="removePollOption({{ $index }})" class="border-0 bg-transparent text-danger p-0">
+                                                <i class="feather-x"></i>
+                                            </button>
+                                        @endif
+                                    </div>
+                                @endforeach
+                                @error('pollOptions')
+                                    <div class="text-danger font-xssss mb-2">{{ $message }}</div>
+                                @enderror
+                                @error('pollOptions.*')
+                                    <div class="text-danger font-xssss mb-2">{{ $message }}</div>
+                                @enderror
+
+                                <button type="button" wire:click="addPollOption" class="border-0 bg-transparent text-primary font-xssss fw-600 p-0">+ Add option</button>
+                            </div>
+                        @endif
 
                         @if(!empty($images))
                             <div class="mt-3 d-flex flex-wrap gap-2">
@@ -264,8 +385,16 @@ new class extends Component
                         @endif
 
                         <div class="d-flex align-items-center gap-2 mt-3">
-                            <button type="button" onclick="document.getElementById('create-post-image-input').click()" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Add image">
-                                <i class="feather-image font-md text-success me-1"></i>
+                            @if(!$isPoll)
+                                <button type="button" onclick="document.getElementById('create-post-image-input').click()" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Add image">
+                                    <i class="feather-image font-md text-success me-1"></i>
+                                </button>
+                            @endif
+                            <button type="button" wire:click="startPoll" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Start a poll">
+                                <i class="feather-bar-chart-2 font-md text-primary me-1"></i>
+                                @if($isPoll)
+                                    <span class="font-xssss fw-600 text-primary">Poll mode</span>
+                                @endif
                             </button>
                             @if(!empty($images))<span class="font-xssss text-grey-500">{{ count($images) }} image(s) selected</span>@endif
                             @error('images')
@@ -516,6 +645,13 @@ new class extends Component
         font-size: 12px;
         color: #868e96;
         padding: 10px;
+    }
+
+    .create-post-poll-box {
+        border: 1px solid #d7dde5;
+        border-radius: 12px;
+        background: #fafcff;
+        padding: 12px;
     }
 </style>
 </div>

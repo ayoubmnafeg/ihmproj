@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['title', 'text', 'media_type', 'category_id'])]
 class Publication extends Content
@@ -40,5 +41,10 @@ class Publication extends Content
     public function attachments(): HasMany
     {
         return $this->hasMany(MediaAttachment::class);
+    }
+
+    public function poll(): HasOne
+    {
+        return $this->hasOne(Poll::class);
     }
 }

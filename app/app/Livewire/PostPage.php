@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Content;
 use App\Models\Comment;
+use App\Models\PollOption;
+use App\Models\PollVote;
 use App\Models\Publication;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -27,6 +29,8 @@ class PostPage extends Component
             'author.profile',
             'category',
             'attachments',
+            'poll.options',
+            'poll.votes' => fn ($voteQuery) => $voteQuery->where('user_id', auth()->id()),
             'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id()),
             'comments' => fn ($commentQuery) => $commentQuery
                 ->with(['author.profile', 'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id())])
@@ -44,6 +48,51 @@ class PostPage extends Component
             ->where('contents.status', 'visible')
             ->where('publications.id', $this->publicationId)
             ->firstOrFail();
+    }
+
+    public function votePoll(string $optionId): void
+    {
+        $publication = Publication::with('poll.options')
+            ->where('publications.id', $this->publicationId)
+            ->where('contents.status', 'visible')
+            ->first();
+
+        if (!$publication || !$publication->poll) {
+            return;
+        }
+
+        $poll = $publication->poll;
+        $selectedOption = $poll->options->firstWhere('id', $optionId);
+        if (!$selectedOption) {
+            return;
+        }
+
+        DB::transaction(function () use ($poll, $selectedOption): void {
+            $existingVote = PollVote::where('poll_id', $poll->id)
+                ->where('user_id', auth()->id())
+                ->lockForUpdate()
+                ->first();
+
+            if ($existingVote && $existingVote->poll_option_id === $selectedOption->id) {
+                return;
+            }
+
+            if ($existingVote) {
+                PollOption::where('id', $existingVote->poll_option_id)
+                    ->where('votes_count', '>', 0)
+                    ->decrement('votes_count');
+
+                $existingVote->update(['poll_option_id' => $selectedOption->id]);
+            } else {
+                PollVote::create([
+                    'poll_id' => $poll->id,
+                    'poll_option_id' => $selectedOption->id,
+                    'user_id' => auth()->id(),
+                ]);
+            }
+
+            PollOption::where('id', $selectedOption->id)->increment('votes_count');
+        });
     }
 
     public function addComment(): void

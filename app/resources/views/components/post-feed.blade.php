@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\PollOption;
+use App\Models\PollVote;
 use App\Models\Publication;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 new class extends Component
@@ -10,6 +13,51 @@ new class extends Component
     public ?string $categoryId = null;
     public int $perPage = 20;
     public bool $hasMore = true;
+
+    public function votePoll(string $publicationId, string $optionId): void
+    {
+        $publication = Publication::with('poll.options')
+            ->where('publications.id', $publicationId)
+            ->where('contents.status', 'visible')
+            ->first();
+
+        if (!$publication || !$publication->poll) {
+            return;
+        }
+
+        $poll = $publication->poll;
+        $selectedOption = $poll->options->firstWhere('id', $optionId);
+        if (!$selectedOption) {
+            return;
+        }
+
+        DB::transaction(function () use ($poll, $selectedOption): void {
+            $existingVote = PollVote::where('poll_id', $poll->id)
+                ->where('user_id', auth()->id())
+                ->lockForUpdate()
+                ->first();
+
+            if ($existingVote && $existingVote->poll_option_id === $selectedOption->id) {
+                return;
+            }
+
+            if ($existingVote) {
+                PollOption::where('id', $existingVote->poll_option_id)
+                    ->where('votes_count', '>', 0)
+                    ->decrement('votes_count');
+
+                $existingVote->update(['poll_option_id' => $selectedOption->id]);
+            } else {
+                PollVote::create([
+                    'poll_id' => $poll->id,
+                    'poll_option_id' => $selectedOption->id,
+                    'user_id' => auth()->id(),
+                ]);
+            }
+
+            PollOption::where('id', $selectedOption->id)->increment('votes_count');
+        });
+    }
 
     public function loadMore(): void
     {
@@ -22,7 +70,7 @@ new class extends Component
 
     public function getPublicationsProperty()
     {
-        $query = Publication::with(['author.profile', 'category', 'attachments'])
+        $query = Publication::with(['author.profile', 'category', 'attachments', 'poll.options', 'poll.votes' => fn ($voteQuery) => $voteQuery->where('user_id', auth()->id())])
             ->with([
                 'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id()),
             ])
@@ -69,6 +117,9 @@ new class extends Component
         $displayAttachments = $photoCount >= 4 ? $publication->attachments->take(4) : $publication->attachments;
         $remainingPhotoCount = max($photoCount - 4, 0);
         $photoLayoutVariant = $photoCount >= 4 ? '4plus' : (string) $photoCount;
+        $poll = $publication->poll;
+        $totalPollVotes = $poll ? $poll->options->sum('votes_count') : 0;
+        $votedOptionId = $poll ? optional($poll->votes->first())->poll_option_id : null;
     @endphp
     <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
         <div class="card-body p-0 d-flex">
@@ -166,6 +217,30 @@ new class extends Component
                             @endif
                         </div>
                     @endforeach
+                </div>
+            @endif
+
+            @if($poll)
+                <div class="post-poll-box mt-3">
+                    <div class="d-flex flex-column gap-2">
+                        @foreach($poll->options as $option)
+                            @php
+                                $optionVotes = (int) $option->votes_count;
+                                $optionPercent = $totalPollVotes > 0 ? (int) round(($optionVotes / $totalPollVotes) * 100) : 0;
+                                $isSelected = $votedOptionId === $option->id;
+                            @endphp
+                            <button
+                                type="button"
+                                wire:click="votePoll('{{ $publication->id }}', '{{ $option->id }}')"
+                                class="post-poll-option {{ $isSelected ? 'is-selected' : '' }}"
+                            >
+                                <span class="post-poll-option-label">{{ $option->label }}</span>
+                                <span class="post-poll-option-meta">{{ $optionPercent }}% ({{ $optionVotes }})</span>
+                                <span class="post-poll-option-bar" style="width: {{ $optionPercent }}%;"></span>
+                            </button>
+                        @endforeach
+                    </div>
+                    <div class="font-xssss text-grey-500 mt-2">{{ $totalPollVotes }} {{ $totalPollVotes === 1 ? 'vote' : 'votes' }}</div>
                 </div>
             @endif
         </div>
@@ -293,6 +368,60 @@ new class extends Component
 
     .comment-action-btn:hover {
         color: #111;
+    }
+</style>
+
+<style>
+    .post-poll-box {
+        border: 1px solid #e8edf3;
+        border-radius: 12px;
+        padding: 12px;
+        background: #fbfdff;
+    }
+
+    .post-poll-option {
+        position: relative;
+        width: 100%;
+        border: 1px solid #d7dde5;
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: #fff;
+        text-align: left;
+        overflow: hidden;
+    }
+
+    .post-poll-option.is-selected {
+        border-color: #4c6fff;
+        box-shadow: 0 0 0 1px rgba(76, 111, 255, 0.15);
+    }
+
+    .post-poll-option-label,
+    .post-poll-option-meta {
+        position: relative;
+        z-index: 1;
+        display: block;
+    }
+
+    .post-poll-option-label {
+        color: #1f2937;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .post-poll-option-meta {
+        color: #6b7280;
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 2px;
+    }
+
+    .post-poll-option-bar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: rgba(76, 111, 255, 0.14);
+        transition: width 0.2s ease;
     }
 </style>
 

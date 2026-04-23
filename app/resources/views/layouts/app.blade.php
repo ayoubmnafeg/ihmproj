@@ -181,7 +181,6 @@
                             <h3 class="fw-700 mb-0 mt-0">
                                 <a class="font-xssss text-grey-600 d-block text-dark" href="{{ route('groups.show', $group->id) }}">{{ $group->name }}</a>
                             </h3>
-                            <span class="bg-success ms-auto btn-round-xss"></span>
                         </li>
                     @empty
                         <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">
@@ -221,7 +220,6 @@
                                     {{ $contact->profile->display_name ?: ('anon_' . $contact->id) }}
                                 </a>
                             </h3>
-                            <span class="bg-success ms-auto btn-round-xss"></span>
                         </li>
                     @empty
                         <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">

@@ -58,12 +58,6 @@
                 <div class="text-muted small">Assign and manage moderator roles.</div>
             </a>
         </div>
-        <div class="col-xl-4 col-md-6">
-            <a href="{{ route('admin.analytics.index') }}" class="card border-0 shadow-sm rounded-3 p-3 d-block text-decoration-none">
-                <div class="fw-700 text-dark">Analytics</div>
-                <div class="text-muted small">View historical snapshot analytics.</div>
-            </a>
-        </div>
     </div>
 
     <div class="row g-3">

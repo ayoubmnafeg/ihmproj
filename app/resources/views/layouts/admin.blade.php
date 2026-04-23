@@ -86,9 +86,6 @@
         <a href="{{ route('admin.moderators.index') }}" class="admin-nav-link {{ request()->routeIs('admin.moderators.*') ? 'active' : '' }}">
             <i class="feather-shield"></i> Moderators
         </a>
-        <a href="{{ route('admin.analytics.index') }}" class="admin-nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
-            <i class="feather-bar-chart-2"></i> Analytics
-        </a>
         <div class="mt-4 pt-3 border-top border-secondary">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

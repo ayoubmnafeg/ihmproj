@@ -85,7 +85,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/moderators', [ModeratorController::class, 'assign'])->name('moderators.assign');
         Route::delete('/moderators/{user}', [ModeratorController::class, 'remove'])->name('moderators.remove');
 
-        Route::get('/analytics', [StatisticsController::class, 'index'])->name('analytics.index');
         Route::post('/statistics/snapshot', [StatisticsController::class, 'snapshot'])->name('statistics.snapshot');
     });
 });

@@ -2,13 +2,21 @@
 
 use App\Models\Publication;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 new class extends Component
 {
-    use WithPagination;
-
     public string $scope = 'all';
+    public int $perPage = 20;
+    public bool $hasMore = true;
+
+    public function loadMore(): void
+    {
+        if (! $this->hasMore) {
+            return;
+        }
+
+        $this->perPage += 20;
+    }
 
     public function getPublicationsProperty()
     {
@@ -28,12 +36,15 @@ new class extends Component
             $query->where('contents.author_id', auth()->id());
         }
 
-        return $query->paginate(20);
+        $publications = $query->take($this->perPage + 1)->get();
+        $this->hasMore = $publications->count() > $this->perPage;
+
+        return $publications->take($this->perPage);
     }
 
     public function render()
     {
-        return view('components.⚡post-feed', [
+        return view('components.post-feed', [
             'publications' => $this->publications,
         ]);
     }
@@ -150,9 +161,13 @@ new class extends Component
     </div>
     @endforelse
 
-    @if($publications->hasPages())
-    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
-        {{ $publications->links() }}
+    @if($hasMore)
+    <div wire:poll.visible.750ms="loadMore" class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
+        <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
+            <div class="stage">
+                <div class="dot-typing"></div>
+            </div>
+        </div>
     </div>
     @endif
 </div>

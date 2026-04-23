@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,6 +76,12 @@ class User extends Authenticatable
     public function receivedFriendRequests(): HasMany
     {
         return $this->hasMany(FriendRequest::class, 'receiver_id');
+    }
+
+    public function followedCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_followers')
+            ->withTimestamps();
     }
 
     public function isAdmin(): bool

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FriendRequestController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ReactionController;
@@ -47,7 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [StaticController::class, 'settings'])->name('settings.index');
     Route::get('/notifications', [StaticController::class, 'notifications'])->name('notifications.index');
     Route::get('/messages', [StaticController::class, 'messages'])->name('messages.index');
-    Route::get('/groups', [StaticController::class, 'groups'])->name('groups.index');
+    Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
+    Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+    Route::post('/groups/{category}/follow', [GroupController::class, 'follow'])->name('groups.follow');
     Route::get('/groups/{id}', [StaticController::class, 'groupShow'])->name('groups.show');
 
     Route::middleware('role.mod')->group(function () {

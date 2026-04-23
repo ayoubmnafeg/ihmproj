@@ -26,6 +26,68 @@ class UserSeeder extends Seeder
             Profile::factory()->create(['user_id' => $user->id]);
         }
 
+        // Seed 200 categories with Tunisia-related themes.
+        $topicBuckets = [
+            'people' => ['Jeunes Tunis', 'Diaspora TN', 'Voix de Sfax', 'Communautes de Tunis', 'Familles du Sahel'],
+            'tech' => ['Startup Tunisia', 'DevOps TN', 'AI Tunisia', 'CyberSec Maghreb', 'NoCode Tunis'],
+            'politics' => ['Debat Citoyen', 'Politiques Publiques TN', 'Elections & Reformes', 'Parlement Watch', 'Gouvernance Locale'],
+            'nutrition' => ['Nutrition Tunisienne', 'Recettes Saines TN', 'Diet Mediteraneen', 'Sport & Nutrition', 'Nutrition Parents'],
+            'islam' => ['Fiqh au Quotidien', 'Tafsir Circle', 'Jeunesse & Islam', 'Valeurs Islamiques', 'Sira & Histoire'],
+        ];
+        $suffixes = ['Hub', 'Network', 'Community', 'Forum', 'Club', 'Collective', 'Lab', 'Circle'];
+        $descriptionsByTheme = [
+            'people' => 'Espace communautaire tunisien pour partager initiatives, entraide et actualites locales.',
+            'tech' => 'Discussions tech en Tunisie: dev, IA, securite, startups et opportunites.',
+            'politics' => 'Echanges respectueux autour de la politique tunisienne, institutions et citoyennete.',
+            'nutrition' => 'Conseils nutritionnels inspires des habitudes tunisiennes et du style mediterraneen.',
+            'islam' => 'Partage de ressources islamiques, rappels benefiques et apprentissage en commun.',
+        ];
+
+        $categoryRows = [];
+        $categoryIds = [];
+        $usedNames = [];
+        for ($i = 1; $i <= 200; $i++) {
+            $theme = array_rand($topicBuckets);
+            $base = $topicBuckets[$theme][array_rand($topicBuckets[$theme])];
+            $suffix = $suffixes[array_rand($suffixes)];
+            $candidateName = $base . ' ' . $suffix;
+            $name = $candidateName;
+            $dedupe = 2;
+            while (isset($usedNames[$name])) {
+                $name = $candidateName . ' ' . $dedupe;
+                $dedupe++;
+            }
+            $usedNames[$name] = true;
+
+            $categoryId = Str::uuid()->toString();
+            $categoryIds[] = $categoryId;
+            $categoryRows[] = [
+                'id' => $categoryId,
+                'name' => $name,
+                'description' => $descriptionsByTheme[$theme],
+                'profile_image_path' => null,
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+        DB::table('categories')->insert($categoryRows);
+
+        // Each user follows 4 categories.
+        $categoryFollowerRows = [];
+        foreach ($users as $user) {
+            $followed = collect($categoryIds)->shuffle()->take(4);
+            foreach ($followed as $categoryId) {
+                $categoryFollowerRows[] = [
+                    'category_id' => $categoryId,
+                    'user_id' => $user->id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        DB::table('category_followers')->insert($categoryFollowerRows);
+
         // Seed a mix of accepted friendships and pending friend requests.
         $friendPairs = [];
         $friendRequestRows = [];
@@ -90,7 +152,7 @@ class UserSeeder extends Seeder
                     'title'      => $attrs['title'],
                     'text'       => $attrs['text'],
                     'media_type' => $attrs['media_type'],
-                    'category_id'=> null,
+                    'category_id'=> collect($categoryIds)->random(),
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);

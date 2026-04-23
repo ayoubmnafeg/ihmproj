@@ -85,18 +85,26 @@
         <h4 class="fw-700 mb-0 font-xssss text-grey-900">Suggest Group</h4>
         <a href="{{ route('groups.index') }}" class="fw-600 ms-auto font-xssss text-primary">See all</a>
     </div>
-    <div class="card-body d-flex pt-4 ps-4 pe-4 pb-0 overflow-hidden border-top-xs bor-0">
-        <img src="{{ asset('images/e-2.jpg') }}" alt="img" class="img-fluid rounded-xxl mb-2">
-    </div>
-    <div class="card-body dd-block pt-0 ps-4 pe-4 pb-4">
-        <ul class="memberlist mt-1 mb-2 ms-0 d-block">
-            <li class="w20"><a href="#"><img src="{{ asset('images/user-6.png') }}" alt="user" class="w35 d-inline-block" style="opacity: 1;"></a></li>
-            <li class="w20"><a href="#"><img src="{{ asset('images/user-7.png') }}" alt="user" class="w35 d-inline-block" style="opacity: 1;"></a></li>
-            <li class="w20"><a href="#"><img src="{{ asset('images/user-8.png') }}" alt="user" class="w35 d-inline-block" style="opacity: 1;"></a></li>
-            <li class="w20"><a href="#"><img src="{{ asset('images/user-3.png') }}" alt="user" class="w35 d-inline-block" style="opacity: 1;"></a></li>
-            <li class="last-member"><a href="#" class="bg-greylight fw-600 text-grey-500 font-xssss w35 ls-3 text-center" style="height: 35px; line-height: 35px;">+2</a></li>
-            <li class="ps-3 w-auto ms-1"><a href="#" class="fw-600 text-grey-500 font-xssss">Member apply</a></li>
-        </ul>
+    <div class="card-body pt-2 ps-4 pe-4 pb-4 border-top-xs">
+        @forelse($suggestedGroups as $group)
+            <div class="d-flex align-items-center {{ $loop->first ? 'pt-2' : 'pt-3' }} {{ $loop->last ? 'pb-0' : 'pb-3' }} {{ !$loop->last ? 'border-bottom' : '' }}">
+                <figure class="avatar me-3 mb-0">
+                    <img src="{{ $group->profile_image_path ? asset('storage/' . $group->profile_image_path) : asset('images/user-12.png') }}" alt="{{ $group->name }}" class="shadow-sm rounded-circle w45">
+                </figure>
+                <div class="flex-grow-1">
+                    <h4 class="fw-700 text-grey-900 font-xssss mb-0">
+                        <a href="{{ route('groups.show', $group->id) }}" class="text-dark">{{ $group->name }}</a>
+                    </h4>
+                    <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">{{ $group->followers_count }} follower{{ $group->followers_count === 1 ? '' : 's' }}</span>
+                </div>
+                <form method="POST" action="{{ route('groups.follow', $group->id) }}">
+                    @csrf
+                    <button type="submit" class="p-2 lh-20 bg-primary-gradiant border-0 text-white text-center font-xssss fw-600 ls-1 rounded-xl">Follow</button>
+                </form>
+            </div>
+        @empty
+            <p class="fw-500 text-grey-500 font-xssss mb-0 pt-2">No new groups to suggest right now.</p>
+        @endforelse
     </div>
 </div>
 @endsection

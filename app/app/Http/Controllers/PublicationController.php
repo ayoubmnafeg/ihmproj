@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\Category;
 use App\Models\FriendRequest;
 use App\Models\Publication;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,19 @@ class PublicationController extends Controller
             ->take(3)
             ->get();
 
-        return view('feed.index', compact('publications', 'incomingFriendRequests'));
+        $followedCategoryIds = auth()->user()
+            ->followedCategories()
+            ->pluck('categories.id');
+
+        $suggestedGroups = Category::query()
+            ->where('is_active', true)
+            ->whereNotIn('id', $followedCategoryIds)
+            ->withCount('followers')
+            ->latest()
+            ->take(2)
+            ->get();
+
+        return view('feed.index', compact('publications', 'incomingFriendRequests', 'suggestedGroups'));
     }
 
     public function store(Request $request): RedirectResponse

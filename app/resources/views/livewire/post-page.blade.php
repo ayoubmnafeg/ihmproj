@@ -14,8 +14,8 @@
                 </div>
 
                 <div class="card-body p-0 me-lg-5 mt-2">
-                    <h5 class="fw-700 text-grey-900 font-xss mb-1">{{ $publication->title }}</h5>
-                    <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">{{ $publication->text }}</p>
+                    <h5 class="post-title-headline mb-1">{{ $publication->title }}</h5>
+                    <div class="post-content fw-500 text-grey-500 lh-26 font-xssss w-100">{!! $publication->text !!}</div>
 
                     <x-post.photos-grid :attachments="$publication->attachments" />
                 </div>
@@ -65,6 +65,34 @@
     <style>
     .comment-actions-row {
         flex-wrap: wrap;
+    }
+
+    .post-title-headline {
+        color: #111;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .post-content p {
+        margin-top: 0;
+        margin-bottom: 0.4rem;
+    }
+
+    .post-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    .post-content span[style*="font-size: 20px"],
+    .post-content p[style*="font-size: 20px"] {
+        color: #343a40 !important;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+
+    .post-content span[style*="font-size: 14px"],
+    .post-content p[style*="font-size: 14px"] {
+        color: #6c757d !important;
     }
 
     .comment-action-btn {

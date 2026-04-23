@@ -73,11 +73,13 @@
                     <ul class="mb-1 top-content">
                         <li class="logo d-none d-xl-block d-lg-block"></li>
                         <li><a href="{{ route('feed.index') }}" class="nav-content-bttn open-font"><i class="feather-tv btn-round-md bg-blue-gradiant me-3"></i><span>Newsfeed</span></a></li>
+                        <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-user-plus btn-round-md bg-red-gradiant me-3"></i><span>Friend Request</span></a></li>
+                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-zap btn-round-md bg-mini-gradiant me-3"></i><span>Suggest Group</span></a></li>
                         <li><a href="{{ route('admin.badges.index') }}" class="nav-content-bttn open-font"><i class="feather-award btn-round-md bg-red-gradiant me-3"></i><span>Badges</span></a></li>
-                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-zap btn-round-md bg-mini-gradiant me-3"></i><span>Popular Groups</span></a></li>
                         <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>Author Profile </span></a></li>
                     </ul>
                 </div>
+                @yield('left_sidebar_extras')
             </div>
         </div>
     </nav>

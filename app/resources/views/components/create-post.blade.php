@@ -229,7 +229,15 @@ new class extends Component
                             <input type="hidden" wire:model="selectedCategoryId">
                         @endif
 
-                        <textarea wire:model="text" class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg" rows="5" placeholder="What's on your mind, {{ auth()->user()->profile->display_name ?? 'there' }}?" required></textarea>
+                        <div
+                            x-data="createPostQuillEditor(@entangle('text').live)"
+                            x-init="init()"
+                            class="create-post-editor-wrap"
+                        >
+                            <div wire:ignore>
+                                <div x-ref="editor" class="create-post-quill"></div>
+                            </div>
+                        </div>
                         @error('text')
                             <div class="text-danger font-xssss mt-2">{{ $message }}</div>
                         @enderror
@@ -286,9 +294,144 @@ new class extends Component
             </div>
         </div>
     </div>
-</div>
+@once
+    <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+    <script>
+        var createPostQuillSizeRegistered = false;
+
+        function createPostQuillEditor(textModel) {
+            return {
+                text: textModel ?? '',
+                quill: null,
+                syncingFromLivewire: false,
+                init() {
+                    if (typeof Quill === 'undefined') {
+                        return;
+                    }
+                    if (!this.$refs.editor || this.$refs.editor.dataset.quillInitialized === '1') {
+                        return;
+                    }
+
+                    this.$refs.editor.dataset.quillInitialized = '1';
+
+                    if (!createPostQuillSizeRegistered) {
+                        const Size = Quill.import('attributors/style/size');
+                        Size.whitelist = ['20px'];
+                        Quill.register(Size, true);
+                        createPostQuillSizeRegistered = true;
+                    }
+
+                    this.quill = new Quill(this.$refs.editor, {
+                        theme: 'snow',
+                        placeholder: "What's on your mind?",
+                        modules: {
+                            toolbar: {
+                                container: [
+                                    ['subheadline'],
+                                    ['bold', 'italic', 'underline'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    ['link'],
+                                    ['clean']
+                                ],
+                                handlers: {
+                                    subheadline: function () {
+                                        const range = this.quill.getSelection();
+                                        const currentFormat = range
+                                            ? this.quill.getFormat(range)
+                                            : this.quill.getFormat();
+                                        const nextSize = currentFormat.size === '20px' ? false : '20px';
+                                        this.quill.format('size', nextSize);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    if (this.text) {
+                        this.quill.root.innerHTML = this.text;
+                    }
+
+                    this.quill.on('text-change', () => {
+                        if (!this.quill) {
+                            return;
+                        }
+
+                        const plainText = this.quill.getText().trim();
+                        const html = plainText.length ? this.quill.root.innerHTML : '';
+                        this.syncingFromLivewire = true;
+                        this.text = html;
+                        this.$nextTick(() => {
+                            this.syncingFromLivewire = false;
+                        });
+                    });
+
+                    this.$watch('text', (value) => {
+                        if (!this.quill || this.syncingFromLivewire) {
+                            return;
+                        }
+
+                        const current = this.quill.root.innerHTML;
+                        const nextValue = value || '';
+                        if (current !== nextValue) {
+                            this.quill.root.innerHTML = nextValue;
+                        }
+                    });
+                }
+            };
+        }
+    </script>
+@endonce
 
 <style>
+    .create-post-editor-wrap .ql-toolbar.ql-snow {
+        border: 1px solid #d7dde5;
+        border-bottom: 0;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .create-post-editor-wrap .ql-container.ql-snow {
+        border: 1px solid #d7dde5;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+        min-height: 140px;
+        background: #f7f7f7;
+    }
+
+    .create-post-editor-wrap .ql-editor {
+        min-height: 120px;
+        font-size: 14px;
+        color: #495057;
+    }
+
+    .create-post-editor-wrap .ql-snow .ql-toolbar button.ql-subheadline,
+    .create-post-editor-wrap .ql-snow.ql-toolbar button.ql-subheadline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 24px;
+        padding: 0;
+        position: relative;
+    }
+
+    .create-post-editor-wrap .ql-snow .ql-toolbar button.ql-subheadline::before,
+    .create-post-editor-wrap .ql-snow.ql-toolbar button.ql-subheadline::before {
+        content: "H";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 1;
+    }
+
     .create-post-cancel-btn {
         transition: background-color 0.2s ease, color 0.2s ease;
     }
@@ -375,3 +518,4 @@ new class extends Component
         padding: 10px;
     }
 </style>
+</div>

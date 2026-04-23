@@ -116,8 +116,39 @@ new class extends Component
         </div>
 
         <div class="card-body p-0 me-lg-5 mt-2">
-            <h5 class="fw-700 text-grey-900 font-xss mb-1">{{ $publication->title }}</h5>
-            <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">{{ $publication->text }}</p>
+            <h5 class="post-title-headline mb-1">{{ $publication->title }}</h5>
+            <div
+                x-data="{
+                    expanded: false,
+                    showToggle: false,
+                    checkOverflow() {
+                        this.$nextTick(() => {
+                            if (!this.$refs.content) return;
+                            if (this.expanded) {
+                                this.showToggle = true;
+                                return;
+                            }
+
+                            this.showToggle = this.$refs.content.scrollHeight > this.$refs.content.clientHeight + 2;
+                        });
+                    }
+                }"
+                x-init="checkOverflow()"
+            >
+                <div
+                    x-ref="content"
+                    class="post-content fw-500 text-grey-500 lh-26 font-xssss w-100"
+                    :class="{ 'post-content--collapsed': !expanded }"
+                >{!! $publication->text !!}</div>
+
+                <button
+                    type="button"
+                    class="see-more-btn mt-1"
+                    x-show="showToggle || expanded"
+                    x-on:click="expanded = !expanded; $nextTick(() => checkOverflow())"
+                    x-text="expanded ? 'See less' : 'See more'"
+                ></button>
+            </div>
             @if($photoCount > 0)
                 <div class="d-flex align-items-center mt-2 mb-2">
                     <i class="feather-image text-grey-500 me-2 font-xss"></i>
@@ -198,6 +229,57 @@ new class extends Component
 </script>
 
 <style>
+    .post-title-headline {
+        color: #111;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .post-content--collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .post-content p {
+        margin-top: 0;
+        margin-bottom: 0.4rem;
+    }
+
+    .post-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    .see-more-btn {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        color: #0d6efd;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .post-content span[style*="font-size: 28px"],
+    .post-content p[style*="font-size: 28px"] {
+        color: #111 !important;
+        font-weight: 700;
+    }
+
+    .post-content span[style*="font-size: 20px"],
+    .post-content p[style*="font-size: 20px"] {
+        color: #343a40 !important;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+
+    .post-content span[style*="font-size: 14px"],
+    .post-content p[style*="font-size: 14px"] {
+        color: #6c757d !important;
+    }
+
     .comment-action-btn {
         border: 0;
         background: transparent;

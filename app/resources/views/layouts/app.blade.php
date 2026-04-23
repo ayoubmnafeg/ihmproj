@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/emoji.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@300;400;500;600;700;800&display=swap">
+    @livewireStyles
     @yield('styles')
     <style>
         .modal { z-index: 1000000 !important; }
@@ -275,6 +276,7 @@
 
 <script src="{{ asset('js/plugin.js') }}"></script>
 <script src="{{ asset('js/scripts.js') }}"></script>
+@livewireScripts
 <script>
 (function () {
     var btn = document.getElementById('profile-avatar-btn');

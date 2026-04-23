@@ -56,4 +56,9 @@ class PublicationController extends Controller
 
         return redirect()->route('feed.index')->with('success', 'Publication deleted.');
     }
+
+    public function show(Publication $publication): View
+    {
+        return view('feed.show', ['publicationId' => $publication->id]);
+    }
 }

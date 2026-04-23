@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [PublicationController::class, 'index'])->name('feed.index');
+    Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
     Route::post('/publications', [PublicationController::class, 'store'])->name('publications.store');
     Route::delete('/publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
 

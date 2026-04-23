@@ -20,7 +20,7 @@ class Content extends Model
 
     public function reactions(): HasMany
     {
-        return $this->hasMany(Reaction::class);
+        return $this->hasMany(Reaction::class, 'content_id');
     }
 
     public function reports(): HasMany

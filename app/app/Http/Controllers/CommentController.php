@@ -18,6 +18,18 @@ class CommentController extends Controller
             'parent_id' => 'nullable|uuid|exists:comments,id',
         ]);
 
+        $parentComment = null;
+        if (!empty($data['parent_id'])) {
+            $parentComment = Comment::query()
+                ->where('comments.id', $data['parent_id'])
+                ->where('comments.publication_id', $publication->id)
+                ->first();
+
+            if (!$parentComment) {
+                return back()->with('error', 'Invalid parent comment.');
+            }
+        }
+
         $content = Content::create([
             'type' => 'comment',
             'status' => 'visible',
@@ -28,7 +40,7 @@ class CommentController extends Controller
             'id' => $content->id,
             'text' => $data['text'],
             'publication_id' => $publication->id,
-            'parent_id' => $data['parent_id'] ?? null,
+            'parent_id' => $parentComment->id ?? null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

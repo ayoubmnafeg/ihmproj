@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-xl-4 col-xxl-3 col-lg-4 pe-0">
         <div class="card w-100 shadow-xss rounded-xxl overflow-hidden border-0 mb-3 mt-3 pb-3">
-            <div class="card-body position-relative h150 bg-image-cover bg-image-center" style="background-image: url('{{ asset('images/bb-9.jpg') }}');"></div>
+            <div class="card-body position-relative h150 bg-image-cover bg-image-center" style="background-image: url('{{ asset('images/Image_Login.jpg') }}');"></div>
             <div class="card-body d-block pt-4 text-center">
                 <figure class="avatar mt--6 position-relative w75 z-index-1 w100 ms-auto me-auto">
                     <img src="{{ $group->profile_image_path ? asset('storage/' . $group->profile_image_path) : asset('images/user-12.png') }}" alt="group avatar" class="p-1 bg-white rounded-xl w-100">

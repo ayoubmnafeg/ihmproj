@@ -35,7 +35,7 @@
         <div class="flex-fill">
             <div class="d-flex align-items-center">
                 <h5 class="fw-700 text-grey-900 font-xssss mb-1">{{ $comment->author->profile->display_name ?? 'Unknown' }}</h5>
-                @if($comment->status !== 'deleted' && (auth()->id() === $comment->author_id || auth()->user()->isAdmin()))
+                @if($comment->status !== 'deleted' && auth()->check() && (auth()->id() === $comment->author_id || auth()->user()->isAdmin()))
                     <button
                         type="button"
                         class="comment-action-btn text-danger ms-2 mb-1"
@@ -52,6 +52,7 @@
             @endif
             <div class="d-flex align-items-center gap-2 comment-actions-row">
                 @if($comment->status !== 'deleted')
+                    @auth
                     <form method="POST" action="{{ route('reactions.toggle', $comment->id) }}" class="d-inline">
                         @csrf
                         <input type="hidden" name="type" value="upvote">
@@ -66,12 +67,18 @@
                             <i class="feather-arrow-down"></i> {{ $comment->downvotes_count ?? 0 }}
                         </button>
                     </form>
+                    @else
+                    <span class="font-xssss text-grey-600"><i class="feather-arrow-up"></i> {{ $comment->upvotes_count ?? 0 }}</span>
+                    <span class="font-xssss text-grey-600"><i class="feather-arrow-down"></i> {{ $comment->downvotes_count ?? 0 }}</span>
+                    @endauth
                     <button type="button" class="comment-action-btn copy-comment-link" data-link="{{ route('publications.show', $publicationId) }}#comment-{{ $comment->id }}">
                         <i class="feather-share-2"></i> Share
                     </button>
+                    @auth
                     <button type="button" class="comment-action-btn" wire:click="toggleReplyForm('{{ $comment->id }}')">
                         <i class="feather-corner-down-right"></i> Reply
                     </button>
+                    @endauth
                 @endif
             </div>
         </div>
@@ -91,6 +98,7 @@
         </div>
     @endif
 
+    @auth
     <x-post.comment-form
         :publication-id="$publicationId"
         form-id="reply-form-{{ $comment->id }}"
@@ -100,5 +108,6 @@
         :hidden="$comment->status === 'deleted' || !($openReplyForms[$comment->id] ?? false)"
         wrapper-class="mt-2"
     />
+    @endauth
 </div>
 @endif

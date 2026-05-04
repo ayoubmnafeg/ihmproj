@@ -21,6 +21,12 @@ class CategoryGroupsList extends Component
 
     public function mount(): void
     {
+        if (! auth()->check()) {
+            $this->followedCategoryIds = [];
+
+            return;
+        }
+
         $this->followedCategoryIds = auth()->user()
             ->followedCategories()
             ->pluck('categories.id')
@@ -40,6 +46,10 @@ class CategoryGroupsList extends Component
 
     public function follow(string $categoryId): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         auth()->user()
             ->followedCategories()
             ->syncWithoutDetaching([$categoryId]);

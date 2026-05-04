@@ -25,15 +25,23 @@ class PostPage extends Component
 
     public function getPublicationProperty(): Publication
     {
+        $userId = auth()->id();
+
         return Publication::with([
             'author.profile',
             'category',
             'attachments',
             'poll.options',
-            'poll.votes' => fn ($voteQuery) => $voteQuery->where('user_id', auth()->id()),
-            'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id()),
+            'poll.votes' => fn ($voteQuery) => $userId
+                ? $voteQuery->where('user_id', $userId)
+                : $voteQuery->whereRaw('0 = 1'),
+            'reactions' => fn ($reactionQuery) => $userId
+                ? $reactionQuery->where('user_id', $userId)
+                : $reactionQuery->whereRaw('0 = 1'),
             'comments' => fn ($commentQuery) => $commentQuery
-                ->with(['author.profile', 'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id())])
+                ->with(['author.profile', 'reactions' => fn ($reactionQuery) => $userId
+                    ? $reactionQuery->where('user_id', $userId)
+                    : $reactionQuery->whereRaw('0 = 1')])
                 ->withCount([
                     'reactions as upvotes_count' => fn ($reactionQuery) => $reactionQuery->where('type', 'upvote'),
                     'reactions as downvotes_count' => fn ($reactionQuery) => $reactionQuery->where('type', 'downvote'),
@@ -52,6 +60,10 @@ class PostPage extends Component
 
     public function votePoll(string $optionId): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         $publication = Publication::with('poll.options')
             ->where('publications.id', $this->publicationId)
             ->where('contents.status', 'visible')
@@ -97,6 +109,10 @@ class PostPage extends Component
 
     public function addComment(): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         $this->validate([
             'newComment' => 'required|string',
         ]);
@@ -121,6 +137,10 @@ class PostPage extends Component
 
     public function addReply(string $parentId): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         $draft = $this->replyDrafts[$parentId] ?? '';
         if (!is_string($draft) || trim($draft) === '') {
             return;
@@ -171,6 +191,10 @@ class PostPage extends Component
 
     public function confirmDeleteComment(): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         if (!$this->pendingDeleteCommentId) {
             return;
         }
@@ -186,7 +210,7 @@ class PostPage extends Component
             return;
         }
 
-        if (auth()->id() !== $comment->author_id && !auth()->user()->isAdmin()) {
+        if (auth()->id() !== $comment->author_id && ! auth()->user()->isAdmin()) {
             abort(403);
         }
 

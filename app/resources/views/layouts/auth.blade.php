@@ -9,18 +9,19 @@
     <link rel="stylesheet" href="{{ asset('css/feather.css') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="{{ asset('css/theme-private.css') }}">
 </head>
-<body class="color-theme-blue">
+<body class="ui-private color-theme-blue">
 
 <div class="preloader"></div>
 
 <div class="main-wrap">
     <div class="nav-header bg-transparent shadow-none border-0">
         <div class="nav-top w-100">
-            <a href="{{ route('feed.index') }}">
-                <i class="feather-zap text-success display1-size me-2 ms-0"></i>
-                <span class="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">{{ config('app.name') }}</span>
+            <a href="{{ route('home') }}" class="text-decoration-none d-inline-flex align-items-center gap-2 app-brand-link">
+                <i class="feather-shield text-grey-600" style="font-size:1.5rem;" aria-hidden="true"></i>
+                <span class="d-inline-block fw-600 text-grey-900 logo-text mb-0" style="font-family:Inter,system-ui,sans-serif;letter-spacing:0.04em;">{{ config('app.name') }}</span>
             </a>
             <a href="#" class="mob-menu ms-auto me-2 chat-active-btn"><i class="feather-message-circle text-grey-900 font-sm btn-round-md bg-greylight"></i></a>
             <a href="#" class="me-2 menu-search-icon mob-menu"><i class="feather-search text-grey-900 font-sm btn-round-md bg-greylight"></i></a>

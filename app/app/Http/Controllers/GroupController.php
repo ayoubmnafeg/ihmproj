@@ -63,10 +63,13 @@ class GroupController extends Controller
     {
         $category->loadCount('followers', 'publications');
 
-        $isFollowing = auth()->user()
-            ->followedCategories()
-            ->where('categories.id', $category->id)
-            ->exists();
+        $isFollowing = false;
+        if (auth()->check()) {
+            $isFollowing = auth()->user()
+                ->followedCategories()
+                ->where('categories.id', $category->id)
+                ->exists();
+        }
 
         return view('groups.show', [
             'group' => $category,

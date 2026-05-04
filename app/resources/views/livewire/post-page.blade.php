@@ -33,11 +33,19 @@
                                         $optionPercent = $totalPollVotes > 0 ? (int) round(($optionVotes / $totalPollVotes) * 100) : 0;
                                         $isSelected = $votedOptionId === $option->id;
                                     @endphp
+                                    @auth
                                     <button type="button" wire:click="votePoll('{{ $option->id }}')" class="post-poll-option {{ $isSelected ? 'is-selected' : '' }}">
                                         <span class="post-poll-option-label">{{ $option->label }}</span>
                                         <span class="post-poll-option-meta">{{ $optionPercent }}% ({{ $optionVotes }})</span>
                                         <span class="post-poll-option-bar" style="width: {{ $optionPercent }}%;"></span>
                                     </button>
+                                    @else
+                                    <div class="post-poll-option {{ $isSelected ? 'is-selected' : '' }}">
+                                        <span class="post-poll-option-label">{{ $option->label }}</span>
+                                        <span class="post-poll-option-meta">{{ $optionPercent }}% ({{ $optionVotes }})</span>
+                                        <span class="post-poll-option-bar" style="width: {{ $optionPercent }}%;"></span>
+                                    </div>
+                                    @endauth
                                 @endforeach
                             </div>
                             <div class="font-xssss text-grey-500 mt-2">{{ $totalPollVotes }} {{ $totalPollVotes === 1 ? 'vote' : 'votes' }}</div>
@@ -52,6 +60,7 @@
             />
 
                 <div id="comments-{{ $publication->id }}" class="card-body p-0 mt-3">
+                    @auth
                     <x-post.comment-form
                         :publication-id="$publication->id"
                         placeholder="Add a comment..."
@@ -59,6 +68,11 @@
                         wire-model="newComment"
                         wrapper-class="mb-3"
                     />
+                    @else
+                    <p class="font-xssss text-grey-500 mb-3">
+                        <a href="{{ route('login') }}">Sign in</a> to comment.
+                    </p>
+                    @endauth
 
                     @foreach($publication->comments->where('parent_id', null) as $comment)
                         <x-post.comment-item

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Newsfeed')
+@section('title', 'Feed')
 
 @section('content')
 <div class="row feed-body">
-    <div class="col-xl-8 col-lg-9 mx-auto">
+    <div class="col-xl-10 col-lg-10 mx-auto">
 
         <!-- loader wrapper -->
         <div class="preloader-wrap p-3">
@@ -36,7 +36,9 @@
         <!-- loader wrapper -->
 
 
+        @auth
         <livewire:create-post context="feed" modal-id="createPostModalFeed" />
+        @endauth
 
         <livewire:post-feed scope="all" />
 
@@ -46,10 +48,11 @@
 @endsection
 
 @section('left_sidebar_extras')
+@auth
 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss mb-2">
     <div class="card-body d-flex align-items-center p-4">
-        <h4 class="fw-700 mb-0 font-xssss text-grey-900">Friend Requests</h4>
-        <a href="{{ route('members.index') }}" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+        <h4 class="fw-600 mb-0 font-xssss text-grey-700">Connection requests</h4>
+        <a href="{{ route('members.index') }}" class="fw-600 ms-auto font-xssss text-primary">View all</a>
     </div>
     @forelse($incomingFriendRequests as $friendRequest)
         <div class="card-body d-flex pt-4 ps-4 pe-4 pb-0 border-top-xs bor-0">
@@ -82,8 +85,8 @@
 
 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss mb-2">
     <div class="card-body d-flex align-items-center p-4">
-        <h4 class="fw-700 mb-0 font-xssss text-grey-900">Suggest Group</h4>
-        <a href="{{ route('groups.index') }}" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+        <h4 class="fw-600 mb-0 font-xssss text-grey-700">Suggested spaces</h4>
+        <a href="{{ route('groups.index') }}" class="fw-600 ms-auto font-xssss text-primary">Browse</a>
     </div>
     <div class="card-body pt-2 ps-4 pe-4 pb-4 border-top-xs">
         @forelse($suggestedGroups as $group)
@@ -107,5 +110,6 @@
         @endforelse
     </div>
 </div>
+@endauth
 @endsection
 

@@ -17,7 +17,7 @@ class ProfileController extends Controller
         $friendRequestStatus = null;
         $outgoingPendingRequestId = null;
 
-        if (auth()->id() !== $user->id) {
+        if (auth()->check() && auth()->id() !== $user->id) {
             $friendRequest = FriendRequest::where(function ($query) use ($user) {
                 $query->where('sender_id', auth()->id())
                     ->where('receiver_id', $user->id);

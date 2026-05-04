@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $isOwnProfile = auth()->id() === $user->id;
+    $isOwnProfile = auth()->check() && auth()->id() === $user->id;
 @endphp
 
 <div class="row">
@@ -26,31 +26,35 @@
                             Edit Profile
                         </a>
                     @else
-                        @if ($friendRequestStatus === 'friends')
-                            <button type="button" class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0" disabled>
-                                Friends
-                            </button>
-                        @elseif ($friendRequestStatus === 'outgoing_pending')
-                            <form method="POST" action="{{ route('friend-requests.update', $outgoingPendingRequestId) }}" class="d-none d-lg-block">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="action" value="canceled">
-                                <button type="submit" class="bg-grey p-3 z-index-1 rounded-3 text-grey-800 font-xsssss text-uppercase fw-700 ls-3 border-0">
-                                    Cancel Request
+                        @auth
+                            @if ($friendRequestStatus === 'friends')
+                                <button type="button" class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0" disabled>
+                                    Friends
                                 </button>
-                            </form>
-                        @elseif ($friendRequestStatus === 'incoming_pending')
-                            <a href="{{ route('members.index') }}" class="d-none d-lg-block bg-primary-gradiant p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
-                                Respond Request
-                            </a>
+                            @elseif ($friendRequestStatus === 'outgoing_pending')
+                                <form method="POST" action="{{ route('friend-requests.update', $outgoingPendingRequestId) }}" class="d-none d-lg-block">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="action" value="canceled">
+                                    <button type="submit" class="bg-grey p-3 z-index-1 rounded-3 text-grey-800 font-xsssss text-uppercase fw-700 ls-3 border-0">
+                                        Cancel Request
+                                    </button>
+                                </form>
+                            @elseif ($friendRequestStatus === 'incoming_pending')
+                                <a href="{{ route('members.index') }}" class="d-none d-lg-block bg-primary-gradiant p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
+                                    Respond Request
+                                </a>
+                            @else
+                                <form method="POST" action="{{ route('friend-requests.store', $user->id) }}" class="d-none d-lg-block">
+                                    @csrf
+                                    <button type="submit" class="bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
+                                        Add Friend
+                                    </button>
+                                </form>
+                            @endif
                         @else
-                            <form method="POST" action="{{ route('friend-requests.store', $user->id) }}" class="d-none d-lg-block">
-                                @csrf
-                                <button type="submit" class="bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
-                                    Add Friend
-                                </button>
-                            </form>
-                        @endif
+                            <a href="{{ route('login') }}" class="d-none d-lg-block bg-primary-gradiant p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">Sign in to connect</a>
+                        @endauth
                     @endif
                     <a href="#" class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="feather-mail font-md"></i></a>
                     <a href="#" class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="ti-more font-md text-dark"></i></a>

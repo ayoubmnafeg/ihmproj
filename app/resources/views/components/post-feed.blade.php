@@ -16,6 +16,10 @@ new class extends Component
 
     public function votePoll(string $publicationId, string $optionId): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         $publication = Publication::with('poll.options')
             ->where('publications.id', $publicationId)
             ->where('contents.status', 'visible')
@@ -70,9 +74,20 @@ new class extends Component
 
     public function getPublicationsProperty()
     {
-        $query = Publication::with(['author.profile', 'category', 'attachments', 'poll.options', 'poll.votes' => fn ($voteQuery) => $voteQuery->where('user_id', auth()->id())])
+        if ($this->scope === 'mine' && ! auth()->check()) {
+            $this->hasMore = false;
+
+            return collect();
+        }
+
+        $userId = auth()->id();
+        $query = Publication::with(['author.profile', 'category', 'attachments', 'poll.options', 'poll.votes' => fn ($voteQuery) => $userId
+            ? $voteQuery->where('user_id', $userId)
+            : $voteQuery->whereRaw('0 = 1')])
             ->with([
-                'reactions' => fn ($reactionQuery) => $reactionQuery->where('user_id', auth()->id()),
+                'reactions' => fn ($reactionQuery) => $userId
+                    ? $reactionQuery->where('user_id', $userId)
+                    : $reactionQuery->whereRaw('0 = 1'),
             ])
             ->withCount('comments')
             ->withCount([
@@ -82,7 +97,7 @@ new class extends Component
             ->where('contents.status', 'visible')
             ->latest('contents.created_at');
 
-        if ($this->scope === 'mine') {
+        if ($this->scope === 'mine' && auth()->check()) {
             $query->where('contents.author_id', auth()->id());
         }
 
@@ -109,7 +124,7 @@ new class extends Component
 };
 ?>
 
-<div>
+<div class="post-feed">
     @forelse($publications as $publication)
     @php
         $userReactionType = $publication->reactions->first()?->type;
@@ -121,11 +136,11 @@ new class extends Component
         $totalPollVotes = $poll ? $poll->options->sum('votes_count') : 0;
         $votedOptionId = $poll ? optional($poll->votes->first())->poll_option_id : null;
     @endphp
-    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 ui-surface-card">
         <div class="card-body p-0 d-flex">
-            <figure class="avatar me-3"><img src="{{ asset('images/profile-4.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-            <h4 class="fw-700 text-grey-900 font-xssss mt-1">
-                <a href="{{ route('profile.show', $publication->author_id) }}" class="text-grey-900">{{ $publication->author->profile->display_name ?? 'Unknown' }}</a>
+            <figure class="avatar me-3"><img src="{{ asset('images/profile-4.png') }}" alt="" class="shadow-sm rounded-circle w45" width="45" height="45"></figure>
+            <h4 class="fw-600 text-grey-900 font-xssss mt-1">
+                <a href="{{ route('profile.show', $publication->author_id) }}" class="text-grey-900 text-decoration-none">{{ $publication->author->profile->display_name ?? ('anon_'. $publication->author_id) }}</a>
                 <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                     {{ $publication->created_at->diffForHumans() }}
                     @if($publication->category) &middot; {{ $publication->category->name }} @endif
@@ -141,6 +156,7 @@ new class extends Component
                     <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
                     <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
                 </div>
+                @auth
                 @if(auth()->id() === $publication->author_id || auth()->user()->isAdmin())
                 <div class="card-body p-0 d-flex mt-2">
                     <i class="feather-trash text-grey-500 me-3 font-lg"></i>
@@ -163,6 +179,7 @@ new class extends Component
                         </button>
                     </form>
                 </div>
+                @endauth
             </div>
         </div>
 
@@ -229,6 +246,7 @@ new class extends Component
                                 $optionPercent = $totalPollVotes > 0 ? (int) round(($optionVotes / $totalPollVotes) * 100) : 0;
                                 $isSelected = $votedOptionId === $option->id;
                             @endphp
+                            @auth
                             <button
                                 type="button"
                                 wire:click="votePoll('{{ $publication->id }}', '{{ $option->id }}')"
@@ -238,6 +256,13 @@ new class extends Component
                                 <span class="post-poll-option-meta">{{ $optionPercent }}% ({{ $optionVotes }})</span>
                                 <span class="post-poll-option-bar" style="width: {{ $optionPercent }}%;"></span>
                             </button>
+                            @else
+                            <div class="post-poll-option {{ $isSelected ? 'is-selected' : '' }}">
+                                <span class="post-poll-option-label">{{ $option->label }}</span>
+                                <span class="post-poll-option-meta">{{ $optionPercent }}% ({{ $optionVotes }})</span>
+                                <span class="post-poll-option-bar" style="width: {{ $optionPercent }}%;"></span>
+                            </div>
+                            @endauth
                         @endforeach
                     </div>
                     <div class="font-xssss text-grey-500 mt-2">{{ $totalPollVotes }} {{ $totalPollVotes === 1 ? 'vote' : 'votes' }}</div>
@@ -246,6 +271,7 @@ new class extends Component
         </div>
 
         <div class="card-body d-flex align-items-center p-0 mt-3">
+            @auth
             <form method="POST" action="{{ route('reactions.toggle', $publication->id) }}" class="d-inline me-2">
                 @csrf
                 <input type="hidden" name="type" value="upvote">
@@ -262,6 +288,16 @@ new class extends Component
                     <span>{{ $publication->downvotes_count }}</span>
                 </button>
             </form>
+            @else
+            <div class="d-flex align-items-center me-2 text-grey-600">
+                <i class="feather-arrow-up me-1 font-xss"></i>
+                <span class="fw-600 font-xssss">{{ $publication->upvotes_count }}</span>
+            </div>
+            <div class="d-flex align-items-center me-3 text-grey-600">
+                <i class="feather-arrow-down me-1 font-xss"></i>
+                <span class="fw-600 font-xssss">{{ $publication->downvotes_count }}</span>
+            </div>
+            @endauth
             <a href="{{ route('publications.show', $publication->id) }}" class="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss">
                 <i class="feather-message-circle text-grey-900 me-1 font-xss"></i>
                 <span class="d-none-xss">{{ $publication->comments_count }} {{ $publication->comments_count === 1 ? 'Comment' : 'Comments' }}</span>
@@ -272,13 +308,13 @@ new class extends Component
         </div>
     </div>
     @empty
-    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 text-center">
-        <p class="fw-500 text-grey-500 font-xssss mb-0">No publications yet. Be the first to post!</p>
+    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 text-center ui-surface-card">
+        <p class="fw-500 text-grey-500 font-xssss mb-0">Nothing here yet. When you and others share, it will show up in this private feed.</p>
     </div>
     @endforelse
 
     @if($hasMore)
-    <div wire:poll.visible.750ms="loadMore" class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
+    <div wire:poll.visible.750ms="loadMore" class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3 ui-surface-card">
         <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
             <div class="stage">
                 <div class="dot-typing"></div>

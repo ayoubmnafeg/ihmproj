@@ -93,7 +93,12 @@ new class extends Component
 
     public function getFollowedCategoriesProperty()
     {
-        return auth()->user()
+        $user = auth()->user();
+        if (! $user) {
+            return collect();
+        }
+
+        return $user
             ->followedCategories()
             ->where('is_active', true)
             ->orderBy('name')
@@ -102,6 +107,10 @@ new class extends Component
 
     public function createPost(): void
     {
+        if (! auth()->check()) {
+            return;
+        }
+
         $effectiveCategoryId = $this->context === 'category' && $this->categoryId
             ? $this->categoryId
             : $this->selectedCategoryId;
@@ -213,8 +222,8 @@ new class extends Component
 };
 ?>
 
-<div>
-    <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-3 pe-4 pb-3 mb-3 mt-3">
+<div class="create-post">
+    <div class="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-3 pe-4 pb-3 mb-3 mt-3 ui-surface-card">
         <input type="file" id="create-post-image-input" class="d-none" wire:model="images" accept="image/*" multiple>
 
         <div class="card-body p-0 d-flex align-items-start">
@@ -225,14 +234,14 @@ new class extends Component
                     <button type="button" wire:click="expand"
                         class="flex-grow-1 text-start bor-0 rounded-xxl p-2 ps-4 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg bg-transparent"
                         style="cursor:pointer;">
-                        What's on your mind, {{ auth()->user()->profile->display_name ?? 'there' }}?
+                        Share to the feed as {{ auth()->user()?->profile?->display_name ?? ('anon_'. auth()->id()) }}…
                     </button>
                     <button
                         type="button"
                         onclick="var input = document.getElementById('create-post-image-input'); if (input) input.click();"
                         class="d-flex align-items-center ms-3 text-grey-600 border-0 bg-transparent"
                     >
-                        <i class="feather-image font-md text-success me-1"></i>
+                        <i class="feather-image font-md text-grey-600 me-1"></i>
                     </button>
                     <button
                         type="button"
@@ -240,9 +249,9 @@ new class extends Component
                         class="d-flex align-items-center ms-2 text-grey-600 border-0 bg-transparent"
                         title="Start a poll"
                     >
-                        <i class="feather-bar-chart-2 font-md text-primary"></i>
+                        <i class="feather-bar-chart-2 font-md text-grey-600"></i>
                     </button>
-                    <button type="button" wire:click="expand" class="d-flex align-items-center ms-2 text-grey-600 border-0 bg-transparent"><i class="feather-smile font-md text-warning"></i></button>
+                    <button type="button" wire:click="expand" class="d-flex align-items-center ms-2 text-grey-600 border-0 bg-transparent" title="Compose"><i class="feather-edit-3 font-md text-grey-600"></i></button>
                 </div>
                 @endif
 
@@ -359,7 +368,7 @@ new class extends Component
                                     <div class="text-danger font-xssss mb-2">{{ $message }}</div>
                                 @enderror
 
-                                <button type="button" wire:click="addPollOption" class="border-0 bg-transparent text-primary font-xssss fw-600 p-0">+ Add option</button>
+                                <button type="button" wire:click="addPollOption" class="border-0 bg-transparent text-grey-700 font-xssss fw-600 p-0">+ Add option</button>
                             </div>
                         @endif
 
@@ -387,13 +396,13 @@ new class extends Component
                         <div class="d-flex align-items-center gap-2 mt-3">
                             @if(!$isPoll)
                                 <button type="button" onclick="document.getElementById('create-post-image-input').click()" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Add image">
-                                    <i class="feather-image font-md text-success me-1"></i>
+                                    <i class="feather-image font-md text-grey-600 me-1"></i>
                                 </button>
                             @endif
                             <button type="button" wire:click="startPoll" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Start a poll">
-                                <i class="feather-bar-chart-2 font-md text-primary me-1"></i>
+                                <i class="feather-bar-chart-2 font-md text-grey-600 me-1"></i>
                                 @if($isPoll)
-                                    <span class="font-xssss fw-600 text-primary">Poll mode</span>
+                                    <span class="font-xssss fw-600 text-grey-700">Poll</span>
                                 @endif
                             </button>
                             @if(!empty($images))<span class="font-xssss text-grey-500">{{ count($images) }} image(s) selected</span>@endif

@@ -21,24 +21,34 @@ class PublicationController extends Controller
             ->latest('contents.created_at')
             ->paginate(20);
 
-        $incomingFriendRequests = FriendRequest::with('sender.profile')
-            ->where('receiver_id', auth()->id())
-            ->where('status', 'pending')
-            ->latest()
-            ->take(3)
-            ->get();
+        if (auth()->check()) {
+            $incomingFriendRequests = FriendRequest::with('sender.profile')
+                ->where('receiver_id', auth()->id())
+                ->where('status', 'pending')
+                ->latest()
+                ->take(3)
+                ->get();
 
-        $followedCategoryIds = auth()->user()
-            ->followedCategories()
-            ->pluck('categories.id');
+            $followedCategoryIds = auth()->user()
+                ->followedCategories()
+                ->pluck('categories.id');
 
-        $suggestedGroups = Category::query()
-            ->where('is_active', true)
-            ->whereNotIn('id', $followedCategoryIds)
-            ->withCount('followers')
-            ->latest()
-            ->take(2)
-            ->get();
+            $suggestedGroups = Category::query()
+                ->where('is_active', true)
+                ->whereNotIn('id', $followedCategoryIds)
+                ->withCount('followers')
+                ->latest()
+                ->take(2)
+                ->get();
+        } else {
+            $incomingFriendRequests = collect();
+            $suggestedGroups = Category::query()
+                ->where('is_active', true)
+                ->withCount('followers')
+                ->latest()
+                ->take(2)
+                ->get();
+        }
 
         return view('feed.index', compact('publications', 'incomingFriendRequests', 'suggestedGroups'));
     }

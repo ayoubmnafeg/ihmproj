@@ -15,7 +15,7 @@
         'default-message.html' => auth()->check() ? route('messages.index') : route('login'),
         'default-group.html' => auth()->check() ? route('groups.index') : route('login'),
         'group-page.html' => auth()->check() ? route('groups.show', 1) : route('login'),
-        '404.html' => auth()->check() ? route('feed.index') : route('login'),
+        '404.html' => auth()->check() ? route('feed.index') : route('home'),
     ];
 
     foreach ($routeMap as $file => $url) {

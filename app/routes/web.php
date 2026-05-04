@@ -17,6 +17,36 @@ use App\Http\Controllers\StaticController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*
+| Public routes: home is / for guests; /welcome is the same intro page for all users (e.g. from the sidebar). Main feed is at /stream.
+| Mutations (post, comment, react, etc.) stay behind the auth group below.
+*/
+Route::get('/welcome', function () {
+    return view('landing');
+})->name('welcome');
+
+Route::get('/', function (Request $request) {
+    if (! $request->user()) {
+        return view('landing');
+    }
+    if ($request->user()->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('feed.index');
+})->name('home');
+
+Route::get('/stream', function (Request $request, PublicationController $publicationController) {
+    if ($request->user()?->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return $publicationController->index();
+})->name('feed.index');
+
+Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -28,14 +58,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/', function (Request $request, PublicationController $publicationController) {
-        if ($request->user()->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return $publicationController->index();
-    })->name('feed.index');
-    Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
     Route::post('/publications', [PublicationController::class, 'store'])->name('publications.store');
     Route::delete('/publications/{publication}', [PublicationController::class, 'destroy'])->name('publications.destroy');
 
@@ -51,7 +73,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 
     Route::get('/settings', [StaticController::class, 'settings'])->name('settings.index');
     Route::get('/notifications', [StaticController::class, 'notifications'])->name('notifications.index');

@@ -9,7 +9,7 @@
                 <p class="text-grey-500 font-xsss">
                     The page you're looking for isn't available. Try to search again or go back home.
                 </p>
-                <a href="{{ route('feed.index') }}" class="p-3 w175 bg-current text-white d-inline-block text-center fw-600 font-xssss rounded-3 text-uppercase ls-3">
+                <a href="{{ auth()->check() ? route('feed.index') : route('home') }}" class="p-3 w175 bg-current text-white d-inline-block text-center fw-600 font-xssss rounded-3 text-uppercase ls-3">
                     Home Page
                 </a>
             </div>

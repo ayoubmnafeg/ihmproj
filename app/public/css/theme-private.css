@@ -1,0 +1,393 @@
+/**
+ * Private / flat UI — surfaces, borders, no glossy gradients.
+ * Works with and without .theme-dark on body.
+ */
+.ui-private {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ui-radius: 10px;
+  --ui-radius-sm: 6px;
+  --ui-shadow: none;
+  --ui-border: #e2e6eb;
+  --ui-bg: #eceff3;
+  --ui-surface: #ffffff;
+  --ui-surface-2: #f6f7f9;
+  --ui-text: #1c2330;
+  --ui-text-muted: #5c6570;
+  --ui-accent: #3d4f60;
+  --ui-accent-fg: #f0f3f6;
+  --ui-icon-bg: #e8ecf1;
+  --ui-icon-fg: #2c3540;
+  --ui-focus: #4a6fa5;
+}
+
+body.ui-private.theme-dark,
+.theme-dark .ui-private {
+  --ui-border: #2d3642;
+  --ui-bg: #0d1117;
+  --ui-surface: #161b22;
+  --ui-surface-2: #1c222c;
+  --ui-text: #e6edf3;
+  --ui-text-muted: #8b949e;
+  --ui-accent: #3d4d5c;
+  --ui-accent-fg: #e6edf3;
+  --ui-icon-bg: #21262d;
+  --ui-icon-fg: #c9d1d9;
+  --ui-focus: #6e8ac4;
+}
+
+.ui-private,
+.ui-private .main-wrapper {
+  background-color: var(--ui-bg) !important;
+}
+
+/* Brand: neutral, not playful */
+.ui-private .app-brand-link .logo-text,
+.ui-private .app-brand-link .text-grey-900 {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .app-brand-link .feather-shield,
+.ui-private .app-brand-link i {
+  color: var(--ui-text-muted) !important;
+}
+
+/* Header: flat, single hairline */
+.ui-private .nav-header {
+  background: var(--ui-surface) !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ui-private .nav-header .header-guest-btn {
+  padding: 0.4rem 0.9rem;
+  min-height: 36px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ui-private .nav-header .header-guest-btn--signin {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border: 1px solid var(--ui-border) !important;
+  box-shadow: none;
+}
+
+.ui-private .nav-header .header-guest-btn--signin:hover {
+  background: var(--ui-icon-bg) !important;
+  color: var(--ui-text) !important;
+}
+
+.ui-private .nav-header .header-guest-btn--register,
+.ui-private .nav-header a.header-guest-btn--register {
+  background: var(--ui-accent) !important;
+  background-image: none !important;
+  color: var(--ui-accent-fg) !important;
+  border: 1px solid transparent !important;
+}
+
+.ui-private .nav-header .header-guest-btn--register:hover,
+.ui-private .nav-header a.header-guest-btn--register:hover {
+  filter: brightness(0.95);
+  color: var(--ui-accent-fg) !important;
+}
+
+.ui-private .font-xssss::placeholder,
+.ui-private input::placeholder {
+  color: var(--ui-text-muted);
+}
+
+/* Header: bell, messages, theme — one neutral stroke, no brand blue */
+.ui-private .nav-header .header-tool,
+.ui-private .nav-header .header-tool i,
+.ui-private .nav-header .header-tool .feather {
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .nav-header .header-tool:hover,
+.ui-private .nav-header .header-tool:hover i {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .nav-header .header-tool--mob {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-icon-bg) !important;
+  border: 1px solid var(--ui-border);
+}
+
+.ui-private .nav-header .header-tool--mob i {
+  color: var(--ui-icon-fg) !important;
+}
+
+.ui-private .nav-header .header-notify-badge {
+  background: var(--ui-text-muted) !important;
+  box-shadow: 0 0 0 1px var(--ui-surface);
+}
+
+.ui-private .header-account-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-top: -2px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-surface-2);
+  color: var(--ui-text-muted);
+  cursor: pointer;
+  line-height: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.ui-private .header-account-btn:hover {
+  background: var(--ui-icon-bg);
+  color: var(--ui-text);
+}
+
+.ui-private .header-account-btn i {
+  font-size: 1.15rem;
+}
+
+.ui-private .header-account-btn:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+/* Kill template shadows / bubbles */
+.ui-private .shadow-xss,
+.ui-private .shadow-xs,
+.ui-private .shadow-lg,
+.ui-private .card.shadow-xss {
+  box-shadow: var(--ui-shadow) !important;
+}
+
+.ui-private .middle-sidebar-right-content {
+  background: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+}
+
+.ui-private .nav-wrap {
+  background: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+}
+
+/* Sidebar nav: flat icon pills */
+.ui-private .nav-content .btn-round-md,
+.ui-private .btn-round-sm {
+  background: var(--ui-icon-bg) !important;
+  background-image: none !important;
+  color: var(--ui-icon-fg) !important;
+  border-radius: var(--ui-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+.ui-private .bg-blue-gradiant,
+.ui-private .bg-primary-gradiant,
+.ui-private .bg-red-gradiant,
+.ui-private .bg-mini-gradiant {
+  background: var(--ui-icon-bg) !important;
+  background-image: none !important;
+  color: var(--ui-icon-fg) !important;
+}
+
+.ui-private .nav-caption {
+  color: var(--ui-text-muted) !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.65rem !important;
+}
+
+.ui-private .nav-content-bttn {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .nav-content-bttn span {
+  font-weight: 500;
+}
+
+/* Mobile footer: solid, no gradient */
+.ui-private .app-footer {
+  background: var(--ui-surface) !important;
+  background-image: none !important;
+  border-top: 1px solid var(--ui-border) !important;
+  box-shadow: none !important;
+}
+
+.ui-private .app-footer .nav-content-bttn {
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .app-footer .nav-content-bttn i {
+  color: inherit;
+}
+
+/* Cards: border instead of float */
+.ui-private .ui-surface-card,
+.ui-private .post-feed .card,
+.ui-private .create-post .card {
+  background: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+}
+
+.ui-private .rounded-xxl {
+  border-radius: var(--ui-radius) !important;
+}
+
+/* Primary actions: flat */
+.ui-private .bg-primary-gradiant.border-0,
+.ui-private button.bg-primary-gradiant {
+  background: var(--ui-accent) !important;
+  background-image: none !important;
+  color: var(--ui-accent-fg) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--ui-radius-sm) !important;
+}
+
+.ui-private .text-primary {
+  color: var(--ui-focus) !important;
+}
+
+/* Notifications dropdown */
+.ui-private #notification-menu {
+  background: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+body.ui-private.theme-dark #notification-menu,
+.theme-dark .ui-private #notification-menu {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Preloader matches bg */
+.ui-private .preloader {
+  background-color: var(--ui-bg) !important;
+}
+
+/* Subtle “secure” focus for interactive controls */
+.ui-private .form-control:focus,
+.ui-private .theme-dark-bg:focus,
+.ui-private button:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 1px;
+}
+
+/* Post stream typography */
+.ui-private .post-title-headline {
+  color: var(--ui-text) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+}
+
+.ui-private .see-more-btn {
+  color: var(--ui-focus) !important;
+}
+
+.ui-private .post-poll-box {
+  border-color: var(--ui-border) !important;
+  background: var(--ui-surface-2) !important;
+}
+
+.ui-private .post-poll-option {
+  background: var(--ui-surface) !important;
+  border-color: var(--ui-border) !important;
+}
+
+.ui-private .post-poll-option.is-selected {
+  border-color: var(--ui-focus) !important;
+  box-shadow: none !important;
+}
+
+.ui-private .post-poll-option-bar {
+  background: rgba(74, 111, 165, 0.2) !important;
+}
+
+body.ui-private.theme-dark .post-poll-option-bar,
+.theme-dark .ui-private .post-poll-option-bar {
+  background: rgba(110, 138, 196, 0.22) !important;
+}
+
+/* Profile menu */
+.ui-private .profile-menu-dropdown {
+  background: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  border-radius: var(--ui-radius) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+body.ui-private.theme-dark .profile-menu-dropdown,
+.theme-dark .ui-private .profile-menu-dropdown {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.ui-private .profile-menu-dropdown a,
+.ui-private .profile-menu-dropdown button {
+  color: var(--ui-text) !important;
+}
+
+/* Welcome / landing: same flat surfaces and CTAs as the rest of the app */
+.ui-private .welcome-hero {
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  box-shadow: none;
+}
+
+.ui-private .welcome-hero .feather-check {
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .welcome-cta-bottom {
+  background: var(--ui-surface-2);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  color: var(--ui-text);
+  box-shadow: none;
+}
+
+.ui-private .welcome-cta-bottom h2,
+.ui-private .welcome-cta-bottom .font-lg {
+  color: var(--ui-text) !important;
+}
+
+.ui-private a.bg-primary-gradiant.border-0,
+.ui-private a.bg-primary-gradiant {
+  background: var(--ui-accent) !important;
+  background-image: none !important;
+  color: var(--ui-accent-fg) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--ui-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+.ui-private a.welcome-cta-secondary {
+  display: inline-block;
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border: 1px solid var(--ui-border) !important;
+  border-radius: var(--ui-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+body.ui-private.theme-dark a.welcome-cta-secondary,
+.theme-dark .ui-private a.welcome-cta-secondary {
+  background: var(--ui-surface) !important;
+}
+
+.ui-private a.welcome-cta-secondary:hover {
+  background: var(--ui-icon-bg) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-border) !important;
+}

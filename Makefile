@@ -1,21 +1,20 @@
 .PHONY: help \
 	backend-setup backend-dev backend-test backend-migrate backend-fresh backend-seed backend-clear backend-install \
-	frontend-dev frontend-build frontend-start frontend-lint frontend-install \
+	frontend-dev frontend-build frontend-install \
 	dev install
 
-BACKEND_DIR := backend
-FRONTEND_DIR := frontend
+APP_DIR := app
 
 help:
 	@echo "Usage: make <target>"
 	@echo ""
 	@echo "Top-level targets:"
-	@echo "  dev              Start both backend and frontend dev servers (parallel)"
-	@echo "  install          Install dependencies for both backend and frontend"
+	@echo "  dev              Start Laravel dev stack (serve, queue, logs, Vite via composer run dev)"
+	@echo "  install          Install Composer and npm dependencies in app/"
 	@echo ""
-	@echo "Backend targets (Laravel):"
-	@echo "  backend-setup    Full backend setup (install, .env, key, migrate, build)"
-	@echo "  backend-dev      Start backend dev server (artisan serve + queue + logs + vite)"
+	@echo "Backend targets (Laravel, in app/):"
+	@echo "  backend-setup    Full setup (composer setup: install, .env, key, migrate, npm, build)"
+	@echo "  backend-dev      Start php artisan serve only"
 	@echo "  backend-test     Run PHPUnit tests"
 	@echo "  backend-migrate  Run database migrations"
 	@echo "  backend-fresh    Fresh migration with seeders"
@@ -23,60 +22,51 @@ help:
 	@echo "  backend-clear    Clear all Laravel caches"
 	@echo "  backend-install  Install Composer dependencies"
 	@echo ""
-	@echo "Frontend targets (Next.js):"
-	@echo "  frontend-dev     Start Next.js dev server"
-	@echo "  frontend-build   Build Next.js for production"
-	@echo "  frontend-start   Start Next.js production server"
-	@echo "  frontend-lint    Run ESLint"
+	@echo "Frontend targets (Vite, in app/):"
+	@echo "  frontend-dev     Start Vite dev server (use with backend-dev, or use: make dev)"
+	@echo "  frontend-build   Production Vite build"
 	@echo "  frontend-install Install npm dependencies"
 
 # ─── Top-level ────────────────────────────────────────────────────────────────
 
 dev:
-	cd $(BACKEND_DIR) && php artisan serve &
-	cd $(FRONTEND_DIR) && npm run dev
+	cd $(APP_DIR) && composer run dev
 
 install: backend-install frontend-install
 
 # ─── Backend ──────────────────────────────────────────────────────────────────
 
 backend-setup:
-	cd $(BACKEND_DIR) && composer run setup
+	cd $(APP_DIR) && composer run setup
 
 backend-dev:
-	cd $(BACKEND_DIR) && php artisan serve
+	cd $(APP_DIR) && php artisan serve
 
 backend-test:
-	cd $(BACKEND_DIR) && composer run test
+	cd $(APP_DIR) && composer run test
 
 backend-migrate:
-	cd $(BACKEND_DIR) && php artisan migrate
+	cd $(APP_DIR) && php artisan migrate
 
 backend-fresh:
-	cd $(BACKEND_DIR) && php artisan migrate:fresh --seed
+	cd $(APP_DIR) && php artisan migrate:fresh --seed
 
 backend-seed:
-	cd $(BACKEND_DIR) && php artisan db:seed
+	cd $(APP_DIR) && php artisan db:seed
 
 backend-clear:
-	cd $(BACKEND_DIR) && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear
+	cd $(APP_DIR) && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear
 
 backend-install:
-	cd $(BACKEND_DIR) && composer install
+	cd $(APP_DIR) && composer install
 
-# ─── Frontend ─────────────────────────────────────────────────────────────────
+# ─── Frontend (Vite) ──────────────────────────────────────────────────────────
 
 frontend-dev:
-	cd $(FRONTEND_DIR) && npm run dev
+	cd $(APP_DIR) && npm run dev
 
 frontend-build:
-	cd $(FRONTEND_DIR) && npm run build
-
-frontend-start:
-	cd $(FRONTEND_DIR) && npm run start
-
-frontend-lint:
-	cd $(FRONTEND_DIR) && npm run lint
+	cd $(APP_DIR) && npm run build
 
 frontend-install:
-	cd $(FRONTEND_DIR) && npm install
+	cd $(APP_DIR) && npm install

@@ -192,7 +192,17 @@
     <!-- navigation top -->
 
     <!-- navigation left -->
-    <nav class="navigation scroll-bar">
+    <nav id="app-left-navigation" class="navigation scroll-bar" aria-label="{{ __('Main navigation') }}">
+        <button
+            type="button"
+            id="left-sidebar-edge-toggle"
+            class="left-sidebar-edge-toggle"
+            aria-expanded="true"
+            aria-controls="app-left-navigation"
+            title="{{ __('Collapse sidebar') }}"
+        >
+            <i class="feather-menu" aria-hidden="true"></i>
+        </button>
         <div class="container ps-0 pe-0">
             <div class="nav-content">
                 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
@@ -464,6 +474,31 @@
         }
         applyDark(!document.body.classList.contains('theme-dark'));
     });
+})();
+
+(function () {
+    var nav = document.getElementById('app-left-navigation');
+    var main = document.querySelector('.main-wrapper .main-content');
+    var btn = document.getElementById('left-sidebar-edge-toggle');
+    if (!nav || !main || !btn) return;
+
+    function sync() {
+        var collapsed = nav.classList.contains('menu-active');
+        document.documentElement.classList.toggle('sidebar-rail-collapsed', collapsed);
+        btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        btn.title = collapsed
+            ? (btn.getAttribute('data-title-expand') || '')
+            : (btn.getAttribute('data-title-collapse') || '');
+    }
+    btn.setAttribute('data-title-collapse', '{{ __('Collapse sidebar') }}');
+    btn.setAttribute('data-title-expand', '{{ __('Expand sidebar') }}');
+
+    btn.addEventListener('click', function () {
+        nav.classList.toggle('menu-active');
+        main.classList.toggle('menu-active');
+        sync();
+    });
+    sync();
 })();
 </script>
 @yield('scripts')

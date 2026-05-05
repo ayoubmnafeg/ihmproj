@@ -181,6 +181,87 @@ body.ui-private.theme-dark,
   box-shadow: none !important;
 }
 
+/* Left rail: one continuous panel + edge straddle toggle (à la Reddit) */
+body.ui-private .navigation {
+  background-color: var(--ui-surface) !important;
+  border-right: 1px solid var(--ui-border);
+  box-shadow: none !important;
+}
+
+body.ui-private .navigation .nav-wrap {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Center feed column between left rail and right panel (inherits max-width ~960px from theme) */
+@media (min-width: 992px) {
+  body.ui-private .main-content .middle-sidebar-left {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/*
+ * Circular hamburger on the rail edge.
+ * Position: fixed avoids .navigation { overflow: hidden } clipping half the control.
+ * html.sidebar-rail-collapsed tracks the 90px narrow rail (mirrors .navigation.menu-active).
+ */
+body.ui-private .left-sidebar-edge-toggle {
+  position: fixed;
+  /* Align just under fixed header (~90–96px) + inset; avoids top clipping */
+  top: calc(env(safe-area-inset-top, 0px) + 104px);
+  left: calc(280px - 16px);
+  z-index: 1002;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-text-muted);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    left 0.25s ease;
+}
+
+html.sidebar-rail-collapsed body.ui-private .left-sidebar-edge-toggle {
+  left: calc(90px - 16px);
+}
+
+body.ui-private .left-sidebar-edge-toggle:hover {
+  background: var(--ui-surface-2);
+  color: var(--ui-text);
+}
+
+body.ui-private .left-sidebar-edge-toggle:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+body.ui-private .left-sidebar-edge-toggle i {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+html.sidebar-rail-collapsed body.ui-private .left-sidebar-edge-toggle i {
+  transform: rotate(90deg);
+}
+
+@media (min-width: 992px) {
+  body.ui-private .left-sidebar-edge-toggle {
+    display: inline-flex;
+  }
+}
+
 /* Sidebar nav: flat icon pills */
 .ui-private .nav-content .btn-round-md,
 .ui-private .btn-round-sm {

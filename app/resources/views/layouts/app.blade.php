@@ -206,9 +206,9 @@
         <div class="container ps-0 pe-0">
             <div class="nav-content">
                 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
-                    <div class="nav-caption fw-600 font-xssss text-grey-500">{{ __('Private feed') }}</div>
                     <ul class="mb-1 top-content">
                         <li class="logo d-none d-xl-block d-lg-block"></li>
+                        @guest
                         <li>
                             <a
                                 href="{{ route('welcome') }}"
@@ -218,6 +218,7 @@
                                 <i class="feather-info btn-round-md bg-current me-3" style="box-shadow: none;"></i><span>{{ __('Welcome') }}</span>
                             </a>
                         </li>
+                        @endguest
                         <li><a href="{{ route('feed.index') }}" class="nav-content-bttn open-font" title="Latest activity from your network"><i class="feather-list btn-round-md bg-blue-gradiant me-3"></i><span>{{ __('Feed') }}</span></a></li>
                         @auth
                         <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>{{ __('Account') }}</span></a></li>

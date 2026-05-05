@@ -223,10 +223,77 @@
                         @auth
                         <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>{{ __('Account') }}</span></a></li>
                         <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-users btn-round-md bg-red-gradiant me-3"></i><span>{{ __('Connections') }}</span></a></li>
-                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-layers btn-round-md bg-mini-gradiant me-3"></i><span>{{ __('Spaces') }}</span></a></li>
                         @endauth
                     </ul>
                 </div>
+                @auth
+                    @php
+                        $sidebarSpacesMeta = auth()->user()
+                            ->followedCategories()
+                            ->where('is_active', true)
+                            ->orderBy('name')
+                            ->get()
+                            ->map(function ($c) {
+                                $compact = preg_replace('/\s+/u', '', $c->name ?? '') ?: '';
+
+                                return [
+                                    'id' => $c->id,
+                                    'name' => $c->name,
+                                    'initials' => strtoupper(\Illuminate\Support\Str::substr($compact, 0, 2) ?: '__'),
+                                    'avatar' => $c->profile_image_path ? asset('storage/'.$c->profile_image_path) : null,
+                                    'url' => route('groups.show', $c->id),
+                                ];
+                            });
+                    @endphp
+                    <div
+                        id="sidebar-spaces-stack"
+                        class="sidebar-spaces-stack px-3 pb-2"
+                        data-user-id="{{ auth()->id() }}"
+                    >
+                        <script type="application/json" id="sidebar-spaces-bootstrap">{!! json_encode($sidebarSpacesMeta->values()->all(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
+
+                        <div class="sidebar-spaces-panel sidebar-spaces-panel--spaces mb-3">
+                            <button
+                                type="button"
+                                class="sidebar-spaces-heading"
+                                aria-expanded="true"
+                                aria-controls="sidebar-all-spaces-body"
+                                id="sidebar-spaces-section-heading"
+                            >
+                                <span class="sidebar-spaces-heading-label">{{ __('Spaces') }}</span>
+                                <i class="feather-chevron-down sidebar-spaces-chevron" aria-hidden="true"></i>
+                            </button>
+                            <div class="sidebar-spaces-body pt-2" id="sidebar-all-spaces-body" role="region" aria-labelledby="sidebar-spaces-section-heading">
+                                <a href="{{ route('groups.index') }}" class="sidebar-spaces-manage font-xsss fw-600">
+                                    <i class="feather-settings" aria-hidden="true"></i><span>{{ __('Manage spaces') }}</span>
+                                </a>
+                                <div id="sidebar-all-spaces-list" class="sidebar-spaces-rows">
+                                    @forelse($sidebarSpacesMeta as $space)
+                                        <div class="sidebar-space-row" data-space-id="{{ $space['id'] }}">
+                                            <a href="{{ $space['url'] }}" class="sidebar-space-link">
+                                                @if($space['avatar'])
+                                                    <img src="{{ $space['avatar'] }}" alt="" width="28" height="28" class="sidebar-space-avatar sidebar-space-avatar-img rounded-circle shadow-sm">
+                                                @else
+                                                    <span class="sidebar-space-avatar sidebar-space-avatar-label rounded-circle">{{ $space['initials'] }}</span>
+                                                @endif
+                                                <span class="sidebar-space-name text-truncate font-xsss fw-600">{{ $space['name'] }}</span>
+                                            </a>
+                                            <button
+                                                type="button"
+                                                class="sidebar-space-star-btn"
+                                                data-space-id="{{ $space['id'] }}"
+                                                aria-pressed="false"
+                                                title="{{ __('Favorite') }}"
+                                            ><i class="feather-star" aria-hidden="true"></i></button>
+                                        </div>
+                                    @empty
+                                        <p class="sidebar-spaces-muted font-xsss fw-600 mb-0 pt-2 pb-2">{{ __('You are not following any spaces yet.') }}</p>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endauth
                 @yield('left_sidebar_extras')
             </div>
         </div>
@@ -501,6 +568,119 @@
     });
     sync();
 })();
+
+@if(auth()->check())
+(function () {
+    var stack = document.getElementById('sidebar-spaces-stack');
+    var raw = document.getElementById('sidebar-spaces-bootstrap');
+    var mainList = document.getElementById('sidebar-all-spaces-list');
+    if (!stack || !raw || !mainList) return;
+
+    var userId = stack.getAttribute('data-user-id') || '';
+    var storageKey = 'ihm.sidebarSpaceFavorites.v1.' + userId;
+    var spaces = [];
+    try {
+        spaces = JSON.parse(raw.textContent || '[]');
+    } catch (e) {
+        spaces = [];
+    }
+    var byId = {};
+    spaces.forEach(function (s) {
+        byId[s.id] = s;
+    });
+
+    function readOrder() {
+        try {
+            var parsed = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            return Array.isArray(parsed) ? parsed.filter(function (id, i, a) {
+                return typeof id === 'string' && a.indexOf(id) === i;
+            }) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function writeOrder(ids) {
+        localStorage.setItem(storageKey, JSON.stringify(ids));
+    }
+
+    function setStarsForId(id, isFav) {
+        stack.querySelectorAll('.sidebar-space-star-btn[data-space-id]').forEach(function (btn) {
+            if (btn.getAttribute('data-space-id') !== id) return;
+            btn.classList.toggle('is-fav', isFav);
+            btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+        });
+    }
+
+    function toggleFavorite(id) {
+        var meta = byId[id];
+        if (!meta) return;
+        var order = readOrder();
+        var ix = order.indexOf(id);
+        if (ix === -1) {
+            order = [id].concat(order.filter(function (x) { return x !== id; }));
+        } else {
+            order = order.filter(function (x) { return x !== id; });
+        }
+        writeOrder(order);
+        syncAll();
+    }
+
+    function syncAll() {
+        var favIds = readOrder().filter(function (id) {
+            return byId[id];
+        });
+        var rows = Array.prototype.slice.call(mainList.querySelectorAll('.sidebar-space-row[data-space-id]'));
+
+        rows.sort(function (a, b) {
+            var ida = a.getAttribute('data-space-id');
+            var idb = b.getAttribute('data-space-id');
+            var ixa = favIds.indexOf(ida);
+            var ixb = favIds.indexOf(idb);
+            var af = ixa !== -1;
+            var bf = ixb !== -1;
+            if (af && bf) return ixa - ixb;
+            if (af) return -1;
+            if (bf) return 1;
+            var na = (byId[ida] && byId[ida].name) || '';
+            var nb = (byId[idb] && byId[idb].name) || '';
+            return na.localeCompare(nb, undefined, { sensitivity: 'base' });
+        });
+
+        rows.forEach(function (row) {
+            mainList.appendChild(row);
+        });
+
+        spaces.forEach(function (s) {
+            setStarsForId(s.id, favIds.indexOf(s.id) !== -1);
+        });
+    }
+
+    stack.querySelectorAll('.sidebar-space-star-btn[data-space-id]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var id = btn.getAttribute('data-space-id');
+            if (id) toggleFavorite(id);
+        });
+    });
+
+    document.querySelectorAll('#sidebar-spaces-stack .sidebar-spaces-heading').forEach(function (head) {
+        head.addEventListener('click', function () {
+            var panel = head.closest('.sidebar-spaces-panel');
+            var cid = head.getAttribute('aria-controls');
+            var body = cid ? document.getElementById(cid) : null;
+            var expanded = head.getAttribute('aria-expanded') === 'true';
+            var next = !expanded;
+            head.setAttribute('aria-expanded', next ? 'true' : 'false');
+            if (panel) panel.classList.toggle('is-collapsed', !next);
+            if (body) body.hidden = !next;
+        });
+    });
+
+    syncAll();
+})();
+@endif
 </script>
 @yield('scripts')
 </body>

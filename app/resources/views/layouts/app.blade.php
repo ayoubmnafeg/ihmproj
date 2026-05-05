@@ -70,7 +70,7 @@
         <form action="#" class="float-left header-search">
             <div class="form-group mb-0 icon-input">
                 <i class="feather-search font-sm text-grey-400"></i>
-                <input type="text" placeholder="Search (optional)…" class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
+                <input type="text" placeholder="{{ __('Search (optional)…') }}" class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
             </div>
         </form>
 
@@ -81,7 +81,7 @@
                 <i class="feather-bell font-xl" aria-hidden="true"></i>
             </a>
             <div id="notification-menu" class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
-                <h4 class="fw-700 font-xss mb-4">Notification</h4>
+                <h4 class="fw-700 font-xss mb-4">{{ __('Notification') }}</h4>
                 <div class="card bg-transparent-card w-100 border-0 ps-5 mb-3">
                     <img src="{{ asset('images/user-8.png') }}" alt="user" class="w40 position-absolute left-0">
                     <h5 class="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">Hendrix Stamp <span class="text-grey-400 font-xsssss fw-600 float-right mt-1"> 3 min</span></h5>
@@ -110,14 +110,24 @@
             <a
                 href="{{ route('login') }}"
                 class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 header-guest-btn header-guest-btn--signin rounded-xl"
-            >Sign in</a>
+            >{{ __('Sign in') }}</a>
             <a
                 href="{{ route('register') }}"
                 class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 border-0 header-guest-btn header-guest-btn--register bg-primary-gradiant rounded-xl"
-            >Create account</a>
+            >{{ __('Create account') }}</a>
         </div>
         @endauth
-        <button id="dark-mode-toggle" class="p-2 text-center {{ auth()->check() ? 'ms-3' : 'ms-2' }} menu-icon border-0 bg-transparent cursor-pointer header-tool" title="Lower luminance (easier in dim light)" style="outline:none;" type="button">
+        <div class="dropdown p-2 text-center ms-2 menu-icon d-inline-block">
+            <a href="#" class="position-relative d-inline-block header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="Language" style="border:1px solid #eee;">
+                <i class="feather-globe me-1"></i> {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="langMenu" style="z-index: 100000; position: absolute;">
+                <li><a class="dropdown-item fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}">English</a></li>
+                <li><a class="dropdown-item fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}">Français</a></li>
+            </ul>
+        </div>
+
+        <button id="dark-mode-toggle" class="p-2 text-center {{ auth()->check() ? 'ms-1' : 'ms-2' }} menu-icon border-0 bg-transparent cursor-pointer header-tool" title="Lower luminance (easier in dim light)" style="outline:none;" type="button">
             <i id="dark-mode-icon" class="feather-moon font-xl" aria-hidden="true"></i>
         </button>
 
@@ -128,12 +138,12 @@
             </button>
             <div id="profile-dropdown" class="profile-menu-dropdown" style="display:none;position:absolute;top:50px;right:0;min-width:180px;z-index:9999;padding:8px 0;">
                 <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;text-decoration:none;">
-                    <i class="feather-sliders" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> Account &amp; privacy
+                    <i class="feather-sliders" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> {{ __('Account & privacy') }}
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;border:0;background:transparent;width:100%;cursor:pointer;">
-                        <i class="feather-log-out" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> Sign out
+                        <i class="feather-log-out" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> {{ __('Sign out') }}
                     </button>
                 </form>
             </div>
@@ -147,7 +157,7 @@
         <div class="container ps-0 pe-0">
             <div class="nav-content">
                 <div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss pt-3 pb-1 mb-2 mt-2">
-                    <div class="nav-caption fw-600 font-xssss text-grey-500">Private feed</div>
+                    <div class="nav-caption fw-600 font-xssss text-grey-500">{{ __('Private feed') }}</div>
                     <ul class="mb-1 top-content">
                         <li class="logo d-none d-xl-block d-lg-block"></li>
                         <li>
@@ -156,14 +166,14 @@
                                 @class(['nav-content-bttn', 'open-font', 'fw-600' => request()->routeIs('welcome') || (request()->routeIs('home') && ! auth()->check())])
                                 title="What this app is for"
                             >
-                                <i class="feather-info btn-round-md bg-current me-3" style="box-shadow: none;"></i><span>Welcome</span>
+                                <i class="feather-info btn-round-md bg-current me-3" style="box-shadow: none;"></i><span>{{ __('Welcome') }}</span>
                             </a>
                         </li>
-                        <li><a href="{{ route('feed.index') }}" class="nav-content-bttn open-font" title="Latest activity from your network"><i class="feather-list btn-round-md bg-blue-gradiant me-3"></i><span>Feed</span></a></li>
+                        <li><a href="{{ route('feed.index') }}" class="nav-content-bttn open-font" title="Latest activity from your network"><i class="feather-list btn-round-md bg-blue-gradiant me-3"></i><span>{{ __('Feed') }}</span></a></li>
                         @auth
-                        <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>Account</span></a></li>
-                        <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-users btn-round-md bg-red-gradiant me-3"></i><span>Connections</span></a></li>
-                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-layers btn-round-md bg-mini-gradiant me-3"></i><span>Spaces</span></a></li>
+                        <li><a href="{{ route('profile.edit') }}" class="nav-content-bttn open-font"><i class="feather-user btn-round-md bg-primary-gradiant me-3"></i><span>{{ __('Account') }}</span></a></li>
+                        <li><a href="{{ route('members.index') }}" class="nav-content-bttn open-font"><i class="feather-users btn-round-md bg-red-gradiant me-3"></i><span>{{ __('Connections') }}</span></a></li>
+                        <li><a href="{{ route('groups.index') }}" class="nav-content-bttn open-font"><i class="feather-layers btn-round-md bg-mini-gradiant me-3"></i><span>{{ __('Spaces') }}</span></a></li>
                         @endauth
                     </ul>
                 </div>
@@ -198,7 +208,7 @@
 
             @auth
             <div class="section full pe-3 ps-4 pt-4 pb-4 position-relative feed-body">
-                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">Your spaces</h4>
+                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">{{ __('Your spaces') }}</h4>
                 @php
                     $followedGroups = ($u = auth()->user())
                         ? $u->followedCategories()
@@ -218,14 +228,14 @@
                         </li>
                     @empty
                         <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">
-                            <span class="font-xssss text-grey-500">You are not following any spaces yet.</span>
+                            <span class="font-xssss text-grey-500">{{ __('You are not following any spaces yet.') }}</span>
                         </li>
                     @endforelse
                 </ul>
             </div>
 
             <div class="section full pe-3 ps-4 pt-4 position-relative feed-body">
-                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">People you trust</h4>
+                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">{{ __('People you trust') }}</h4>
                 @php
                     $contacts = \App\Models\User::with('profile')
                         ->where('status', 'active')
@@ -257,17 +267,17 @@
                         </li>
                     @empty
                         <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">
-                            <span class="font-xssss text-grey-500">No friends to show yet.</span>
+                            <span class="font-xssss text-grey-500">{{ __('No friends to show yet.') }}</span>
                         </li>
                     @endforelse
                 </ul>
             </div>
             @else
             <div class="section full pe-3 ps-4 pt-4 pb-4 position-relative feed-body">
-                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">Viewing as guest</h4>
-                <p class="font-xssss text-grey-600 mb-2">You can read the feed. Sign in to post, comment, and connect with others.</p>
-                <a href="{{ route('login') }}" class="d-block fw-600 text-primary font-xssss text-decoration-none mb-1">Sign in</a>
-                <a href="{{ route('register') }}" class="d-block fw-600 text-grey-700 font-xssss text-decoration-none">Create an account</a>
+                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">{{ __('Viewing as guest') }}</h4>
+                <p class="font-xssss text-grey-600 mb-2">{{ __('You can read the feed. Sign in to post, comment, and connect with others.') }}</p>
+                <a href="{{ route('login') }}" class="d-block fw-600 text-primary font-xssss text-decoration-none mb-1">{{ __('Sign in') }}</a>
+                <a href="{{ route('register') }}" class="d-block fw-600 text-grey-700 font-xssss text-decoration-none">{{ __('Create an account') }}</a>
             </div>
             @endauth
 
@@ -290,7 +300,7 @@
     <div class="app-header-search">
         <form class="search-form">
             <div class="form-group searchbox mb-0 border-0 p-1">
-                <input type="text" class="form-control border-0" placeholder="Search...">
+                <input type="text" class="form-control border-0" placeholder="{{ __('Search...') }}">
                 <i class="input-icon">
                     <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline"></ion-icon>
                 </i>

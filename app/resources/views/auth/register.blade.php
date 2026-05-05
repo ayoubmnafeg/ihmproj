@@ -1,9 +1,9 @@
 @extends('layouts.auth')
 
-@section('title', 'Register')
+@section('title', __('Register'))
 
 @section('content')
-<h2 class="fw-700 display1-size display2-md-size mb-4">Create <br>your account</h2>
+<h2 class="fw-700 display1-size display2-md-size mb-4 header-title">{!! __('Create <br>your account') !!}</h2>
 
 @if ($errors->any())
     <div class="alert alert-danger font-xsss mb-3">
@@ -17,14 +17,14 @@
     @csrf
 
     <div class="form-group mb-3">
-        <label class="font-xsss text-grey-500 fw-600 mb-1">Your username</label>
+        <label class="font-xsss text-grey-500 fw-600 mb-1">{{ __('Your username') }}</label>
         <div class="d-flex gap-2 align-items-center">
             <input type="text" name="display_name" id="username-input"
                    value="{{ old('display_name') }}"
                    class="style2-input form-control text-grey-900 font-xsss fw-600"
-                   placeholder="Username" maxlength="30" required>
+                   placeholder="{{ __('Username') }}" maxlength="30" required>
             <button type="button" onclick="generateUsername()"
-                    title="Generate new username"
+                    title="{{ __('Generate new username') }}"
                     class="btn-round-md bg-greylight border-0 d-flex align-items-center justify-content-center"
                     style="min-width:40px;height:40px;cursor:pointer;flex-shrink:0;">
                 <i class="feather-refresh-cw text-grey-700 font-sm"></i>
@@ -36,7 +36,7 @@
         <i class="font-sm ti-email text-grey-500 pe-0"></i>
         <input type="email" name="email" value="{{ old('email') }}"
                class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
-               placeholder="Your Email Address" required>
+               placeholder="{{ __('Your Email Address') }}" required>
     </div>
 
     <div class="form-group mb-3">
@@ -45,12 +45,12 @@
             <button type="button" id="btn-male" onclick="selectGender('male')"
                     class="gender-btn flex-fill style2-input form-control fw-600 font-xsss border d-flex align-items-center justify-content-center gap-2"
                     style="cursor:pointer;">
-                <img src="{{ asset('images/male.svg') }}" width="18" height="18" class="gender-icon"> Male
+                <img src="{{ asset('images/male.svg') }}" width="18" height="18" class="gender-icon"> {{ __('Male') }}
             </button>
             <button type="button" id="btn-female" onclick="selectGender('female')"
                     class="gender-btn flex-fill style2-input form-control fw-600 font-xsss border d-flex align-items-center justify-content-center gap-2"
                     style="cursor:pointer;">
-                <img src="{{ asset('images/female.svg') }}" width="18" height="18" class="gender-icon"> Female
+                <img src="{{ asset('images/female.svg') }}" width="18" height="18" class="gender-icon"> {{ __('Female') }}
             </button>
         </div>
     </div>
@@ -58,25 +58,25 @@
     <div class="form-group icon-input mb-3">
         <input type="password" name="password"
                class="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
-               placeholder="Password" required>
+               placeholder="{{ __('Password') }}" required>
         <i class="font-sm ti-lock text-grey-500 pe-0"></i>
     </div>
 
     <div class="form-group icon-input mb-3">
         <input type="password" name="password_confirmation"
                class="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
-               placeholder="Confirm Password" required>
+               placeholder="{{ __('Confirm Password') }}" required>
         <i class="font-sm ti-lock text-grey-500 pe-0"></i>
     </div>
 
-    <div class="col-sm-12 p-0 text-left mt-2">
+    <div class="col-sm-12 p-0 text-left mt-3">
         <div class="form-group mb-1">
-            <button type="submit" class="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0">
-                Register
+            <button type="submit" class="form-control text-center text-white fw-600 border-0 p-0 btn-submit font-xss">
+                {{ __('Register') }}
             </button>
         </div>
-        <h6 class="text-grey-500 font-xsss fw-500 mt-0 mb-0 lh-32">
-            Already have account <a href="{{ route('login') }}" class="fw-700 ms-1">Login</a>
+        <h6 class="text-grey-500 font-xsss fw-500 mt-3 mb-0 lh-32">
+            {{ __('Already have account') }} <a href="{{ route('login') }}" class="fw-700 ms-1">{{ __('Login') }}</a>
         </h6>
     </div>
 </form>

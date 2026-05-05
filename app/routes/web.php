@@ -25,6 +25,13 @@ Route::get('/welcome', function () {
     return view('landing');
 })->name('welcome');
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'fr'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', function (Request $request) {
     if (! $request->user()) {
         return view('landing');

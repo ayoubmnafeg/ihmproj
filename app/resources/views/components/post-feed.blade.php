@@ -150,11 +150,11 @@ new class extends Component
             <div class="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg" aria-labelledby="dropdownPub{{ $publication->id }}">
                 <div class="card-body p-0 d-flex">
                     <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
-                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">{{ __('Save Link') }} <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Add this to your saved items') }}</span></h4>
                 </div>
                 <div class="card-body p-0 d-flex mt-2">
                     <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                    <h4 class="fw-600 text-grey-900 font-xssss mt-0 me-4">{{ __('Hide Post') }} <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Save to your saved items') }}</span></h4>
                 </div>
                 @auth
                 @if(auth()->id() === $publication->author_id || auth()->user()->isAdmin())
@@ -164,7 +164,7 @@ new class extends Component
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="border-0 bg-transparent p-0 fw-600 text-grey-900 font-xssss mt-0 me-4 cursor-pointer">
-                            Delete Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Remove this post</span>
+                            {{ __('Delete Post') }} <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Remove this post') }}</span>
                         </button>
                     </form>
                 </div>
@@ -175,7 +175,7 @@ new class extends Component
                         @csrf
                         <input type="hidden" name="reason" value="inappropriate">
                         <button type="submit" class="border-0 bg-transparent p-0 fw-600 text-grey-900 font-xssss mt-0 me-4 cursor-pointer">
-                            Report Post <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Flag as inappropriate</span>
+                            {{ __('Report Post') }} <span class="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Flag as inappropriate') }}</span>
                         </button>
                     </form>
                 </div>
@@ -214,13 +214,13 @@ new class extends Component
                     class="see-more-btn mt-1"
                     x-show="showToggle || expanded"
                     x-on:click="expanded = !expanded; $nextTick(() => checkOverflow())"
-                    x-text="expanded ? 'See less' : 'See more'"
+                    x-text="expanded ? '{{ __('See less') }}' : '{{ __('See more') }}'"
                 ></button>
             </div>
             @if($photoCount > 0)
                 <div class="d-flex align-items-center mt-2 mb-2">
                     <i class="feather-image text-grey-500 me-2 font-xss"></i>
-                    <span class="fw-600 text-grey-700 font-xssss">{{ $photoCount }} {{ $photoCount === 1 ? 'Photo' : 'Photos' }}</span>
+                    <span class="fw-600 text-grey-700 font-xssss">{{ $photoCount }} {{ $photoCount === 1 ? __('Photo') : __('Photos') }}</span>
                 </div>
             @endif
             @if($publication->attachments->count())
@@ -300,16 +300,16 @@ new class extends Component
             @endauth
             <a href="{{ route('publications.show', $publication->id) }}" class="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss">
                 <i class="feather-message-circle text-grey-900 me-1 font-xss"></i>
-                <span class="d-none-xss">{{ $publication->comments_count }} {{ $publication->comments_count === 1 ? 'Comment' : 'Comments' }}</span>
+                <span class="d-none-xss">{{ $publication->comments_count }} {{ $publication->comments_count === 1 ? __('Comment') : __('Comments') }}</span>
             </a>
             <button type="button" class="comment-action-btn ms-3 copy-post-link" data-link="{{ route('publications.show', $publication->id) }}">
-                <i class="feather-share-2"></i> Share
+                <i class="feather-share-2"></i> {{ __('Share') }}
             </button>
         </div>
     </div>
     @empty
     <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 text-center ui-surface-card">
-        <p class="fw-500 text-grey-500 font-xssss mb-0">Nothing here yet. When you and others share, it will show up in this private feed.</p>
+        <p class="fw-500 text-grey-500 font-xssss mb-0">{{ __('Nothing here yet. When you and others share, it will show up in this private feed.') }}</p>
     </div>
     @endforelse
 

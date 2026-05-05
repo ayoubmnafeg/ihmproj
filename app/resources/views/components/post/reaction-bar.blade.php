@@ -34,11 +34,11 @@
     @endauth
     <span class="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss">
         <i class="feather-message-circle text-grey-900 me-1 font-xss"></i>
-        <span class="d-none-xss">{{ $commentsCount }} {{ $commentsCount === 1 ? 'Comment' : 'Comments' }}</span>
+        <span class="d-none-xss">{{ $commentsCount }} {{ $commentsCount === 1 ? __('Comment') : __('Comments') }}</span>
     </span>
     @if($shareUrl)
         <button type="button" class="comment-action-btn ms-3 copy-post-link" data-link="{{ $shareUrl }}">
-            <i class="feather-share-2"></i> Share
+            <i class="feather-share-2"></i> {{ __('Share') }}
         </button>
     @endif
 </div>

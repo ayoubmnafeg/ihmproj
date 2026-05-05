@@ -70,7 +70,7 @@
                     />
                     @else
                     <p class="font-xssss text-grey-500 mb-3">
-                        <a href="{{ route('login') }}">Sign in</a> to comment.
+                        <a href="{{ route('login') }}">{{ __('Sign in') }}</a> {{ __('to comment.') }}
                     </p>
                     @endauth
 
@@ -91,11 +91,11 @@
         <div class="app-modal-backdrop"></div>
         <div class="app-modal-wrap" role="dialog" aria-modal="true" aria-labelledby="deleteCommentModalTitle">
             <div class="app-modal-card shadow-xss rounded-xxl border-0">
-                <h4 id="deleteCommentModalTitle" class="fw-700 text-grey-900 font-xsss mb-2">Delete comment?</h4>
-                <p class="fw-500 text-grey-500 font-xssss mb-4">This action cannot be undone. If the comment has replies, its content will be replaced with "content is deleted".</p>
+                <h4 id="deleteCommentModalTitle" class="fw-700 text-grey-900 font-xsss mb-2">{{ __('Delete comment?') }}</h4>
+                <p class="fw-500 text-grey-500 font-xssss mb-4">{{ __('This action cannot be undone. If the comment has replies, its content will be replaced with "content is deleted".') }}</p>
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="button" wire:click="cancelDeleteComment" class="app-modal-btn app-modal-btn-cancel">Cancel</button>
-                    <button type="button" wire:click="confirmDeleteComment" class="app-modal-btn app-modal-btn-danger">Delete</button>
+                    <button type="button" wire:click="cancelDeleteComment" class="app-modal-btn app-modal-btn-cancel">{{ __('Cancel') }}</button>
+                    <button type="button" wire:click="confirmDeleteComment" class="app-modal-btn app-modal-btn-danger">{{ __('Delete') }}</button>
                 </div>
             </div>
         </div>

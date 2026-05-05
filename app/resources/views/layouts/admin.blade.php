@@ -71,19 +71,19 @@
     <aside class="admin-sidebar">
         <a href="{{ route('admin.dashboard') }}" class="brand">Admin Panel</a>
 
-        <a href="{{ route('admin.dashboard') }}" class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+        <a href="{{ route('admin.dashboard') }}" class="admin-nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
             <i class="feather-home"></i> Dashboard
         </a>
-        <a href="{{ route('admin.users.index') }}" class="admin-nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.users.index') }}" class="admin-nav-link {{ request()->is('admin/users*') ? 'active' : '' }}">
             <i class="feather-users"></i> Users
         </a>
-        <a href="{{ route('admin.reports.index') }}" class="admin-nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.reports.index') }}" class="admin-nav-link {{ request()->is('admin/reports*') ? 'active' : '' }}">
             <i class="feather-flag"></i> Reports
         </a>
-        <a href="{{ route('admin.categories.index') }}" class="admin-nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.categories.index') }}" class="admin-nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}">
             <i class="feather-grid"></i> Categories
         </a>
-        <a href="{{ route('admin.moderators.index') }}" class="admin-nav-link {{ request()->routeIs('admin.moderators.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.moderators.index') }}" class="admin-nav-link {{ request()->is('admin/moderators*') ? 'active' : '' }}">
             <i class="feather-shield"></i> Moderators
         </a>
         <div class="mt-4 pt-3 border-top border-secondary">

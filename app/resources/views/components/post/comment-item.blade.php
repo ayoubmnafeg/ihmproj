@@ -41,12 +41,12 @@
                         class="comment-action-btn text-danger ms-2 mb-1"
                         wire:click="promptDeleteComment('{{ $comment->id }}')"
                     >
-                        <i class="feather-trash-2"></i> Delete
+                        <i class="feather-trash-2"></i> {{ __('Delete') }}
                     </button>
                 @endif
             </div>
             @if($comment->status === 'deleted')
-                <p class="fw-500 text-grey-400 font-xssss mb-1 lh-24 fst-italic">content is deleted</p>
+                <p class="fw-500 text-grey-400 font-xssss mb-1 lh-24 fst-italic">{{ __('content is deleted') }}</p>
             @else
                 <p class="fw-500 text-grey-500 font-xssss mb-1 lh-24">{{ $comment->text }}</p>
             @endif
@@ -72,11 +72,11 @@
                     <span class="font-xssss text-grey-600"><i class="feather-arrow-down"></i> {{ $comment->downvotes_count ?? 0 }}</span>
                     @endauth
                     <button type="button" class="comment-action-btn copy-comment-link" data-link="{{ route('publications.show', $publicationId) }}#comment-{{ $comment->id }}">
-                        <i class="feather-share-2"></i> Share
+                        <i class="feather-share-2"></i> {{ __('Share') }}
                     </button>
                     @auth
                     <button type="button" class="comment-action-btn" wire:click="toggleReplyForm('{{ $comment->id }}')">
-                        <i class="feather-corner-down-right"></i> Reply
+                        <i class="feather-corner-down-right"></i> {{ __('Reply') }}
                     </button>
                     @endauth
                 @endif

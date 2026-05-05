@@ -273,7 +273,7 @@ new class extends Component
                                     },
                                     get selectedLabel() {
                                         const match = this.categories.find(c => c.id === this.selected);
-                                        return match ? match.name : 'Select category';
+                                        return match ? match.name : '{{ __('Select category') }}';
                                     },
                                     openPicker() {
                                         this.open = true;
@@ -298,7 +298,7 @@ new class extends Component
                                             x-ref="searchInput"
                                             type="text"
                                             class="create-post-category-search"
-                                            placeholder="Search category..."
+                                            placeholder="{{ __('Search category...') }}"
                                             x-model="query"
                                         >
                                     </div>
@@ -308,13 +308,13 @@ new class extends Component
                                                 <span x-text="item.name"></span>
                                             </button>
                                         </template>
-                                        <div class="create-post-category-empty" x-show="filtered.length === 0">No matching category</div>
+                                        <div class="create-post-category-empty" x-show="filtered.length === 0">{{ __('No matching category') }}</div>
                                     </div>
                                 </div>
                             </div>
                         @endif
 
-                        <input type="text" wire:model="title" class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg mb-2" placeholder="Post title" required>
+                        <input type="text" wire:model="title" class="bor-0 w-100 rounded-xxl p-2 ps-3 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg mb-2" placeholder="{{ __('Post title') }}" required>
                         @error('title')
                             <div class="text-danger font-xssss mb-2">{{ $message }}</div>
                         @enderror
@@ -341,10 +341,10 @@ new class extends Component
                         @if($isPoll)
                             <div class="create-post-poll-box mt-3">
                                 <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <h4 class="fw-700 text-grey-900 font-xssss mb-0">Poll</h4>
-                                    <button type="button" wire:click="removePoll" class="border-0 bg-transparent text-danger font-xssss fw-600 p-0">Remove poll</button>
+                                    <h4 class="fw-700 text-grey-900 font-xssss mb-0">{{ __('Poll') }}</h4>
+                                    <button type="button" wire:click="removePoll" class="border-0 bg-transparent text-danger font-xssss fw-600 p-0">{{ __('Remove poll') }}</button>
                                 </div>
-                                <div class="font-xssss text-grey-500 mb-2">Poll question will use the post title.</div>
+                                <div class="font-xssss text-grey-500 mb-2">{{ __('Poll question will use the post title.') }}</div>
 
                                 @foreach($pollOptions as $index => $option)
                                     <div class="d-flex align-items-center gap-2 mb-2">
@@ -368,7 +368,7 @@ new class extends Component
                                     <div class="text-danger font-xssss mb-2">{{ $message }}</div>
                                 @enderror
 
-                                <button type="button" wire:click="addPollOption" class="border-0 bg-transparent text-grey-700 font-xssss fw-600 p-0">+ Add option</button>
+                                <button type="button" wire:click="addPollOption" class="border-0 bg-transparent text-grey-700 font-xssss fw-600 p-0">{{ __('+ Add option') }}</button>
                             </div>
                         @endif
 
@@ -402,10 +402,10 @@ new class extends Component
                             <button type="button" wire:click="startPoll" class="d-flex align-items-center text-grey-600 border-0 bg-transparent p-0" title="Start a poll">
                                 <i class="feather-bar-chart-2 font-md text-grey-600 me-1"></i>
                                 @if($isPoll)
-                                    <span class="font-xssss fw-600 text-grey-700">Poll</span>
+                                    <span class="font-xssss fw-600 text-grey-700">{{ __('Poll') }}</span>
                                 @endif
                             </button>
-                            @if(!empty($images))<span class="font-xssss text-grey-500">{{ count($images) }} image(s) selected</span>@endif
+                            @if(!empty($images))<span class="font-xssss text-grey-500">{{ count($images) }} {{ __('image(s) selected') }}</span>@endif
                             @error('images')
                                 <span class="text-danger font-xssss">{{ $message }}</span>
                             @enderror
@@ -414,10 +414,10 @@ new class extends Component
                             @enderror
                             <div class="ms-auto d-flex align-items-center gap-2">
                                 <button type="submit" class="border-0 bg-primary-gradiant text-white text-center font-xssss fw-700 rounded-3 cursor-pointer d-inline-flex align-items-center justify-content-center px-3" style="height:48px; min-width:78px;">
-                                    Post
+                                    {{ __('Post') }}
                                 </button>
                                 <button type="button" wire:click="collapse" class="create-post-cancel-btn border-0 bg-greylight text-grey-700 text-center font-xssss fw-700 rounded-3 cursor-pointer d-inline-flex align-items-center justify-content-center px-3" style="height:48px; min-width:78px;">
-                                    Cancel
+                                    {{ __('Cancel') }}
                                 </button>
                             </div>
                         </div>
@@ -462,7 +462,7 @@ new class extends Component
 
                     this.quill = new Quill(this.$refs.editor, {
                         theme: 'snow',
-                        placeholder: "What's on your mind?",
+                        placeholder: "{{ __('What\'s on your mind?') }}",
                         modules: {
                             toolbar: {
                                 container: [

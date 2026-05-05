@@ -97,7 +97,6 @@
     "content is deleted": "content is deleted",
     "Reply": "Reply",
     "Back to top": "Back to top",
-    "Select space": "Select space",
     "Search space…": "Search space…",
     "No matching space": "No matching space",
     "Post title": "Post title",
@@ -114,5 +113,17 @@
     "Bio": "Bio",
     "Share your vibe without sharing your identity.": "Share your vibe without sharing your identity.",
     "Avatar URL": "Avatar URL",
-    "Save Profile": "Save Profile"
+    "Save Profile": "Save Profile",
+    "spaces": "Spaces",
+    "Your spaces": "Your spaces",
+    "Browse all spaces": "Browse all spaces",
+    "Create a space": "Create a space",
+    "Add spaces others can discover and follow.": "Add spaces others can discover and follow.",
+    "Create new space": "Create new space",
+    "Space name": "Space name",
+    "Enter space name": "Enter space name",
+    "Describe your space": "Describe your space",
+    "Profile Image": "Profile Image",
+    "Description": "Description",
+    "Create": "Create"
 }

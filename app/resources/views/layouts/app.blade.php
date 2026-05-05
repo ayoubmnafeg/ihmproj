@@ -145,8 +145,8 @@
                 <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}</a></li>
             </ul>
         </div>
-        <button id="dark-mode-toggle" class="p-2 text-center ms-2 menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;" type="button">
-            <i id="dark-mode-icon" class="feather-moon font-xl" aria-hidden="true"></i>
+        <button class="dark-mode-toggle p-2 text-center ms-2 menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;" type="button">
+            <i class="dark-mode-icon feather-moon font-xl" aria-hidden="true"></i>
         </button>
         @endguest
 
@@ -172,8 +172,8 @@
                         </a>
                     </div>
                 </div>
-                <button type="button" id="dark-mode-toggle" class="text-dark w-100 border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;outline:none;text-align:left;">
-                    <i id="dark-mode-icon" class="feather-moon font-xl" style="opacity:0.85;flex-shrink:0;" aria-hidden="true"></i><span style="flex:1;">{{ __('Toggle theme') }}</span>
+                <button type="button" class="dark-mode-toggle text-dark w-100 border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;outline:none;text-align:left;">
+                    <i class="dark-mode-icon feather-moon font-xl" style="opacity:0.85;flex-shrink:0;" aria-hidden="true"></i><span style="flex:1;">{{ __('Toggle theme') }}</span>
                 </button>
                 <div style="border-top:1px solid #eee;margin:4px 0 0;padding-top:4px;" role="separator"></div>
                 <a href="{{ route('profile.edit') }}" class="text-dark" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;text-decoration:none;">
@@ -490,9 +490,8 @@
 })();
 
 (function () {
-    var toggle = document.getElementById('dark-mode-toggle');
-    var icon = document.getElementById('dark-mode-icon');
-    if (!toggle || !icon) return;
+    var toggles = document.querySelectorAll('.dark-mode-toggle');
+    var icons = document.querySelectorAll('.dark-mode-icon');
 
     function applyDark(dark) {
         if (dark) {
@@ -500,22 +499,26 @@
         } else {
             document.body.classList.remove('theme-dark');
         }
-        icon.className = (dark ? 'feather-sun' : 'feather-moon') + ' font-xl';
-        icon.style.opacity = '0.85';
+        icons.forEach(function(icon) {
+            icon.className = (dark ? 'feather-sun' : 'feather-moon') + ' dark-mode-icon font-xl';
+            icon.style.opacity = '0.85';
+        });
         localStorage.setItem('darkMode', dark ? '1' : '0');
     }
 
     if (localStorage.getItem('darkMode') === '1') applyDark(true);
 
-    toggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var ls = document.getElementById('profile-lang-submenu');
-        var lb = document.getElementById('profile-lang-submenu-btn');
-        if (ls && lb) {
-            ls.style.display = 'none';
-            lb.setAttribute('aria-expanded', 'false');
-        }
-        applyDark(!document.body.classList.contains('theme-dark'));
+    toggles.forEach(function(toggle) {
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var ls = document.getElementById('profile-lang-submenu');
+            var lb = document.getElementById('profile-lang-submenu-btn');
+            if (ls && lb) {
+                ls.style.display = 'none';
+                lb.setAttribute('aria-expanded', 'false');
+            }
+            applyDark(!document.body.classList.contains('theme-dark'));
+        });
     });
 })();
 

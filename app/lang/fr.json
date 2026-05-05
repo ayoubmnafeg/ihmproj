@@ -79,5 +79,17 @@
     "No matching category": "Aucune catégorie trouvée",
     "Post title": "Titre du post",
     "What's on your mind?": "Quoi de neuf ?",
-    "Generate new username": "Générer un nouveau nom d'utilisateur"
+    "Generate new username": "Générer un nouveau nom d'utilisateur",
+    "Edit Profile": "Modifier le profil",
+    "Private by default": "Privé par défaut",
+    "New uploads are hidden until you publish.": "Les nouveaux envois sont masqués jusqu'à leur publication.",
+    "Discoverability": "Découvrabilité",
+    "Only alias appears in search and mentions.": "Seul le pseudo apparaît dans les recherches et mentions.",
+    "Safety mode enabled": "Mode de sécurité activé",
+    "Auto-hide sensitive previews": "Masquer automatiquement les aperçus sensibles",
+    "Alias": "Pseudo",
+    "Bio": "Biographie",
+    "Share your vibe without sharing your identity.": "Partagez votre ambiance sans partager votre identité.",
+    "Avatar URL": "URL de l'avatar",
+    "Save Profile": "Enregistrer le profil"
 }

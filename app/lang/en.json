@@ -79,5 +79,17 @@
     "No matching category": "No matching category",
     "Post title": "Post title",
     "What's on your mind?": "What's on your mind?",
-    "Generate new username": "Generate new username"
+    "Generate new username": "Generate new username",
+    "Edit Profile": "Edit Profile",
+    "Private by default": "Private by default",
+    "New uploads are hidden until you publish.": "New uploads are hidden until you publish.",
+    "Discoverability": "Discoverability",
+    "Only alias appears in search and mentions.": "Only alias appears in search and mentions.",
+    "Safety mode enabled": "Safety mode enabled",
+    "Auto-hide sensitive previews": "Auto-hide sensitive previews",
+    "Alias": "Alias",
+    "Bio": "Bio",
+    "Share your vibe without sharing your identity.": "Share your vibe without sharing your identity.",
+    "Avatar URL": "Avatar URL",
+    "Save Profile": "Save Profile"
 }

@@ -52,8 +52,6 @@ Route::get('/stream', function (Request $request, PublicationController $publica
 })->name('feed.index');
 
 Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('publications.show');
-Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
-
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -116,3 +114,5 @@ Route::middleware('auth')->group(function () {
         Route::post('/statistics/snapshot', [StatisticsController::class, 'snapshot'])->name('statistics.snapshot');
     });
 });
+
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');

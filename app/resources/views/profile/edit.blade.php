@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Anonymous Profile')
+@section('title', __('Edit Profile'))
 
 @section('content')
 <div class="row">
@@ -11,17 +11,17 @@
             </div>
             <div class="card-body p-0 position-relative">
                 <figure class="avatar position-absolute w100 z-index-1" style="top:-40px; left: 30px;">
-                    <img src="{{ asset('images/user-12.png') }}" alt="avatar" class="float-right p-1 bg-white rounded-circle w-100">
+                    <img src="{{ $user->profile->avatar_url ?: asset('images/user-12.png') }}" alt="avatar" class="float-right p-1 bg-white rounded-circle w-100" style="object-fit: cover; aspect-ratio: 1/1;">
                 </figure>
                 <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">
                     {{ $user->profile->display_name ?: ('anon_' . $user->id) }}
                 </h4>
-                <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#editProfileModal" class="d-none d-lg-block bg-primary-gradiant p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
-                        Edit Profile
+                <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2" style="z-index: 10;">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editProfileModal" class="bg-primary-gradiant p-3 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3 border-0">
+                        {{ __('Edit Profile') }}
                     </button>
-                    <a href="#" class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="feather-shield font-md"></i></a>
-                    <a href="#" class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="ti-more font-md text-dark"></i></a>
+                    <a href="#" class="bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="feather-shield font-md"></i></a>
+                    <a href="#" class="bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="ti-more font-md text-dark"></i></a>
                 </div>
             </div>
 
@@ -32,20 +32,20 @@
         <div class="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
             <div class="card-body border-top-xs d-flex">
                 <i class="feather-lock text-grey-500 me-3 font-lg"></i>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-0">Private by default <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">New uploads are hidden until you publish.</span></h4>
+                <h4 class="fw-700 text-grey-900 font-xssss mt-0">{{ __('Private by default') }} <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">{{ __('New uploads are hidden until you publish.') }}</span></h4>
             </div>
 
             <div class="card-body d-flex pt-0">
                 <i class="feather-eye text-grey-500 me-3 font-lg"></i>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-0">Discoverability <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">Only alias appears in search and mentions.</span></h4>
+                <h4 class="fw-700 text-grey-900 font-xssss mt-0">{{ __('Discoverability') }} <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Only alias appears in search and mentions.') }}</span></h4>
             </div>
             <div class="card-body d-flex pt-0">
                 <i class="feather-shield text-grey-500 me-3 font-lg"></i>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-1">Safety mode enabled</h4>
+                <h4 class="fw-700 text-grey-900 font-xssss mt-1">{{ __('Safety mode enabled') }}</h4>
             </div>
             <div class="card-body d-flex pt-0">
                 <i class="feather-alert-triangle text-grey-500 me-3 font-lg"></i>
-                <h4 class="fw-700 text-grey-900 font-xssss mt-1">Auto-hide sensitive previews</h4>
+                <h4 class="fw-700 text-grey-900 font-xssss mt-1">{{ __('Auto-hide sensitive previews') }}</h4>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-xxl border-0 shadow-lg">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-700 font-md text-grey-900" id="editProfileModalLabel">Edit Profile</h5>
+                <h5 class="modal-title fw-700 font-md text-grey-900" id="editProfileModalLabel">{{ __('Edit Profile') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body pt-2">
@@ -70,7 +70,7 @@
                     @method('PATCH')
 
                     <div class="mb-3">
-                        <label for="display_name" class="form-label fw-600 text-grey-900 font-xssss">Alias</label>
+                        <label for="display_name" class="form-label fw-600 text-grey-900 font-xssss">{{ __('Alias') }}</label>
                         <input
                             id="display_name"
                             type="text"
@@ -86,13 +86,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="bio" class="form-label fw-600 text-grey-900 font-xssss">Bio</label>
+                        <label for="bio" class="form-label fw-600 text-grey-900 font-xssss">{{ __('Bio') }}</label>
                         <textarea
                             id="bio"
                             name="bio"
                             rows="4"
                             class="form-control rounded-xl bg-greylight border-0 font-xssss fw-500 @error('bio') is-invalid @enderror"
-                            placeholder="Share your vibe without sharing your identity."
+                            placeholder="{{ __('Share your vibe without sharing your identity.') }}"
                         >{{ old('bio', $user->profile->bio ?? '') }}</textarea>
                         @error('bio')
                             <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="avatar_url" class="form-label fw-600 text-grey-900 font-xssss">Avatar URL</label>
+                        <label for="avatar_url" class="form-label fw-600 text-grey-900 font-xssss">{{ __('Avatar URL') }}</label>
                         <input
                             id="avatar_url"
                             type="url"
@@ -115,7 +115,7 @@
                     </div>
 
                     <button type="submit" class="w-100 p-2 lh-20 bg-primary-gradiant text-white text-center font-xssss fw-600 ls-1 rounded-xl border-0">
-                        Save Profile
+                        {{ __('Save Profile') }}
                     </button>
                 </form>
             </div>

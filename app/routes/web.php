@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StaticController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'fr'])) {
         session()->put('locale', $locale);
     }
+
     return redirect()->back();
 })->name('lang.switch');
 
@@ -86,6 +88,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
     Route::post('/groups/{category}/follow', [GroupController::class, 'follow'])->name('groups.follow');
     Route::get('/groups/{category}', [GroupController::class, 'show'])->name('groups.show');
+
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
     Route::middleware('role.mod')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

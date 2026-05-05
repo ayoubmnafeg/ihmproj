@@ -18,6 +18,12 @@
   --ui-icon-bg: #e8ecf1;
   --ui-icon-fg: #2c3540;
   --ui-focus: #4a6fa5;
+  /* Matches fixed left `.navigation` column (expanded / collapsed rail) */
+  --ui-left-rail-width: 280px;
+  --ui-left-rail-collapsed-width: 90px;
+  /* Header search width (shorter than full rail) */
+  --ui-header-search-field-max-width: 200px;
+  --ui-header-search-margin-left: 20px;
 }
 
 body.ui-private.theme-dark,
@@ -56,6 +62,196 @@ body.ui-private.theme-dark,
   background: var(--ui-surface) !important;
   box-shadow: none !important;
   border-bottom: 1px solid var(--ui-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 0.5rem;
+  row-gap: 0.35rem;
+}
+
+/* Icon + search on the left; search stretches until header actions */
+.ui-private .nav-header .nav-top {
+  flex: 1 1 0%;
+  min-width: 12rem;
+  /* Template uses justify-content:center — keep brand + search pinned to the left */
+  justify-content: flex-start !important;
+}
+
+/*
+ * Template: .nav-header .nav-top a { width: 280px; … } (logo column width).
+ * That leaves a huge gap between the shield and the search — override so the
+ * field sits flush next to the icon.
+ */
+.ui-private .nav-header .nav-top a.app-brand-link {
+  width: auto !important;
+  line-height: normal !important;
+  padding-left: 0 !important;
+  white-space: nowrap;
+}
+
+.ui-private .nav-header .nav-top > a.header-tool,
+.ui-private .nav-header .nav-top a.mob-menu {
+  width: auto !important;
+  line-height: normal !important;
+  padding-left: 0 !important;
+}
+
+.ui-private .nav-header-sidebar-cluster {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: var(--ui-left-rail-width);
+  margin-left: 12px;
+  gap: 0;
+}
+
+html.sidebar-rail-collapsed body.ui-private .nav-header-sidebar-cluster {
+  max-width: var(--ui-left-rail-collapsed-width);
+}
+
+html.sidebar-rail-collapsed body.ui-private .sidebar-header-search {
+  display: none !important;
+}
+
+.ui-private .nav-header .sidebar-header-search {
+  float: none !important;
+  margin-left: var(--ui-header-search-margin-left);
+  flex: 0 1 auto !important;
+  max-width: var(--ui-header-search-field-max-width);
+  width: 100%;
+}
+
+.ui-private .nav-header .sidebar-header-search .icon-input {
+  width: 100%;
+}
+
+/* Clicks go to the form handler; icon would otherwise steal the hit target */
+.ui-private .nav-header .sidebar-header-search .icon-input > i {
+  pointer-events: none;
+}
+
+.ui-private .nav-header .sidebar-header-search-input {
+  width: 100% !important;
+  max-width: 100%;
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* Search results: Posts / Spaces tabs */
+.ui-private .search-results-tabs__nav {
+  border-bottom: 1px solid var(--ui-border);
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+}
+
+.ui-private .search-results-tabs__nav .nav-link {
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--ui-radius-sm) var(--ui-radius-sm) 0 0;
+  color: var(--ui-text-muted);
+  padding: 0.5rem 1rem;
+  margin-bottom: -1px;
+  background: transparent;
+}
+
+.ui-private .search-results-tabs__nav .nav-link:hover {
+  color: var(--ui-text);
+}
+
+.ui-private .search-results-tabs__nav .nav-link.active {
+  color: var(--ui-text);
+  border-bottom-color: var(--ui-focus);
+  background: var(--ui-surface-2);
+}
+
+.ui-private .search-results-tabs__content {
+  background: var(--ui-surface);
+  border-top: 1px solid var(--ui-border);
+}
+
+.ui-private .search-results-tabs .list-unstyled li + li {
+  border-top: 1px solid var(--ui-border);
+}
+
+/* Search posts: no card shell — divider between items */
+.ui-private .post-feed--bare .post-feed-item--bare {
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ui-border);
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.ui-private .post-feed--bare .post-feed-load-more--bare {
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Search modal: no card shell — only title row + field */
+.ui-private #appSearchModal .modal-content.app-search-modal-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.ui-private #appSearchModal .app-search-modal-body {
+  background: transparent;
+}
+
+.ui-private #appSearchModal .app-search-modal-dialog {
+  max-width: min(100%, 28rem);
+}
+
+.ui-private #appSearchModal .app-search-modal-close {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* Search modal: circular submit inside field */
+.ui-private .app-search-modal-input {
+  padding-right: 3rem;
+}
+
+.ui-private .app-search-modal-submit {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ui-accent);
+  color: var(--ui-accent-fg);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.ui-private .app-search-modal-submit:hover {
+  filter: brightness(0.95);
+}
+
+.ui-private .app-search-modal-submit:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+.ui-private .app-search-modal-submit i {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.ui-private .app-search-modal-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.25);
+  pointer-events: none;
 }
 
 .ui-private .nav-header .header-guest-btn {
@@ -211,7 +407,7 @@ body.ui-private .left-sidebar-edge-toggle {
   position: fixed;
   /* Align just under fixed header (~90–96px) + inset; avoids top clipping */
   top: calc(env(safe-area-inset-top, 0px) + 104px);
-  left: calc(280px - 16px);
+  left: calc(var(--ui-left-rail-width) - 16px);
   z-index: 1002;
   display: none;
   align-items: center;
@@ -233,7 +429,7 @@ body.ui-private .left-sidebar-edge-toggle {
 }
 
 html.sidebar-rail-collapsed body.ui-private .left-sidebar-edge-toggle {
-  left: calc(90px - 16px);
+  left: calc(var(--ui-left-rail-collapsed-width) - 16px);
 }
 
 body.ui-private .left-sidebar-edge-toggle:hover {

@@ -15,7 +15,6 @@
     "Female": "Female",
     "Confirm Password": "Confirm Password",
     "Already have account": "Already have an account?",
-    "Search (optional)…": "Search (optional)…",
     "Notification": "Notifications",
     "Sign in": "Sign in",
     "to comment.": "to comment.",
@@ -114,5 +113,19 @@
     "Bio": "Bio",
     "Share your vibe without sharing your identity.": "Share your vibe without sharing your identity.",
     "Avatar URL": "Avatar URL",
-    "Save Profile": "Save Profile"
+    "Save Profile": "Save Profile",
+    "Search": "Search",
+    "Search the app": "Search the app",
+    "Search results": "Search results",
+    "Showing results for": "Showing results for",
+    "Enter a search term to see posts, spaces, and people.": "Enter a search term to see posts, spaces, and people.",
+    "Use the search bar to find posts, spaces, and people.": "Use the search bar to find posts, spaces, and people.",
+    "No search results": "No results match your search.",
+    "Posts": "Posts",
+    "People": "People",
+    "Close": "Close",
+    "No posts match your search.": "No posts match your search.",
+    "Enter a search term to see posts and spaces.": "Enter a search term to see posts and spaces.",
+    "Use the search bar to find posts and spaces.": "Use the search bar to find posts and spaces.",
+    "No spaces or people match your search.": "No spaces or people match your search."
 }

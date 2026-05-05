@@ -73,25 +73,39 @@
 
     <!-- navigation top-->
     <div class="nav-header bg-white shadow-xs border-0">
-        <div class="nav-top">
-            <a href="{{ auth()->check() ? route('feed.index') : route('home') }}" class="text-decoration-none d-inline-flex align-items-center gap-2 app-brand-link">
-                <i class="feather-shield text-grey-600" style="font-size:1.5rem;" aria-hidden="true"></i>
-                <span class="d-inline-block fw-600 text-grey-900 ls-1 font-lg logo-text mb-0" style="font-family:Inter,system-ui,sans-serif;letter-spacing:0.04em;">{{ config('app.name') }}</span>
-            </a>
+        <div class="nav-top d-flex align-items-center">
+            <div class="nav-header-sidebar-cluster d-flex align-items-center min-w-0">
+                <a
+                    href="{{ auth()->check() ? route('feed.index') : route('home') }}"
+                    class="text-decoration-none d-inline-flex align-items-center flex-shrink-0 app-brand-link"
+                    title="{{ config('app.name') }}"
+                    aria-label="{{ config('app.name') }}"
+                >
+                    <i class="feather-shield text-grey-600" style="font-size:1.5rem;" aria-hidden="true"></i>
+                </a>
+                <form action="#" class="header-search sidebar-header-search mb-0 min-w-0" onsubmit="return false;">
+                    <div class="form-group mb-0 icon-input">
+                        <i class="feather-search font-sm text-grey-400"></i>
+                        <input
+                            type="text"
+                            placeholder="{{ __('Search...') }}"
+                            class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w-100 theme-dark-bg sidebar-header-search-input"
+                            readonly
+                            autocomplete="off"
+                            aria-haspopup="dialog"
+                            aria-controls="appSearchModal"
+                        >
+                    </div>
+                </form>
+            </div>
             <a href="#" class="mob-menu ms-auto me-2 chat-active-btn header-tool header-tool--mob"><i class="feather-message-circle font-sm"></i></a>
-            <a href="#" class="me-2 menu-search-icon mob-menu header-tool header-tool--mob"><i class="feather-search font-sm"></i></a>
+            <a href="#" class="me-2 mob-menu header-tool header-tool--mob" data-app-search-modal title="{{ __('Search the app') }}" aria-label="{{ __('Search the app') }}"><i class="feather-search font-sm"></i></a>
             <button class="nav-menu me-0 ms-2"></button>
         </div>
 
-        <form action="#" class="float-left header-search">
-            <div class="form-group mb-0 icon-input">
-                <i class="feather-search font-sm text-grey-400"></i>
-                <input type="text" placeholder="{{ __('Search (optional)…') }}" class="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
-            </div>
-        </form>
-
         @auth
-        <div class="dropdown p-2 text-center ms-auto menu-icon d-inline-block">
+        <div class="nav-header-actions d-flex align-items-center flex-shrink-0 ms-auto gap-2 flex-wrap">
+        <div class="dropdown p-2 text-center menu-icon d-inline-block">
             <a href="#" class="position-relative d-inline-block header-tool text-decoration-none" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false" title="Activity">
                 <span class="dot-count header-notify-badge" aria-hidden="true"></span>
                 <i class="feather-bell font-xl" aria-hidden="true"></i>
@@ -120,38 +134,8 @@
                 </div>
             </div>
         </div>
-        <a href="{{ route('messages.index') }}" class="p-2 text-center ms-3 menu-icon chat-active-btn header-tool text-decoration-none" title="Messages"><i class="feather-message-square font-xl" aria-hidden="true"></i></a>
-        @else
-        <div class="d-flex align-items-center ms-auto gap-2 flex-wrap">
-            <a
-                href="{{ route('login') }}"
-                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 header-guest-btn header-guest-btn--signin rounded-xl"
-            >{{ __('Sign in') }}</a>
-            <a
-                href="{{ route('register') }}"
-                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 border-0 header-guest-btn header-guest-btn--register bg-primary-gradiant rounded-xl"
-            >{{ __('Create account') }}</a>
-        </div>
-        @endauth
-
-        @guest
-        <div class="dropdown p-2 text-center ms-2 menu-icon d-inline-block">
-            <a href="#" class="position-relative d-inline-flex align-items-center header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('Language') }}" style="border:1px solid #eee;">
-                <img src="{{ $langFlagCurrent }}" alt="" width="22" height="22" class="lang-flag-icon me-1">
-                {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="langMenu" style="z-index: 100000; position: absolute;">
-                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}"><img src="{{ $langFlagEn }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('English') }}</a></li>
-                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}</a></li>
-            </ul>
-        </div>
-        <button id="dark-mode-toggle" class="p-2 text-center ms-2 menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;" type="button">
-            <i id="dark-mode-icon" class="feather-moon font-xl" aria-hidden="true"></i>
-        </button>
-        @endguest
-
-        @auth
-        <div class="p-0 ms-3 menu-icon header-tool-wrap" style="position:relative;" id="profile-dropdown-wrap">
+        <a href="{{ route('messages.index') }}" class="p-2 text-center menu-icon chat-active-btn header-tool text-decoration-none" title="Messages"><i class="feather-message-square font-xl" aria-hidden="true"></i></a>
+        <div class="p-0 menu-icon header-tool-wrap" style="position:relative;" id="profile-dropdown-wrap">
             <button type="button" class="header-account-btn" id="profile-avatar-btn" title="Account" aria-label="Open account menu" aria-haspopup="true" aria-expanded="false">
                 <i class="feather-user" aria-hidden="true"></i>
             </button>
@@ -187,7 +171,37 @@
                 </form>
             </div>
         </div>
+        </div>
+        @else
+        <div class="d-flex align-items-center ms-auto gap-2 flex-wrap">
+            <a
+                href="{{ route('login') }}"
+                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 header-guest-btn header-guest-btn--signin rounded-xl"
+            >{{ __('Sign in') }}</a>
+            <a
+                href="{{ route('register') }}"
+                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 border-0 header-guest-btn header-guest-btn--register bg-primary-gradiant rounded-xl"
+            >{{ __('Create account') }}</a>
+        </div>
         @endauth
+
+        @guest
+        <div class="nav-header-actions d-flex align-items-center flex-shrink-0 gap-2">
+        <div class="dropdown p-2 text-center menu-icon d-inline-block">
+            <a href="#" class="position-relative d-inline-flex align-items-center header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('Language') }}" style="border:1px solid #eee;">
+                <img src="{{ $langFlagCurrent }}" alt="" width="22" height="22" class="lang-flag-icon me-1">
+                {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="langMenu" style="z-index: 100000; position: absolute;">
+                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}"><img src="{{ $langFlagEn }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('English') }}</a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}</a></li>
+            </ul>
+        </div>
+        <button id="dark-mode-toggle" class="p-2 text-center menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;" type="button">
+            <i id="dark-mode-icon" class="feather-moon font-xl" aria-hidden="true"></i>
+        </button>
+        </div>
+        @endguest
     </div>
     <!-- navigation top -->
 
@@ -389,20 +403,38 @@
         @endauth
     </div>
 
-    <div class="app-header-search">
-        <form class="search-form">
-            <div class="form-group searchbox mb-0 border-0 p-1">
-                <input type="text" class="form-control border-0" placeholder="{{ __('Search...') }}">
-                <i class="input-icon">
-                    <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline"></ion-icon>
-                </i>
-                <a href="#" class="ms-1 mt-1 d-inline-block close searchbox-close">
-                    <i class="ti-close font-xs"></i>
-                </a>
-            </div>
-        </form>
-    </div>
+    <div class="app-header-search d-none" aria-hidden="true"></div>
 
+</div>
+
+<div class="modal fade" id="appSearchModal" tabindex="-1" aria-labelledby="appSearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered app-search-modal-dialog">
+        <div class="modal-content app-search-modal-content border-0 shadow-none bg-transparent">
+            <div class="modal-body app-search-modal-body p-0">
+                <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                    <h5 class="modal-title fw-700 font-xsss text-grey-900 mb-0" id="appSearchModalLabel">{{ __('Search the app') }}</h5>
+                    <button type="button" class="btn-close app-search-modal-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                </div>
+                <form method="GET" action="{{ route('search.index') }}" id="appSearchModalForm">
+                    <label for="appSearchModalQuery" class="visually-hidden">{{ __('Search') }}</label>
+                    <div class="position-relative app-search-modal-field">
+                        <input
+                            type="search"
+                            name="q"
+                            id="appSearchModalQuery"
+                            class="form-control rounded-xl bg-greylight border-0 font-xssss fw-500 theme-dark-bg lh-32 py-2 ps-3 app-search-modal-input"
+                            placeholder="{{ __('Search...') }}"
+                            autocomplete="off"
+                            maxlength="255"
+                        >
+                        <button type="submit" class="app-search-modal-submit" id="appSearchModalSubmit" disabled title="{{ __('Search') }}" aria-label="{{ __('Search') }}">
+                            <i class="feather-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal bottom side fade" id="Modalstory" tabindex="-1" role="dialog" style="overflow-y: auto;">
@@ -458,6 +490,87 @@
 <script src="{{ asset('js/scripts.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @livewireScripts
+<script>
+(function () {
+    var modalEl = document.getElementById('appSearchModal');
+    if (!modalEl || typeof bootstrap === 'undefined' || !bootstrap.Modal) {
+        return;
+    }
+    function getSearchModal() {
+        var existing = bootstrap.Modal.getInstance(modalEl);
+        if (existing) {
+            return existing;
+        }
+        return new bootstrap.Modal(modalEl);
+    }
+    var barInput = document.querySelector('.sidebar-header-search-input');
+    var modalInput = document.getElementById('appSearchModalQuery');
+    var headerForm = document.querySelector('.sidebar-header-search');
+    var searchForm = document.getElementById('appSearchModalForm');
+    var searchSubmit = document.getElementById('appSearchModalSubmit');
+
+    function syncSearchSubmitState() {
+        if (!modalInput || !searchSubmit) {
+            return;
+        }
+        var ok = modalInput.value.trim().length > 0;
+        searchSubmit.disabled = !ok;
+        searchSubmit.setAttribute('aria-disabled', ok ? 'false' : 'true');
+    }
+
+    function openModal(prefill) {
+        if (modalInput) {
+            modalInput.value = typeof prefill === 'string' ? prefill : '';
+            syncSearchSubmitState();
+        }
+        getSearchModal().show();
+    }
+
+    if (searchForm && modalInput) {
+        searchForm.addEventListener('submit', function (e) {
+            if (!modalInput.value.trim()) {
+                e.preventDefault();
+            }
+        });
+        modalInput.addEventListener('input', syncSearchSubmitState);
+        modalInput.addEventListener('change', syncSearchSubmitState);
+    }
+
+    /* Clicks often land on the feather icon (stacked over the field), not the input */
+    if (headerForm) {
+        headerForm.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModal(barInput ? barInput.value.trim() : '');
+        });
+        headerForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            openModal('');
+        });
+    }
+    if (barInput) {
+        barInput.addEventListener('focus', function (e) {
+            e.preventDefault();
+            barInput.blur();
+            openModal(barInput.value.trim());
+        });
+    }
+
+    modalEl.addEventListener('shown.bs.modal', function () {
+        if (modalInput) {
+            modalInput.focus();
+            modalInput.select();
+            syncSearchSubmitState();
+        }
+    });
+
+    document.querySelectorAll('[data-app-search-modal]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModal('');
+        });
+    });
+})();
+</script>
 <script>
 (function () {
     var btn = document.getElementById('profile-avatar-btn');

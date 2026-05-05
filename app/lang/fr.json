@@ -15,7 +15,6 @@
     "Female": "Femme",
     "Confirm Password": "Confirmez le mot de passe",
     "Already have account": "Vous avez déjà un compte ?",
-    "Search (optional)…": "Recherche (optionnelle)…",
     "Notification": "Notifications",
     "Sign in": "Se connecter",
     "to comment.": "pour commenter.",
@@ -114,5 +113,19 @@
     "Bio": "Biographie",
     "Share your vibe without sharing your identity.": "Partagez votre ambiance sans partager votre identité.",
     "Avatar URL": "URL de l'avatar",
-    "Save Profile": "Enregistrer le profil"
+    "Save Profile": "Enregistrer le profil",
+    "Search": "Rechercher",
+    "Search the app": "Rechercher dans l'application",
+    "Search results": "Résultats de recherche",
+    "Showing results for": "Résultats pour",
+    "Enter a search term to see posts, spaces, and people.": "Saisissez un terme pour afficher des publications, des espaces et des personnes.",
+    "Use the search bar to find posts, spaces, and people.": "Utilisez la barre de recherche pour trouver des publications, des espaces et des personnes.",
+    "No search results": "Aucun résultat ne correspond à votre recherche.",
+    "Posts": "Publications",
+    "People": "Personnes",
+    "Close": "Fermer",
+    "No posts match your search.": "Aucune publication ne correspond à votre recherche.",
+    "Enter a search term to see posts and spaces.": "Saisissez un terme pour afficher des publications et des espaces.",
+    "Use the search bar to find posts and spaces.": "Utilisez la barre de recherche pour trouver des publications et des espaces.",
+    "No spaces or people match your search.": "Aucun espace ni personne ne correspond à votre recherche."
 }

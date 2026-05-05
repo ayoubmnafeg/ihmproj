@@ -11,6 +11,10 @@ new class extends Component
     public string $scope = 'all';
     public ?string $userId = null;
     public ?string $categoryId = null;
+    /** When scope is `search`, filter posts by title/body (same ordering as feed). */
+    public ?string $searchQuery = null;
+    /** No card/shadow wrapper around each post (e.g. search results). */
+    public bool $bareSurface = false;
     public int $perPage = 20;
     public bool $hasMore = true;
 
@@ -80,6 +84,15 @@ new class extends Component
             return collect();
         }
 
+        if ($this->scope === 'search') {
+            $term = trim((string) ($this->searchQuery ?? ''));
+            if ($term === '') {
+                $this->hasMore = false;
+
+                return collect();
+            }
+        }
+
         $userId = auth()->id();
         $query = Publication::with(['author.profile', 'category', 'attachments', 'poll.options', 'poll.votes' => fn ($voteQuery) => $userId
             ? $voteQuery->where('user_id', $userId)
@@ -97,16 +110,24 @@ new class extends Component
             ->where('contents.status', 'visible')
             ->latest('contents.created_at');
 
-        if ($this->scope === 'mine' && auth()->check()) {
-            $query->where('contents.author_id', auth()->id());
-        }
+        if ($this->scope === 'search') {
+            $like = '%'.addcslashes(trim((string) $this->searchQuery), '%_\\').'%';
+            $query->where(function ($q) use ($like) {
+                $q->where('publications.title', 'like', $like)
+                    ->orWhere('publications.text', 'like', $like);
+            });
+        } else {
+            if ($this->scope === 'mine' && auth()->check()) {
+                $query->where('contents.author_id', auth()->id());
+            }
 
-        if ($this->scope === 'user' && $this->userId) {
-            $query->where('contents.author_id', $this->userId);
-        }
+            if ($this->scope === 'user' && $this->userId) {
+                $query->where('contents.author_id', $this->userId);
+            }
 
-        if ($this->categoryId) {
-            $query->where('publications.category_id', $this->categoryId);
+            if ($this->categoryId) {
+                $query->where('publications.category_id', $this->categoryId);
+            }
         }
 
         $publications = $query->take($this->perPage + 1)->get();
@@ -124,7 +145,7 @@ new class extends Component
 };
 ?>
 
-<div class="post-feed">
+<div @class(['post-feed', 'post-feed--bare' => $bareSurface])>
     @forelse($publications as $publication)
     @php
         $userReactionType = $publication->reactions->first()?->type;
@@ -136,8 +157,12 @@ new class extends Component
         $totalPollVotes = $poll ? $poll->options->sum('votes_count') : 0;
         $votedOptionId = $poll ? optional($poll->votes->first())->poll_option_id : null;
     @endphp
-    <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 ui-surface-card">
-        <div class="card-body p-0 d-flex">
+    <div @class([
+        'post-feed-item w-100 mb-3',
+        'post-feed-item--bare' => $bareSurface,
+        'card shadow-xss rounded-xxl border-0 p-4 ui-surface-card' => ! $bareSurface,
+    ])>
+        <div class="{{ $bareSurface ? 'd-flex p-0 w-100' : 'card-body p-0 d-flex' }}">
             <figure class="avatar me-3"><img src="{{ asset('images/profile-4.png') }}" alt="" class="shadow-sm rounded-circle w45" width="45" height="45"></figure>
             <h4 class="fw-600 text-grey-900 font-xssss mt-1">
                 <a href="{{ route('profile.show', $publication->author_id) }}" class="text-grey-900 text-decoration-none">{{ $publication->author->profile->display_name ?? ('anon_'. $publication->author_id) }}</a>
@@ -183,7 +208,7 @@ new class extends Component
             </div>
         </div>
 
-        <div class="card-body p-0 me-lg-5 mt-2">
+        <div class="{{ $bareSurface ? 'p-0 me-lg-5 mt-2 w-100' : 'card-body p-0 me-lg-5 mt-2' }}">
             <h5 class="post-title-headline mb-1">{{ $publication->title }}</h5>
             <div
                 x-data="{
@@ -270,7 +295,7 @@ new class extends Component
             @endif
         </div>
 
-        <div class="card-body d-flex align-items-center p-0 mt-3">
+        <div class="{{ $bareSurface ? 'd-flex align-items-center p-0 mt-3 w-100' : 'card-body d-flex align-items-center p-0 mt-3' }}">
             @auth
             <form method="POST" action="{{ route('reactions.toggle', $publication->id) }}" class="d-inline me-2">
                 @csrf
@@ -308,13 +333,25 @@ new class extends Component
         </div>
     </div>
     @empty
+    @if($bareSurface)
+        <p class="fw-500 text-grey-500 font-xssss mb-0 py-4 text-center">{{ $scope === 'search' ? __('No posts match your search.') : __('Nothing here yet. When you and others share, it will show up in this private feed.') }}</p>
+    @else
     <div class="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-3 text-center ui-surface-card">
-        <p class="fw-500 text-grey-500 font-xssss mb-0">{{ __('Nothing here yet. When you and others share, it will show up in this private feed.') }}</p>
+        @if($scope === 'search')
+            <p class="fw-500 text-grey-500 font-xssss mb-0">{{ __('No posts match your search.') }}</p>
+        @else
+            <p class="fw-500 text-grey-500 font-xssss mb-0">{{ __('Nothing here yet. When you and others share, it will show up in this private feed.') }}</p>
+        @endif
     </div>
+    @endif
     @endforelse
 
     @if($hasMore)
-    <div wire:poll.visible.750ms="loadMore" class="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3 ui-surface-card">
+    <div wire:poll.visible.750ms="loadMore" @class([
+        'w-100 text-center mb-3 mt-3',
+        'post-feed-load-more--bare py-3' => $bareSurface,
+        'card shadow-xss rounded-xxl border-0 p-4 ui-surface-card' => ! $bareSurface,
+    ])>
         <div class="snippet mt-2 ms-auto me-auto" data-title=".dot-typing">
             <div class="stage">
                 <div class="dot-typing"></div>

@@ -47,6 +47,17 @@
             text-overflow: ellipsis;
             margin-bottom: 0;
         }
+        .lang-flag-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+        body.theme-dark .lang-flag-icon {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
+        }
     </style>
 </head>
 <body class="ui-private color-theme-blue mont-font">
@@ -54,6 +65,11 @@
 <div class="preloader"></div>
 
 <div class="main-wrapper">
+    @php
+        $langFlagEn = asset('images/lang-en.png');
+        $langFlagFr = asset('images/lang-fr.png');
+        $langFlagCurrent = app()->getLocale() === 'fr' ? $langFlagFr : $langFlagEn;
+    @endphp
 
     <!-- navigation top-->
     <div class="nav-header bg-white shadow-xs border-0">
@@ -117,32 +133,55 @@
             >{{ __('Create account') }}</a>
         </div>
         @endauth
+
+        @guest
         <div class="dropdown p-2 text-center ms-2 menu-icon d-inline-block">
-            <a href="#" class="position-relative d-inline-block header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="Language" style="border:1px solid #eee;">
-                <i class="feather-globe me-1"></i> {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
+            <a href="#" class="position-relative d-inline-flex align-items-center header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('Language') }}" style="border:1px solid #eee;">
+                <img src="{{ $langFlagCurrent }}" alt="" width="22" height="22" class="lang-flag-icon me-1">
+                {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="langMenu" style="z-index: 100000; position: absolute;">
-                <li><a class="dropdown-item fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}">English</a></li>
-                <li><a class="dropdown-item fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}">Français</a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}"><img src="{{ $langFlagEn }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('English') }}</a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}</a></li>
             </ul>
         </div>
-
-        <button id="dark-mode-toggle" class="p-2 text-center {{ auth()->check() ? 'ms-1' : 'ms-2' }} menu-icon border-0 bg-transparent cursor-pointer header-tool" title="Lower luminance (easier in dim light)" style="outline:none;" type="button">
+        <button id="dark-mode-toggle" class="p-2 text-center ms-2 menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;" type="button">
             <i id="dark-mode-icon" class="feather-moon font-xl" aria-hidden="true"></i>
         </button>
+        @endguest
 
         @auth
         <div class="p-0 ms-3 menu-icon header-tool-wrap" style="position:relative;" id="profile-dropdown-wrap">
             <button type="button" class="header-account-btn" id="profile-avatar-btn" title="Account" aria-label="Open account menu" aria-haspopup="true" aria-expanded="false">
                 <i class="feather-user" aria-hidden="true"></i>
             </button>
-            <div id="profile-dropdown" class="profile-menu-dropdown" style="display:none;position:absolute;top:50px;right:0;min-width:180px;z-index:9999;padding:8px 0;">
-                <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;text-decoration:none;">
+            <div id="profile-dropdown" class="profile-menu-dropdown bg-white shadow-sm rounded-3 border-0" style="display:none;position:absolute;top:50px;right:0;min-width:200px;z-index:9999;padding:8px 0;overflow:visible;">
+                <div id="profile-lang-wrap" style="position:relative;width:100%;">
+                    <button type="button" id="profile-lang-submenu-btn" class="text-dark w-100 border-0 bg-transparent cursor-pointer header-tool" aria-expanded="false" aria-haspopup="true" aria-controls="profile-lang-submenu" title="{{ __('Language') }}" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;outline:none;text-align:left;">
+                        <img src="{{ $langFlagCurrent }}" alt="" width="22" height="22" class="lang-flag-icon">
+                        <span style="flex:1;">{{ __('Language') }}</span>
+                        <span class="text-grey-500 font-xsssss fw-700">{{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}</span>
+                        <i class="feather-chevron-right profile-lang-submenu-chevron text-grey-500" style="font-size:14px;opacity:0.75;flex-shrink:0;" aria-hidden="true"></i>
+                    </button>
+                    <div id="profile-lang-submenu" class="bg-white rounded-3 border-0" role="menu" aria-labelledby="profile-lang-submenu-btn" style="display:none;position:absolute;right:100%;top:0;margin-right:8px;min-width:160px;padding:8px 0;z-index:10050;box-shadow:0 10px 40px rgba(0,0,0,.14);">
+                        <a href="{{ route('lang.switch', 'en') }}" class="text-dark text-decoration-none" role="menuitem" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;">
+                            <img src="{{ $langFlagEn }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('English') }}
+                        </a>
+                        <a href="{{ route('lang.switch', 'fr') }}" class="text-dark text-decoration-none" role="menuitem" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;">
+                            <img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}
+                        </a>
+                    </div>
+                </div>
+                <button type="button" id="dark-mode-toggle" class="text-dark w-100 border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:600;outline:none;text-align:left;">
+                    <i id="dark-mode-icon" class="feather-moon font-xl" style="opacity:0.85;flex-shrink:0;" aria-hidden="true"></i><span style="flex:1;">{{ __('Toggle theme') }}</span>
+                </button>
+                <div style="border-top:1px solid #eee;margin:4px 0 0;padding-top:4px;" role="separator"></div>
+                <a href="{{ route('profile.edit') }}" class="text-dark" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;text-decoration:none;">
                     <i class="feather-sliders" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> {{ __('Account & privacy') }}
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;border:0;background:transparent;width:100%;cursor:pointer;">
+                    <button type="submit" class="text-dark" style="display:flex;align-items:center;padding:10px 16px;font-size:13px;font-weight:600;border:0;background:transparent;width:100%;cursor:pointer;text-align:left;">
                         <i class="feather-log-out" style="margin-right:10px;font-size:15px;opacity:0.85;"></i> {{ __('Sign out') }}
                     </button>
                 </form>
@@ -370,19 +409,37 @@
 (function () {
     var btn = document.getElementById('profile-avatar-btn');
     var dropdown = document.getElementById('profile-dropdown');
+    var langSub = document.getElementById('profile-lang-submenu');
+    var langBtn = document.getElementById('profile-lang-submenu-btn');
+    function closeLangSubmenu() {
+        if (!langSub || !langBtn) return;
+        langSub.style.display = 'none';
+        langBtn.setAttribute('aria-expanded', 'false');
+    }
     if (!btn || !dropdown) return;
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        var next = dropdown.style.display === 'none' || dropdown.style.display === '';
+        dropdown.style.display = next ? 'block' : 'none';
+        if (dropdown.style.display === 'block') closeLangSubmenu();
     });
     document.addEventListener('click', function () {
         dropdown.style.display = 'none';
+        closeLangSubmenu();
+    });
+    if (!langBtn || !langSub) return;
+    langBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var show = langSub.style.display === 'none' || langSub.style.display === '';
+        langSub.style.display = show ? 'block' : 'none';
+        langBtn.setAttribute('aria-expanded', show ? 'true' : 'false');
     });
 })();
 
 (function () {
     var toggle = document.getElementById('dark-mode-toggle');
     var icon = document.getElementById('dark-mode-icon');
+    if (!toggle || !icon) return;
 
     function applyDark(dark) {
         if (dark) {
@@ -390,13 +447,21 @@
         } else {
             document.body.classList.remove('theme-dark');
         }
-        icon.className = dark ? 'feather-sun font-xl' : 'feather-moon font-xl';
+        icon.className = (dark ? 'feather-sun' : 'feather-moon') + ' font-xl';
+        icon.style.opacity = '0.85';
         localStorage.setItem('darkMode', dark ? '1' : '0');
     }
 
     if (localStorage.getItem('darkMode') === '1') applyDark(true);
 
-    toggle.addEventListener('click', function () {
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var ls = document.getElementById('profile-lang-submenu');
+        var lb = document.getElementById('profile-lang-submenu-btn');
+        if (ls && lb) {
+            ls.style.display = 'none';
+            lb.setAttribute('aria-expanded', 'false');
+        }
         applyDark(!document.body.classList.contains('theme-dark'));
     });
 })();

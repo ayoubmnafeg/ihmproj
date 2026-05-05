@@ -127,5 +127,8 @@
     "No posts match your search.": "Aucune publication ne correspond à votre recherche.",
     "Enter a search term to see posts and spaces.": "Saisissez un terme pour afficher des publications et des espaces.",
     "Use the search bar to find posts and spaces.": "Utilisez la barre de recherche pour trouver des publications et des espaces.",
-    "No spaces or people match your search.": "Aucun espace ni personne ne correspond à votre recherche."
+    "No spaces or people match your search.": "Aucun espace ni personne ne correspond à votre recherche.",
+    "Profile Image": "Image de profil",
+    "Description": "Description",
+    "Create": "Créer"
 }

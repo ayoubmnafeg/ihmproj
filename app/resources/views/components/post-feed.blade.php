@@ -378,7 +378,7 @@ new class extends Component
 
 <style>
     .post-title-headline {
-        color: #111;
+        color: var(--ui-text);
         font-size: 28px;
         font-weight: 700;
         line-height: 1.2;
@@ -412,20 +412,20 @@ new class extends Component
 
     .post-content span[style*="font-size: 28px"],
     .post-content p[style*="font-size: 28px"] {
-        color: #111 !important;
+        color: var(--ui-text) !important;
         font-weight: 700;
     }
 
     .post-content span[style*="font-size: 20px"],
     .post-content p[style*="font-size: 20px"] {
-        color: #343a40 !important;
+        color: var(--ui-text) !important;
         font-weight: 600;
         margin-bottom: 0.2rem;
     }
 
     .post-content span[style*="font-size: 14px"],
     .post-content p[style*="font-size: 14px"] {
-        color: #6c757d !important;
+        color: var(--ui-text-muted) !important;
     }
 
     .comment-action-btn {
@@ -440,32 +440,32 @@ new class extends Component
     }
 
     .comment-action-btn:hover {
-        color: #111;
+        color: var(--ui-text);
     }
 </style>
 
 <style>
     .post-poll-box {
-        border: 1px solid #e8edf3;
+        border: 1px solid var(--ui-border);
         border-radius: 12px;
         padding: 12px;
-        background: #fbfdff;
+        background: var(--ui-surface-2);
     }
 
     .post-poll-option {
         position: relative;
         width: 100%;
-        border: 1px solid #d7dde5;
+        border: 1px solid var(--ui-border);
         border-radius: 10px;
         padding: 10px 12px;
-        background: #fff;
+        background: var(--ui-surface);
         text-align: left;
         overflow: hidden;
     }
 
     .post-poll-option.is-selected {
-        border-color: #4c6fff;
-        box-shadow: 0 0 0 1px rgba(76, 111, 255, 0.15);
+        border-color: var(--ui-focus);
+        box-shadow: 0 0 0 1px rgba(110, 138, 196, 0.25);
     }
 
     .post-poll-option-label,
@@ -476,13 +476,13 @@ new class extends Component
     }
 
     .post-poll-option-label {
-        color: #1f2937;
+        color: var(--ui-text);
         font-size: 12px;
         font-weight: 700;
     }
 
     .post-poll-option-meta {
-        color: #6b7280;
+        color: var(--ui-text-muted);
         font-size: 11px;
         font-weight: 600;
         margin-top: 2px;

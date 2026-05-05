@@ -41,6 +41,97 @@ body.ui-private.theme-dark,
   --ui-focus: #6e8ac4;
 }
 
+/* Global Dark Mode Overrides for Bootstrap Utilities */
+body.ui-private.theme-dark .bg-white,
+.theme-dark .ui-private .bg-white,
+body.ui-private.theme-dark .bg-transparent-card,
+.theme-dark .ui-private .bg-transparent-card {
+  background-color: var(--ui-surface) !important;
+}
+
+body.ui-private.theme-dark .bg-greylight,
+.theme-dark .ui-private .bg-greylight {
+  background-color: var(--ui-surface-2) !important;
+}
+
+body.ui-private.theme-dark .text-grey-900,
+body.ui-private.theme-dark .text-grey-800,
+body.ui-private.theme-dark .text-grey-700,
+body.ui-private.theme-dark .text-dark,
+body.ui-private.theme-dark h1,
+body.ui-private.theme-dark h2,
+body.ui-private.theme-dark h3,
+body.ui-private.theme-dark h4,
+body.ui-private.theme-dark h5,
+body.ui-private.theme-dark h6 {
+  color: var(--ui-text) !important;
+}
+
+body.ui-private.theme-dark .text-grey-600,
+body.ui-private.theme-dark .text-grey-500,
+body.ui-private.theme-dark .text-grey-400 {
+  color: var(--ui-text-muted) !important;
+}
+
+body.ui-private.theme-dark .border-light,
+body.ui-private.theme-dark .border-bottom-light,
+body.ui-private.theme-dark .border-top-xs {
+  border-color: var(--ui-border) !important;
+}
+
+/* Dropdown Menus */
+body.ui-private.theme-dark .dropdown-menu,
+.theme-dark .ui-private .dropdown-menu,
+body.ui-private.theme-dark .profile-menu-dropdown,
+.theme-dark .ui-private .profile-menu-dropdown,
+body.ui-private.theme-dark .dropdown-menu-settings {
+  background-color: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.ui-private.theme-dark .dropdown-item,
+.theme-dark .ui-private .dropdown-item,
+body.ui-private.theme-dark .dropdown-menu a {
+  color: var(--ui-text) !important;
+}
+
+body.ui-private.theme-dark .dropdown-item:hover,
+.theme-dark .ui-private .dropdown-item:hover,
+body.ui-private.theme-dark .dropdown-menu a:hover {
+  background-color: var(--ui-surface-2) !important;
+  color: var(--ui-text) !important;
+}
+
+/* Modals */
+body.ui-private.theme-dark .modal-content,
+.theme-dark .ui-private .modal-content {
+  background-color: var(--ui-surface) !important;
+  border: 1px solid var(--ui-border) !important;
+  color: var(--ui-text) !important;
+}
+
+body.ui-private.theme-dark .modal-header,
+body.ui-private.theme-dark .modal-footer {
+  border-color: var(--ui-border) !important;
+}
+
+/* Form Controls */
+body.ui-private.theme-dark .form-control,
+.theme-dark .ui-private .form-control {
+  background-color: var(--ui-surface-2) !important;
+  border: 1px solid var(--ui-border) !important;
+  color: var(--ui-text) !important;
+}
+
+body.ui-private.theme-dark .form-control:focus,
+.theme-dark .ui-private .form-control:focus {
+  background-color: var(--ui-surface) !important;
+  border-color: var(--ui-focus) !important;
+  color: var(--ui-text) !important;
+  box-shadow: 0 0 0 4px rgba(110, 138, 196, 0.15) !important;
+}
+
 .ui-private,
 .ui-private .main-wrapper {
   background-color: var(--ui-bg) !important;
@@ -1066,4 +1157,74 @@ body.ui-private.theme-dark .connection-requests-btn--delete:hover,
   font-size: 0.73rem !important;
   font-weight: 500;
   color: var(--ui-text-muted) !important;
+}
+
+/* Sidebar Rail Mode (Collapsed State) */
+.sidebar-rail-collapsed .navigation {
+  width: 84px !important;
+  overflow-x: hidden !important;
+}
+
+.sidebar-rail-collapsed .main-content {
+  padding-left: 84px !important;
+}
+
+/* Mobile & Tablet exceptions */
+@media (max-width: 991px) {
+  .sidebar-rail-collapsed .main-content {
+    padding-left: 0 !important;
+  }
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-spaces-heading-label,
+.sidebar-rail-collapsed .navigation .sidebar-spaces-chevron,
+.sidebar-rail-collapsed .navigation .sidebar-spaces-manage span,
+.sidebar-rail-collapsed .navigation .sidebar-space-name,
+.sidebar-rail-collapsed .navigation .sidebar-space-meta-sidebar,
+.sidebar-rail-collapsed .navigation .sidebar-suggested-follow-form,
+.sidebar-rail-collapsed .navigation .sidebar-space-star-btn,
+.sidebar-rail-collapsed .navigation .nav-content-bttn span,
+.sidebar-rail-collapsed .navigation .sidebar-spaces-muted {
+  display: none !important;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-space-link {
+  padding-right: 0 !important;
+  justify-content: center !important;
+}
+
+.sidebar-rail-collapsed .navigation .nav-content-bttn {
+  justify-content: center !important;
+  padding: 12px 10px !important;
+}
+
+.sidebar-rail-collapsed .navigation .nav-content-bttn i {
+  margin-right: 0 !important;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-spaces-panel {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-spaces-heading {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-space-row {
+  justify-content: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-spaces-manage {
+  justify-content: center !important;
+  padding: 8px 0 !important;
+}
+
+.sidebar-rail-collapsed .navigation .sidebar-spaces-manage i {
+  margin-right: 0 !important;
 }

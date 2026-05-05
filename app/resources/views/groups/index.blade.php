@@ -63,18 +63,18 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="space-description" class="fw-600 font-xssss text-grey-700 mb-1">Description</label>
+                        <label for="space-description" class="fw-600 font-xssss text-grey-700 mb-1">{{ __('Description') }}</label>
                         <textarea id="space-description" name="description" class="form-control" rows="4" placeholder="{{ __('Describe your space') }}">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="space-image" class="fw-600 font-xssss text-grey-700 mb-1">Profile Image</label>
+                        <label for="space-image" class="fw-600 font-xssss text-grey-700 mb-1">{{ __('Profile Image') }}</label>
                         <input id="space-image" name="profile_image" type="file" accept="image/*" class="form-control">
                     </div>
 
                     <div class="d-flex pt-2">
-                        <button type="button" id="cancel-create-space-modal" class="bg-greylight border-0 text-grey-700 fw-600 font-xssss rounded-xl p-2 ps-4 pe-4 me-2">Cancel</button>
-                        <button type="submit" class="bg-current border-0 text-white fw-700 font-xssss rounded-xl p-2 ps-4 pe-4">Create</button>
+                        <button type="button" id="cancel-create-space-modal" class="bg-greylight border-0 text-grey-700 fw-600 font-xssss rounded-xl p-2 ps-4 pe-4 me-2">{{ __('Cancel') }}</button>
+                        <button type="submit" class="bg-current border-0 text-white fw-700 font-xssss rounded-xl p-2 ps-4 pe-4">{{ __('Create') }}</button>
                     </div>
                 </form>
             </div>

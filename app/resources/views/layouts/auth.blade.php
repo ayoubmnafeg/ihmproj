@@ -71,11 +71,15 @@
             <button class="nav-menu me-0 ms-2"></button>
             <div class="dropdown ms-3" style="position: relative;">
                 <button type="button" class="header-btn d-inline-flex align-items-center bg-white text-dark font-xsss p-2 ps-3 pe-3 text-center lh-20 rounded-xl fw-600 border shadow-sm" id="langDropdown" style="outline:none;">
-                    <i class="feather-globe me-1"></i> {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }} <i class="feather-chevron-down ms-1" style="font-size:10px;"></i>
+                    <i class="feather-globe me-1 text-grey-500"></i> {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }} <i class="feather-chevron-down ms-1 text-grey-500" style="font-size:10px;"></i>
                 </button>
-                <div class="dropdown-menu shadow-sm border-0 p-2 rounded-3" id="langMenuChoices" style="display: none; position: absolute; right: 0; top: 100%; z-index: 100000; min-width: 120px;">
-                    <a class="dropdown-item fw-600 font-xsss rounded-3 mb-1" href="{{ route('lang.switch', 'en') }}">English</a>
-                    <a class="dropdown-item fw-600 font-xsss rounded-3" href="{{ route('lang.switch', 'fr') }}">Français</a>
+                <div class="dropdown-menu shadow-lg border-0 p-2 rounded-3" id="langMenuChoices" style="display: none; position: absolute; right: 0; top: 100%; z-index: 100000; min-width: 140px;">
+                    <a class="dropdown-item fw-600 font-xsss rounded-3 mb-1 d-flex align-items-center gap-2" href="{{ route('lang.switch', 'en') }}">
+                        <img src="{{ asset('images/lang-en.png') }}" alt="" width="20" height="20" class="rounded-circle"> English
+                    </a>
+                    <a class="dropdown-item fw-600 font-xsss rounded-3 d-flex align-items-center gap-2" href="{{ route('lang.switch', 'fr') }}">
+                        <img src="{{ asset('images/lang-fr.png') }}" alt="" width="20" height="20" class="rounded-circle"> Français
+                    </a>
                 </div>
             </div>
             <button id="dark-mode-toggle" class="p-2 text-center ms-2 menu-icon border-0 bg-transparent cursor-pointer header-tool" style="outline:none;" type="button">

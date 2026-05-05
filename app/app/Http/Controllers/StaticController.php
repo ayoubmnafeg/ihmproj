@@ -26,12 +26,12 @@ class StaticController extends Controller
         return view('messages.index');
     }
 
-    public function groups(): View
+    public function spaces(): View
     {
         return view('groups.index');
     }
 
-    public function groupShow(): View
+    public function spaceShow(): View
     {
         return view('groups.show');
     }

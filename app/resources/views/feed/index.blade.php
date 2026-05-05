@@ -164,67 +164,88 @@
 @endpush
 @endsection
 
-@section('left_sidebar_extras')
+@section('right_sidebar_extra')
 @auth
-<div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss mb-2">
-    <div class="card-body d-flex align-items-center p-4">
-        <h4 class="fw-600 mb-0 font-xssss text-grey-700">{{ __('Connection requests') }}</h4>
-        <a href="{{ route('members.index') }}" class="fw-600 ms-auto font-xssss text-primary">{{ __('View all') }}</a>
+<div class="section full pe-3 ps-4 pt-4 pb-4 position-relative feed-body connection-requests-panel">
+    <div class="connection-requests-panel__header">
+        <h2 class="connection-requests-panel__title">{{ __('Connection requests') }}</h2>
+        <a href="{{ route('members.index') }}" class="connection-requests-panel__view-all">{{ __('View all') }}</a>
     </div>
     @forelse($incomingFriendRequests as $friendRequest)
-        <div class="card-body d-flex pt-4 ps-4 pe-4 pb-0 border-top-xs bor-0">
-            <figure class="avatar me-3"><img src="{{ $friendRequest->sender->profile->avatar_url ?: asset('images/user-12.png') }}" alt="image" class="shadow-sm rounded-circle w45"></figure>
-            <h4 class="fw-700 text-grey-900 font-xssss mt-1">
-                {{ $friendRequest->sender->profile->display_name ?: ('anon_' . $friendRequest->sender->id) }}
-                <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">{{ __('Sent you a friend request') }}</span>
-            </h4>
-        </div>
-        <div class="card-body d-flex align-items-center pt-0 ps-4 pe-4 pb-4">
-            <form method="POST" action="{{ route('friend-requests.update', $friendRequest->id) }}" class="w-100 me-2">
-                @csrf
-                @method('PATCH')
-                <input type="hidden" name="action" value="accepted">
-                <button type="submit" class="p-2 lh-20 w-100 bg-primary-gradiant border-0 text-white text-center font-xssss fw-600 ls-1 rounded-xl">{{ __('Confirm') }}</button>
-            </form>
-            <form method="POST" action="{{ route('friend-requests.update', $friendRequest->id) }}" class="w-100">
-                @csrf
-                @method('PATCH')
-                <input type="hidden" name="action" value="rejected">
-                <button type="submit" class="p-2 lh-20 w-100 bg-grey border-0 text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl">{{ __('Delete') }}</button>
-            </form>
+        <div class="connection-requests-panel__item {{ $loop->first ? 'connection-requests-panel__item--first' : '' }}">
+            <figure class="connection-requests-panel__avatar avatar mb-0 flex-shrink-0">
+                <img src="{{ $friendRequest->sender->profile->avatar_url ?: asset('images/user-12.png') }}" alt="" width="44" height="44" class="rounded-circle shadow-sm">
+            </figure>
+            <div class="connection-requests-panel__body">
+                <p class="connection-requests-panel__name">{{ $friendRequest->sender->profile->display_name ?: ('anon_' . $friendRequest->sender->id) }}</p>
+                <p class="connection-requests-panel__hint">{{ __('Sent you a friend request') }}</p>
+                <div class="connection-requests-panel__actions">
+                    <form method="POST" action="{{ route('friend-requests.update', $friendRequest->id) }}" class="connection-requests-panel__form">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="action" value="accepted">
+                        <button type="submit" class="connection-requests-btn connection-requests-btn--confirm">{{ __('Confirm') }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('friend-requests.update', $friendRequest->id) }}" class="connection-requests-panel__form">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="action" value="rejected">
+                        <button type="submit" class="connection-requests-btn connection-requests-btn--delete">{{ __('Delete') }}</button>
+                    </form>
+                </div>
+            </div>
         </div>
     @empty
-        <div class="card-body pt-0 ps-4 pe-4 pb-4 border-top-xs">
-            <p class="fw-500 text-grey-500 font-xssss mb-0">{{ __('No pending friend requests.') }}</p>
-        </div>
+        <p class="connection-requests-panel__empty">{{ __('No pending friend requests.') }}</p>
     @endforelse
 </div>
+@endauth
+@endsection
 
-<div class="nav-wrap bg-white bg-transparent-card rounded-xxl shadow-xss mb-2">
-    <div class="card-body d-flex align-items-center p-4">
-        <h4 class="fw-600 mb-0 font-xssss text-grey-700">{{ __('Suggested spaces') }}</h4>
-        <a href="{{ route('groups.index') }}" class="fw-600 ms-auto font-xssss text-primary">{{ __('Browse') }}</a>
-    </div>
-    <div class="card-body pt-2 ps-4 pe-4 pb-4 border-top-xs">
-        @forelse($suggestedGroups as $group)
-            <div class="d-flex align-items-center {{ $loop->first ? 'pt-2' : 'pt-3' }} {{ $loop->last ? 'pb-0' : 'pb-3' }} {{ !$loop->last ? 'border-bottom' : '' }}">
-                <figure class="avatar me-3 mb-0">
-                    <img src="{{ $group->profile_image_path ? asset('storage/' . $group->profile_image_path) : asset('images/user-12.png') }}" alt="{{ $group->name }}" class="shadow-sm rounded-circle w45">
-                </figure>
-                <div class="flex-grow-1">
-                    <h4 class="fw-700 text-grey-900 font-xssss mb-0">
-                        <a href="{{ route('groups.show', $group->id) }}" class="text-dark">{{ $group->name }}</a>
-                    </h4>
-                    <span class="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">{{ $group->followers_count }} follower{{ $group->followers_count === 1 ? '' : 's' }}</span>
+@section('left_sidebar_extras')
+@auth
+<div class="sidebar-spaces-panel sidebar-spaces-panel--suggested px-3 pb-2 mb-2">
+    <button
+        type="button"
+        class="sidebar-spaces-heading"
+        aria-expanded="true"
+        aria-controls="sidebar-suggested-spaces-body"
+        id="sidebar-suggested-spaces-heading"
+    >
+        <span class="sidebar-spaces-heading-label">{{ __('Suggested spaces') }}</span>
+        <i class="feather-chevron-down sidebar-spaces-chevron" aria-hidden="true"></i>
+    </button>
+    <div class="sidebar-spaces-body pt-2" id="sidebar-suggested-spaces-body" role="region" aria-labelledby="sidebar-suggested-spaces-heading">
+        <a href="{{ route('groups.index') }}" class="sidebar-spaces-manage font-xsss fw-600">
+            <i class="feather-compass" aria-hidden="true"></i><span>{{ __('Browse') }}</span>
+        </a>
+        <div class="sidebar-spaces-rows">
+            @forelse($suggestedSpaces as $space)
+                @php
+                    $__sCompact = preg_replace('/\s+/u', '', $space->name ?? '') ?: '';
+                    $__sInitials = strtoupper(\Illuminate\Support\Str::substr($__sCompact, 0, 2) ?: '__');
+                @endphp
+                <div class="sidebar-space-row">
+                    <a href="{{ route('groups.show', $space->id) }}" class="sidebar-space-link sidebar-space-link--stacked">
+                        @if($space->profile_image_path)
+                            <img src="{{ asset('storage/' . $space->profile_image_path) }}" alt="" width="28" height="28" class="sidebar-space-avatar sidebar-space-avatar-img rounded-circle shadow-sm">
+                        @else
+                            <span class="sidebar-space-avatar sidebar-space-avatar-label rounded-circle">{{ $__sInitials }}</span>
+                        @endif
+                        <span class="sidebar-space-stack">
+                            <span class="sidebar-space-name text-truncate font-xsss fw-600">{{ $space->name }}</span>
+                            <span class="sidebar-space-meta-sidebar sidebar-spaces-muted font-xsss fw-600">{{ $space->followers_count }} follower{{ $space->followers_count === 1 ? '' : 's' }}</span>
+                        </span>
+                    </a>
+                    <form method="POST" action="{{ route('groups.follow', $space->id) }}" class="sidebar-suggested-follow-form">
+                        @csrf
+                        <button type="submit" class="sidebar-suggested-follow-btn">{{ __('Follow') }}</button>
+                    </form>
                 </div>
-                <form method="POST" action="{{ route('groups.follow', $group->id) }}">
-                    @csrf
-                    <button type="submit" class="p-2 lh-20 bg-primary-gradiant border-0 text-white text-center font-xssss fw-600 ls-1 rounded-xl">{{ __('Follow') }}</button>
-                </form>
-            </div>
-        @empty
-            <p class="fw-500 text-grey-500 font-xssss mb-0 pt-2">{{ __('No new groups to suggest right now.') }}</p>
-        @endforelse
+            @empty
+                <p class="sidebar-spaces-muted font-xsss fw-600 mb-0 pt-2 pb-2">{{ __('No new spaces to suggest right now.') }}</p>
+            @endforelse
+        </div>
     </div>
 </div>
 @endauth

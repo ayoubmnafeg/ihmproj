@@ -19,6 +19,9 @@ class CategoryGroupsList extends Component
 
     public array $followedCategoryIds = [];
 
+    /** When true, only spaces the authenticated user follows (sidebar Spaces). */
+    public bool $followingOnly = false;
+
     public function mount(): void
     {
         if (! auth()->check()) {
@@ -63,21 +66,27 @@ class CategoryGroupsList extends Component
     {
         $baseQuery = Category::query()
             ->where('is_active', true)
-            ->withCount('followers')
-            ->latest();
+            ->withCount('followers');
+
+        if ($this->followingOnly) {
+            $baseQuery->whereIn('id', $this->followedCategoryIds)->orderBy('name');
+        } else {
+            $baseQuery->latest();
+        }
 
         $total = (clone $baseQuery)->count();
         if ($this->loadedCount < $this->initialLoad) {
             $this->loadedCount = $this->initialLoad;
         }
-        $groups = $baseQuery
+        $spaces = $baseQuery
             ->take($this->loadedCount)
             ->get();
 
-        $this->hasMore = $groups->count() < $total;
+        $this->hasMore = $spaces->count() < $total;
 
         return view('livewire.category-groups-list', [
-            'groups' => $groups,
+            'spaces' => $spaces,
+            'followingOnly' => $this->followingOnly,
         ]);
     }
 }

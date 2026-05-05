@@ -81,7 +81,7 @@
             <i class="feather-flag"></i> Reports
         </a>
         <a href="{{ route('admin.categories.index') }}" class="admin-nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}">
-            <i class="feather-grid"></i> Categories
+            <i class="feather-grid"></i> Spaces
         </a>
         <a href="{{ route('admin.moderators.index') }}" class="admin-nav-link {{ request()->is('admin/moderators*') ? 'active' : '' }}">
             <i class="feather-shield"></i> Moderators

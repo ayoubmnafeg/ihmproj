@@ -22,7 +22,7 @@ class CategoryController extends Controller
         $data = $request->validate(['name' => 'required|string|max:255|unique:categories,name']);
         Category::create($data);
 
-        return back()->with('success', 'Category created.');
+        return back()->with('success', __('Space created.'));
     }
 
     public function update(Request $request, Category $category): RedirectResponse
@@ -30,13 +30,13 @@ class CategoryController extends Controller
         $data = $request->validate(['name' => 'required|string|max:255|unique:categories,name,'.$category->id]);
         $category->update($data);
 
-        return back()->with('success', 'Category updated.');
+        return back()->with('success', __('Space updated.'));
     }
 
     public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
 
-        return back()->with('success', 'Category deleted.');
+        return back()->with('success', __('Space deleted.'));
     }
 }

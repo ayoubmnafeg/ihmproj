@@ -559,6 +559,63 @@ body.ui-private.theme-dark a.welcome-cta-secondary,
   gap: 2px;
 }
 
+/* Suggested spaces — same sidebar treatment as Spaces (collapsible heading + dense rows + compact follow) */
+.ui-private .sidebar-spaces-panel--suggested {
+  border-top: 1px solid var(--ui-border);
+  margin-top: 6px;
+  padding-top: 8px;
+}
+
+.ui-private .sidebar-space-link--stacked {
+  align-items: flex-start !important;
+}
+
+.ui-private .sidebar-space-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ui-private .sidebar-space-meta-sidebar {
+  line-height: 1.35;
+}
+
+.ui-private .sidebar-suggested-follow-form {
+  margin: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.ui-private .sidebar-suggested-follow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-accent) !important;
+  background-image: none !important;
+  color: var(--ui-accent-fg) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.12s ease;
+}
+
+.ui-private .sidebar-suggested-follow-btn:hover {
+  filter: brightness(0.93);
+}
+
+body.ui-private.theme-dark .sidebar-suggested-follow-btn:hover,
+.theme-dark .ui-private .sidebar-suggested-follow-btn:hover {
+  filter: brightness(1.08);
+}
+
 .sidebar-space-row {
   display: flex;
   align-items: center;
@@ -651,4 +708,166 @@ body.ui-private.theme-dark .sidebar-space-star-btn.is-fav,
 
 html.sidebar-rail-collapsed body.ui-private #sidebar-spaces-stack {
   display: none;
+}
+
+/* Right sidebar — connection requests (dense list + dual actions) */
+.ui-private .connection-requests-panel {
+  --connection-req-delete-bg-light: #f0f3f7;
+  --connection-req-delete-fg-light: #1c2330;
+  --connection-req-delete-border-light: #d8dee6;
+}
+
+body.ui-private.theme-dark .connection-requests-panel,
+.theme-dark .ui-private .connection-requests-panel {
+  --connection-req-delete-bg-light: #d9dee4;
+  --connection-req-delete-fg-light: #1f2329;
+  --connection-req-delete-border-light: #b6bcc4;
+}
+
+.ui-private .connection-requests-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 2px;
+}
+
+.ui-private .connection-requests-panel__title {
+  margin: 0;
+  padding: 0;
+  font-size: 0.65rem !important;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text) !important;
+  line-height: 1.35;
+  max-width: 70%;
+}
+
+.ui-private .connection-requests-panel__view-all {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  color: var(--ui-focus) !important;
+}
+
+.ui-private .connection-requests-panel__view-all:hover {
+  text-decoration: underline !important;
+  filter: brightness(1.06);
+}
+
+.ui-private .connection-requests-panel__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.ui-private .connection-requests-panel__item--first {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 0;
+}
+
+.ui-private .connection-requests-panel__avatar img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+}
+
+.ui-private .connection-requests-panel__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-private .connection-requests-panel__name {
+  margin: 2px 0 0;
+  font-size: 0.76rem !important;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ui-text) !important;
+}
+
+.ui-private .connection-requests-panel__hint {
+  margin: 4px 0 12px;
+  font-size: 0.72rem !important;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .connection-requests-panel__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.ui-private .connection-requests-panel__form {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+}
+
+.ui-private .connection-requests-btn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 0.74rem !important;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  transition: filter 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.ui-private .connection-requests-btn--confirm {
+  background: var(--ui-accent) !important;
+  background-image: none !important;
+  color: var(--ui-accent-fg) !important;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+body.ui-private.theme-dark .connection-requests-btn--confirm,
+.theme-dark .ui-private .connection-requests-btn--confirm {
+  background: #30363d !important;
+  color: var(--ui-text) !important;
+  border-color: #454c55;
+}
+
+.ui-private .connection-requests-btn--confirm:hover {
+  filter: brightness(0.95);
+}
+
+body.ui-private.theme-dark .connection-requests-btn--confirm:hover,
+.theme-dark .ui-private .connection-requests-btn--confirm:hover {
+  filter: brightness(1.08);
+}
+
+.ui-private .connection-requests-btn--delete {
+  background: var(--connection-req-delete-bg-light) !important;
+  color: var(--connection-req-delete-fg-light) !important;
+  border: 1px solid var(--connection-req-delete-border-light);
+}
+
+.ui-private .connection-requests-btn--delete:hover {
+  filter: brightness(0.96);
+}
+
+body.ui-private.theme-dark .connection-requests-btn--delete:hover,
+.theme-dark .ui-private .connection-requests-btn--delete:hover {
+  filter: brightness(1.06);
+}
+
+.ui-private .connection-requests-panel__empty {
+  margin: 4px 0 0;
+  font-size: 0.73rem !important;
+  font-weight: 500;
+  color: var(--ui-text-muted) !important;
 }

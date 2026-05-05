@@ -34,7 +34,7 @@ class GroupController extends Controller
             'is_active' => true,
         ]);
 
-        return redirect()->route('groups.index')->with('success', 'Category created successfully.');
+        return redirect()->route('groups.index')->with('success', __('Space created successfully.'));
     }
 
     public function follow(Request $request, Category $category): RedirectResponse
@@ -49,14 +49,14 @@ class GroupController extends Controller
                 ->followedCategories()
                 ->detach($category->id);
 
-            return back()->with('success', 'Category unfollowed successfully.');
+            return back()->with('success', __('Space unfollowed successfully.'));
         }
 
         $request->user()
             ->followedCategories()
             ->syncWithoutDetaching([$category->id]);
 
-        return back()->with('success', 'Category followed successfully.');
+        return back()->with('success', __('Space followed successfully.'));
     }
 
     public function show(Category $category): View
@@ -72,7 +72,7 @@ class GroupController extends Controller
         }
 
         return view('groups.show', [
-            'group' => $category,
+            'space' => $category,
             'isFollowing' => $isFollowing,
         ]);
     }

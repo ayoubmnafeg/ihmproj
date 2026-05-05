@@ -33,7 +33,7 @@ class PublicationController extends Controller
                 ->followedCategories()
                 ->pluck('categories.id');
 
-            $suggestedGroups = Category::query()
+            $suggestedSpaces = Category::query()
                 ->where('is_active', true)
                 ->whereNotIn('id', $followedCategoryIds)
                 ->withCount('followers')
@@ -42,7 +42,7 @@ class PublicationController extends Controller
                 ->get();
         } else {
             $incomingFriendRequests = collect();
-            $suggestedGroups = Category::query()
+            $suggestedSpaces = Category::query()
                 ->where('is_active', true)
                 ->withCount('followers')
                 ->latest()
@@ -50,7 +50,7 @@ class PublicationController extends Controller
                 ->get();
         }
 
-        return view('feed.index', compact('publications', 'incomingFriendRequests', 'suggestedGroups'));
+        return view('feed.index', compact('publications', 'incomingFriendRequests', 'suggestedSpaces'));
     }
 
     public function store(Request $request): RedirectResponse

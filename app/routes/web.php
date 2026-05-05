@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 | Public routes: home is / for guests; /welcome is the same intro page for all users (e.g. from the sidebar). Main feed is at /stream.
-| Mutations (post, comment, react, etc.) stay behind the auth group below.
+| Mutations (post, comment, react, etc.) stay behind the authenticated routes below.
 */
 Route::get('/welcome', function () {
     return view('landing');

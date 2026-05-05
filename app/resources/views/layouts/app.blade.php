@@ -264,7 +264,7 @@
                                 <i class="feather-chevron-down sidebar-spaces-chevron" aria-hidden="true"></i>
                             </button>
                             <div class="sidebar-spaces-body pt-2" id="sidebar-all-spaces-body" role="region" aria-labelledby="sidebar-spaces-section-heading">
-                                <a href="{{ route('groups.index') }}" class="sidebar-spaces-manage font-xsss fw-600">
+                                <a href="{{ route('groups.index', ['following' => true]) }}" class="sidebar-spaces-manage font-xsss fw-600">
                                     <i class="feather-settings" aria-hidden="true"></i><span>{{ __('Manage spaces') }}</span>
                                 </a>
                                 <div id="sidebar-all-spaces-list" class="sidebar-spaces-rows">
@@ -324,32 +324,7 @@
         <div class="middle-sidebar-right-content bg-white shadow-xss rounded-xxl">
 
             @auth
-            <div class="section full pe-3 ps-4 pt-4 pb-4 position-relative feed-body">
-                <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">{{ __('Your spaces') }}</h4>
-                @php
-                    $followedGroups = ($u = auth()->user())
-                        ? $u->followedCategories()
-                            ->where('is_active', true)
-                            ->latest()
-                            ->take(6)
-                            ->get()
-                        : collect();
-                @endphp
-                <ul class="list-group list-group-flush">
-                    @forelse($followedGroups as $group)
-                        <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0 d-flex align-items-center">
-                            <span class="btn-round-sm bg-mini-gradiant me-3 ls-3 text-white font-xssss fw-700">{{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($group->name, 0, 2)) }}</span>
-                            <h3 class="fw-700 mb-0 mt-0">
-                                <a class="font-xssss text-grey-600 d-block text-dark" href="{{ route('groups.show', $group->id) }}">{{ $group->name }}</a>
-                            </h3>
-                        </li>
-                    @empty
-                        <li class="bg-transparent list-group-item no-icon pe-0 ps-0 pt-2 pb-2 border-0">
-                            <span class="font-xssss text-grey-500">{{ __('You are not following any spaces yet.') }}</span>
-                        </li>
-                    @endforelse
-                </ul>
-            </div>
+            @yield('right_sidebar_extra')
 
             <div class="section full pe-3 ps-4 pt-4 position-relative feed-body">
                 <h4 class="font-xsssss text-grey-500 text-uppercase fw-700 ls-3">{{ __('People you trust') }}</h4>
@@ -571,6 +546,20 @@
 
 @if(auth()->check())
 (function () {
+    document.querySelectorAll('#app-left-navigation .sidebar-spaces-heading').forEach(function (head) {
+        head.addEventListener('click', function () {
+            var panel = head.closest('.sidebar-spaces-panel');
+            var cid = head.getAttribute('aria-controls');
+            var body = cid ? document.getElementById(cid) : null;
+            var expanded = head.getAttribute('aria-expanded') === 'true';
+            var next = !expanded;
+            head.setAttribute('aria-expanded', next ? 'true' : 'false');
+            if (panel) panel.classList.toggle('is-collapsed', !next);
+            if (body) body.hidden = !next;
+        });
+    });
+})();
+(function () {
     var stack = document.getElementById('sidebar-spaces-stack');
     var raw = document.getElementById('sidebar-spaces-bootstrap');
     var mainList = document.getElementById('sidebar-all-spaces-list');
@@ -662,19 +651,6 @@
             e.stopPropagation();
             var id = btn.getAttribute('data-space-id');
             if (id) toggleFavorite(id);
-        });
-    });
-
-    document.querySelectorAll('#sidebar-spaces-stack .sidebar-spaces-heading').forEach(function (head) {
-        head.addEventListener('click', function () {
-            var panel = head.closest('.sidebar-spaces-panel');
-            var cid = head.getAttribute('aria-controls');
-            var body = cid ? document.getElementById(cid) : null;
-            var expanded = head.getAttribute('aria-expanded') === 'true';
-            var next = !expanded;
-            head.setAttribute('aria-expanded', next ? 'true' : 'false');
-            if (panel) panel.classList.toggle('is-collapsed', !next);
-            if (body) body.hidden = !next;
         });
     });
 

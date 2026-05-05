@@ -48,8 +48,8 @@
         </div>
         <div class="col-xl-4 col-md-6">
             <a href="{{ route('admin.categories.index') }}" class="card border-0 shadow-sm rounded-3 p-3 d-block text-decoration-none">
-                <div class="fw-700 text-dark">Categories</div>
-                <div class="text-muted small">Create and organize category structure.</div>
+                <div class="fw-700 text-dark">Spaces</div>
+                <div class="text-muted small">Create and organize your space catalog.</div>
             </a>
         </div>
         <div class="col-xl-4 col-md-6">

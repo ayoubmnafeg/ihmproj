@@ -127,7 +127,7 @@ new class extends Component
         ]);
 
         if (! $effectiveCategoryId) {
-            $this->addError('selectedCategoryId', 'Please select a category.');
+            $this->addError('selectedCategoryId', __('Please select a space.'));
             return;
         }
 
@@ -137,7 +137,7 @@ new class extends Component
             ->exists();
 
         if (! $isFollowingCategory) {
-            $this->addError('selectedCategoryId', 'You can only post in categories you follow.');
+            $this->addError('selectedCategoryId', __('You can only post in spaces you follow.'));
             return;
         }
 
@@ -265,15 +265,15 @@ new class extends Component
                                     open: false,
                                     query: '',
                                     selected: @entangle('selectedCategoryId').live,
-                                    categories: @js($this->followedCategories->map(fn ($category) => ['id' => $category->id, 'name' => $category->name])->values()),
+                                    spaces: @js($this->followedCategories->map(fn ($category) => ['id' => $category->id, 'name' => $category->name])->values()),
                                     get filtered() {
                                         const q = this.query.trim().toLowerCase();
-                                        if (!q) return this.categories;
-                                        return this.categories.filter(c => c.name.toLowerCase().includes(q));
+                                        if (!q) return this.spaces;
+                                        return this.spaces.filter(c => c.name.toLowerCase().includes(q));
                                     },
                                     get selectedLabel() {
-                                        const match = this.categories.find(c => c.id === this.selected);
-                                        return match ? match.name : '{{ __('Select category') }}';
+                                        const match = this.spaces.find(c => c.id === this.selected);
+                                        return match ? match.name : '{{ __('Select space') }}';
                                     },
                                     openPicker() {
                                         this.open = true;
@@ -298,7 +298,7 @@ new class extends Component
                                             x-ref="searchInput"
                                             type="text"
                                             class="create-post-category-search"
-                                            placeholder="{{ __('Search category...') }}"
+                                            placeholder="{{ __('Search space…') }}"
                                             x-model="query"
                                         >
                                     </div>
@@ -308,7 +308,7 @@ new class extends Component
                                                 <span x-text="item.name"></span>
                                             </button>
                                         </template>
-                                        <div class="create-post-category-empty" x-show="filtered.length === 0">{{ __('No matching category') }}</div>
+                                        <div class="create-post-category-empty" x-show="filtered.length === 0">{{ __('No matching space') }}</div>
                                     </div>
                                 </div>
                             </div>

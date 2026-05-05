@@ -10,7 +10,7 @@
             <div class="welcome-hero text-center p-4 p-md-5 mb-3 mb-md-4">
                 <p class="nav-caption fw-600 font-xssss text-grey-500 mb-2">Your space. Your circle.</p>
                 <h1 class="font-xl fw-700 text-grey-900 mb-3" style="line-height:1.2;">
-                    Stop losing updates in group chats. Put them in one <span class="text-primary">calm, private</span> feed.
+                    Stop losing updates in space chats. Put them in one <span class="text-primary">calm, private</span> feed.
                 </h1>
                 <p class="fw-500 text-grey-500 font-xssss lh-4 mb-4" style="max-width: 34rem; margin-left: auto; margin-right: auto;">
                     Read posts and comments for free. Create an account in minutes to post, comment, and connect with people you actually trust.
@@ -79,7 +79,7 @@
                         </div>
                         <h3 class="fw-700 text-grey-900 font-xssss mb-2">Spaces</h3>
                         <p class="fw-600 text-primary font-xssss mb-2">Post where it matters.</p>
-                        <p class="fw-500 text-grey-500 font-xssss lh-4 mb-0">Follow topics and post into categories you care about, so the right people see your updates.</p>
+                        <p class="fw-500 text-grey-500 font-xssss lh-4 mb-0">Follow topics and post into spaces you care about, so the right people see your updates.</p>
                     </div>
                 </div>
             </div>

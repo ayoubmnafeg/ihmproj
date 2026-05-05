@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Categories')
-@section('admin_title', 'Category Management')
-@section('admin_subtitle', 'Create and maintain content categories.')
+@section('title', 'Admin Spaces')
+@section('admin_title', 'Space management')
+@section('admin_subtitle', 'Create and maintain spaces.')
 
 @section('admin_content')
     <div class="card border-0 shadow-sm rounded-3 p-3 mb-3">
@@ -13,12 +13,12 @@
                     type="text"
                     name="name"
                     class="form-control"
-                    placeholder="New category name"
+                    placeholder="New space name"
                     required
                 >
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100">Add Category</button>
+                <button type="submit" class="btn btn-primary w-100">Add space</button>
             </div>
         </form>
     </div>
@@ -55,7 +55,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="text-muted">No categories yet.</td>
+                            <td colspan="3" class="text-muted">No spaces yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -63,13 +63,16 @@ body.ui-private.theme-dark h2,
 body.ui-private.theme-dark h3,
 body.ui-private.theme-dark h4,
 body.ui-private.theme-dark h5,
-body.ui-private.theme-dark h6 {
+body.ui-private.theme-dark h6,
+body.ui-private.theme-dark .post-title-headline {
   color: var(--ui-text) !important;
 }
 
 body.ui-private.theme-dark .text-grey-600,
 body.ui-private.theme-dark .text-grey-500,
-body.ui-private.theme-dark .text-grey-400 {
+body.ui-private.theme-dark .text-grey-400,
+body.ui-private.theme-dark .post-content,
+body.ui-private.theme-dark .post-content p {
   color: var(--ui-text-muted) !important;
 }
 
@@ -1374,4 +1377,86 @@ body.ui-private.theme-dark .connection-requests-btn--delete:hover,
 
 .sidebar-rail-collapsed .navigation .sidebar-spaces-manage i {
   margin-right: 0 !important;
+}
+
+/* Create Post — Dark Mode Fixes */
+.ui-private .create-post-editor-wrap .ql-toolbar.ql-snow {
+  border-color: var(--ui-border) !important;
+  background: var(--ui-surface-2) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-container.ql-snow {
+  border-color: var(--ui-border) !important;
+  background: var(--ui-surface) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-editor {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-editor.ql-blank::before {
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-snow .ql-stroke {
+  stroke: var(--ui-text-muted) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-snow .ql-fill {
+  fill: var(--ui-text-muted) !important;
+}
+
+.ui-private .create-post-editor-wrap .ql-snow .ql-picker {
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .create-post-category-trigger {
+  border-color: var(--ui-border) !important;
+  background: var(--ui-surface-2) !important;
+  color: var(--ui-text) !important;
+}
+
+.ui-private .create-post-category-dropdown {
+  background: var(--ui-surface) !important;
+  border-color: var(--ui-border) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4) !important;
+}
+
+.ui-private .create-post-category-search-wrap {
+  border-bottom-color: var(--ui-border) !important;
+}
+
+.ui-private .create-post-category-search {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .create-post-category-item {
+  color: var(--ui-text) !important;
+}
+
+.ui-private .create-post-category-item:hover {
+  background: var(--ui-surface-2) !important;
+}
+
+.ui-private .create-post-poll-box {
+  border-color: var(--ui-border) !important;
+  background: var(--ui-surface-2) !important;
+}
+
+.ui-private .create-post-cancel-btn {
+  background: var(--ui-icon-bg) !important;
+  color: var(--ui-text-muted) !important;
+}
+
+.ui-private .create-post-cancel-btn:hover {
+  background: #fde7e9 !important;
+  color: #dc3545 !important;
+}
+
+.ui-private .theme-dark-bg {
+  background-color: var(--ui-surface-2) !important;
+}
+
+.ui-private .border-light-md {
+  border-color: var(--ui-border) !important;
 }

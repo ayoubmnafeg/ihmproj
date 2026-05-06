@@ -76,6 +76,24 @@ new class extends Component
         $this->perPage += 20;
     }
 
+    /**
+     * Logged-in users see posts only from spaces they follow, except on a single-space page,
+     * the "my posts" tab, or when not authenticated.
+     */
+    protected function restrictQueryToFollowedSpaces($query): void
+    {
+        if (! auth()->check() || $this->categoryId || $this->scope === 'mine') {
+            return;
+        }
+
+        $ids = auth()->user()->followedCategories()->pluck('categories.id');
+        if ($ids->isEmpty()) {
+            $query->whereRaw('0 = 1');
+        } else {
+            $query->whereIn('publications.category_id', $ids);
+        }
+    }
+
     public function getPublicationsProperty()
     {
         if ($this->scope === 'mine' && ! auth()->check()) {
@@ -129,6 +147,8 @@ new class extends Component
                 $query->where('publications.category_id', $this->categoryId);
             }
         }
+
+        $this->restrictQueryToFollowedSpaces($query);
 
         $publications = $query->take($this->perPage + 1)->get();
         $this->hasMore = $publications->count() > $this->perPage;

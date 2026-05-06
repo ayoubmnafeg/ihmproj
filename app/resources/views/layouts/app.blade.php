@@ -569,24 +569,35 @@
         var inner = document.createElement('div');
         inner.className = 'app-search-suggest-inner app-search-suggest-enter';
         var delay = 0;
-        function addSection(labelText, items, textKey) {
+        function addSection(labelText, items, textKey, kind) {
             var sec = document.createElement('div');
-            sec.className = 'app-search-suggest-section';
+            sec.className = 'app-search-suggest-section app-search-suggest-section--' + kind;
             var lab = document.createElement('div');
             lab.className = 'app-search-suggest-label';
             lab.textContent = labelText;
             sec.appendChild(lab);
             var ul = document.createElement('ul');
             ul.className = 'app-search-suggest-list list-unstyled mb-0';
+            var iconClass = kind === 'posts' ? 'feather-file-text' : 'feather-layers';
             items.forEach(function (item) {
                 var li = document.createElement('li');
                 li.className = 'app-search-suggest-item';
                 li.style.animationDelay = (delay * 45) + 'ms';
                 delay += 1;
                 var a = document.createElement('a');
-                a.className = 'app-search-suggest-link';
+                a.className = 'app-search-suggest-link app-search-suggest-link--' + kind;
                 a.href = item.url;
-                a.textContent = item[textKey] || '';
+                var iconWrap = document.createElement('span');
+                iconWrap.className = 'app-search-suggest-icon';
+                iconWrap.setAttribute('aria-hidden', 'true');
+                var ic = document.createElement('i');
+                ic.className = iconClass;
+                iconWrap.appendChild(ic);
+                var textSpan = document.createElement('span');
+                textSpan.className = 'app-search-suggest-text';
+                textSpan.textContent = item[textKey] || '';
+                a.appendChild(iconWrap);
+                a.appendChild(textSpan);
                 li.appendChild(a);
                 ul.appendChild(li);
             });
@@ -594,10 +605,10 @@
             inner.appendChild(sec);
         }
         if (posts.length) {
-            addSection(i18nPosts, posts, 'title');
+            addSection(i18nPosts, posts, 'title', 'posts');
         }
         if (spaces.length) {
-            addSection(i18nSpaces, spaces, 'name');
+            addSection(i18nSpaces, spaces, 'name', 'spaces');
         }
         suggestEl.appendChild(inner);
         suggestEl.hidden = false;

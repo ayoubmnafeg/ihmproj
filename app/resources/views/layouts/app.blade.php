@@ -407,7 +407,16 @@
 
 </div>
 
-<div class="modal fade" id="appSearchModal" tabindex="-1" aria-labelledby="appSearchModalLabel" aria-hidden="true">
+<div
+    class="modal fade"
+    id="appSearchModal"
+    tabindex="-1"
+    aria-labelledby="appSearchModalLabel"
+    aria-hidden="true"
+    data-search-suggest-url="{{ route('search.suggest') }}"
+    data-i18n-posts="{{ __('Posts') }}"
+    data-i18n-spaces="{{ __('Spaces') }}"
+>
     <div class="modal-dialog modal-dialog-centered app-search-modal-dialog">
         <div class="modal-content app-search-modal-content border-0 shadow-none bg-transparent">
             <div class="modal-body app-search-modal-body p-0">
@@ -432,6 +441,14 @@
                         </button>
                     </div>
                 </form>
+                <div
+                    id="appSearchSuggest"
+                    class="app-search-suggest mt-2"
+                    hidden
+                    role="region"
+                    aria-live="polite"
+                    aria-label="{{ __('Suggestions') }}"
+                ></div>
             </div>
         </div>
     </div>
@@ -508,6 +525,13 @@
     var headerForm = document.querySelector('.sidebar-header-search');
     var searchForm = document.getElementById('appSearchModalForm');
     var searchSubmit = document.getElementById('appSearchModalSubmit');
+    var suggestEl = document.getElementById('appSearchSuggest');
+    var suggestUrl = modalEl.getAttribute('data-search-suggest-url');
+    var i18nPosts = modalEl.getAttribute('data-i18n-posts') || 'Posts';
+    var i18nSpaces = modalEl.getAttribute('data-i18n-spaces') || 'Spaces';
+    var suggestTimer;
+    var suggestAbort;
+    var suggestReqId = 0;
 
     function syncSearchSubmitState() {
         if (!modalInput || !searchSubmit) {
@@ -518,10 +542,114 @@
         searchSubmit.setAttribute('aria-disabled', ok ? 'false' : 'true');
     }
 
+    function clearSearchSuggest() {
+        clearTimeout(suggestTimer);
+        suggestReqId += 1;
+        if (suggestAbort) {
+            suggestAbort.abort();
+            suggestAbort = null;
+        }
+        if (suggestEl) {
+            suggestEl.innerHTML = '';
+            suggestEl.hidden = true;
+        }
+    }
+
+    function renderSearchSuggest(data) {
+        if (!suggestEl) {
+            return;
+        }
+        var posts = (data && data.posts) ? data.posts : [];
+        var spaces = (data && data.spaces) ? data.spaces : [];
+        suggestEl.innerHTML = '';
+        if (!posts.length && !spaces.length) {
+            suggestEl.hidden = true;
+            return;
+        }
+        var inner = document.createElement('div');
+        inner.className = 'app-search-suggest-inner app-search-suggest-enter';
+        var delay = 0;
+        function addSection(labelText, items, textKey) {
+            var sec = document.createElement('div');
+            sec.className = 'app-search-suggest-section';
+            var lab = document.createElement('div');
+            lab.className = 'app-search-suggest-label';
+            lab.textContent = labelText;
+            sec.appendChild(lab);
+            var ul = document.createElement('ul');
+            ul.className = 'app-search-suggest-list list-unstyled mb-0';
+            items.forEach(function (item) {
+                var li = document.createElement('li');
+                li.className = 'app-search-suggest-item';
+                li.style.animationDelay = (delay * 45) + 'ms';
+                delay += 1;
+                var a = document.createElement('a');
+                a.className = 'app-search-suggest-link';
+                a.href = item.url;
+                a.textContent = item[textKey] || '';
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            sec.appendChild(ul);
+            inner.appendChild(sec);
+        }
+        if (posts.length) {
+            addSection(i18nPosts, posts, 'title');
+        }
+        if (spaces.length) {
+            addSection(i18nSpaces, spaces, 'name');
+        }
+        suggestEl.appendChild(inner);
+        suggestEl.hidden = false;
+    }
+
+    function fetchSearchSuggest() {
+        if (!suggestUrl || !suggestEl || !modalInput) {
+            return;
+        }
+        var q = modalInput.value.trim();
+        if (q.length < 2) {
+            clearSearchSuggest();
+            return;
+        }
+        if (suggestAbort) {
+            suggestAbort.abort();
+        }
+        suggestAbort = new AbortController();
+        var ac = suggestAbort;
+        suggestReqId += 1;
+        var req = suggestReqId;
+        fetch(suggestUrl + '?q=' + encodeURIComponent(q), {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            signal: ac.signal
+        })
+            .then(function (r) {
+                return r.json();
+            })
+            .then(function (data) {
+                if (req !== suggestReqId) {
+                    return;
+                }
+                renderSearchSuggest(data);
+            })
+            .catch(function (err) {
+                if (err.name === 'AbortError') {
+                    return;
+                }
+            });
+    }
+
+    function scheduleSearchSuggest() {
+        clearTimeout(suggestTimer);
+        suggestTimer = setTimeout(fetchSearchSuggest, 280);
+    }
+
     function openModal(prefill) {
         if (modalInput) {
             modalInput.value = typeof prefill === 'string' ? prefill : '';
             syncSearchSubmitState();
+            scheduleSearchSuggest();
         }
         getSearchModal().show();
     }
@@ -532,7 +660,10 @@
                 e.preventDefault();
             }
         });
-        modalInput.addEventListener('input', syncSearchSubmitState);
+        modalInput.addEventListener('input', function () {
+            syncSearchSubmitState();
+            scheduleSearchSuggest();
+        });
         modalInput.addEventListener('change', syncSearchSubmitState);
     }
 
@@ -560,8 +691,11 @@
             modalInput.focus();
             modalInput.select();
             syncSearchSubmitState();
+            scheduleSearchSuggest();
         }
     });
+
+    modalEl.addEventListener('hidden.bs.modal', clearSearchSuggest);
 
     document.querySelectorAll('[data-app-search-modal]').forEach(function (el) {
         el.addEventListener('click', function (e) {

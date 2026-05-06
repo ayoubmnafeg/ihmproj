@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/groups/{category}', [GroupController::class, 'show'])->name('groups.show');
 
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/search/suggest', [SearchController::class, 'suggest'])->name('search.suggest');
 
     Route::middleware('role.mod')->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

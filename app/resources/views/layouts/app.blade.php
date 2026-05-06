@@ -173,34 +173,43 @@
             </div>
         </div>
         </div>
-        @else
-        <div class="d-flex align-items-center ms-auto gap-2 flex-wrap">
-            <a
-                href="{{ route('login') }}"
-                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 header-guest-btn header-guest-btn--signin rounded-xl"
-            >{{ __('Sign in') }}</a>
-            <a
-                href="{{ route('register') }}"
-                class="d-inline-flex align-items-center justify-content-center text-decoration-none font-xssss fw-600 border-0 header-guest-btn header-guest-btn--register bg-primary-gradiant rounded-xl"
-            >{{ __('Create account') }}</a>
-        </div>
         @endauth
 
         @guest
-        <div class="nav-header-actions d-flex align-items-center flex-shrink-0 gap-2">
-        <div class="dropdown p-2 text-center menu-icon d-inline-block">
-            <a href="#" class="position-relative d-inline-flex align-items-center header-tool text-decoration-none text-dark fw-600 font-xssss pt-1 pb-1 ps-2 pe-2 rounded-xl" id="langMenu" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('Language') }}" style="border:1px solid #eee;">
-                <img src="{{ $langFlagCurrent }}" alt="" width="22" height="22" class="lang-flag-icon me-1">
-                {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="langMenu" style="z-index: 100000; position: absolute;">
-                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'en') }}"><img src="{{ $langFlagEn }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('English') }}</a></li>
-                <li><a class="dropdown-item d-flex align-items-center gap-2 fw-600 font-xsss" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="22" height="22" class="lang-flag-icon">{{ __('Français') }}</a></li>
-            </ul>
-        </div>
-        <button type="button" class="dark-mode-toggle p-2 text-center menu-icon border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;">
-            <i class="dark-mode-icon feather-moon font-xl" aria-hidden="true"></i>
-        </button>
+        @php
+            $authSegmentLogin = request()->routeIs('login');
+            $authSegmentRegister = request()->routeIs('register');
+        @endphp
+        <div class="auth-nav-actions">
+            <nav class="auth-nav-segment" role="tablist" aria-label="{{ __('Account') }}">
+                <a
+                    href="{{ route('login') }}"
+                    role="tab"
+                    class="{{ $authSegmentLogin ? 'active' : '' }}"
+                    @if ($authSegmentLogin) aria-current="page" @endif
+                >{{ __('Login') }}</a>
+                <a
+                    href="{{ route('register') }}"
+                    role="tab"
+                    class="{{ $authSegmentRegister ? 'active' : '' }}"
+                    @if ($authSegmentRegister) aria-current="page" @endif
+                >{{ __('Register') }}</a>
+            </nav>
+            <span class="auth-nav-divider d-none d-sm-block" aria-hidden="true"></span>
+            <div class="auth-nav-utilities">
+                <div class="dropdown" style="position: relative;">
+                    <button type="button" class="auth-lang-btn header-btn d-inline-flex align-items-center bg-white text-dark font-xsss text-center lh-20 fw-600 border shadow-sm" id="appHeaderLangDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="{{ __('Language') }}" style="outline:none;">
+                        <i class="feather-globe me-1 text-grey-500" aria-hidden="true"></i> {{ strtoupper(app()->getLocale() == 'fr' ? 'fr' : 'en') }} <i class="feather-chevron-down ms-1 text-grey-500" style="font-size:10px;" aria-hidden="true"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-2 rounded-3" aria-labelledby="appHeaderLangDropdown" style="z-index: 100000; min-width: 140px;">
+                        <li><a class="dropdown-item fw-600 font-xsss rounded-3 mb-1 d-flex align-items-center gap-2" role="menuitem" href="{{ route('lang.switch', 'en') }}"><img src="{{ $langFlagEn }}" alt="" width="20" height="20" class="rounded-circle">{{ __('English') }}</a></li>
+                        <li><a class="dropdown-item fw-600 font-xsss rounded-3 d-flex align-items-center gap-2" role="menuitem" href="{{ route('lang.switch', 'fr') }}"><img src="{{ $langFlagFr }}" alt="" width="20" height="20" class="rounded-circle">{{ __('Français') }}</a></li>
+                    </ul>
+                </div>
+                <button type="button" class="auth-theme-btn dark-mode-toggle text-center border-0 bg-transparent cursor-pointer header-tool" title="{{ __('Lower luminance (easier in dim light)') }}" aria-label="{{ __('Toggle theme') }}" style="outline:none;">
+                    <i class="dark-mode-icon feather-moon font-xl" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
         @endguest
     </div>

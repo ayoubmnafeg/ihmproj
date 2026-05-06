@@ -543,37 +543,153 @@ body.ui-private.theme-dark .app-search-suggest-link:focus-visible .app-search-su
   background: var(--ui-surface);
 }
 
-.ui-private .nav-header .header-guest-btn {
-  padding: 0.4rem 0.9rem;
-  min-height: 36px;
-  line-height: 1.2;
-  white-space: nowrap;
+/*
+ * Guest header: Login / Register segment + lang + theme — same structure and look as layouts/auth.blade.php
+ * (template sets .nav-header .nav-top a { line-height: 90px }; keep high specificity on links)
+ */
+.ui-private .nav-header .auth-nav-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-left: auto;
 }
 
-.ui-private .nav-header .header-guest-btn--signin {
-  background: var(--ui-surface) !important;
+body.ui-private .nav-header .auth-nav-segment {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  height: auto !important;
+  line-height: normal !important;
+  background: linear-gradient(180deg, #eef1f6 0%, #e8ecf2 100%);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+body.ui-private .nav-header .auth-nav-segment a {
+  font-size: 0.8125rem !important;
+  line-height: 1.35 !important;
+  width: auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin-bottom: 0 !important;
+  padding: 0.4rem 0.8rem !important;
+  text-align: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  justify-content: center;
+  border-radius: 7px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  background: transparent;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+body.ui-private .nav-header .auth-nav-segment a:hover:not(.active) {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+body.ui-private .nav-header .auth-nav-segment a:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+body.ui-private .nav-header .auth-nav-segment a.active {
+  font-weight: 600;
+  background: #fff;
+  color: #0f172a;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 0 0 1px rgba(148, 163, 184, 0.28);
+}
+
+.ui-private .nav-header .auth-nav-divider {
+  width: 1px;
+  height: 1.25rem;
+  background: #e2e8f0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.ui-private .nav-header .auth-nav-utilities {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.ui-private .nav-header .auth-lang-btn.header-btn {
+  padding: 0.4rem 0.65rem !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.35 !important;
+  border-radius: 0.55rem !important;
+}
+
+.ui-private .nav-header .auth-lang-btn .feather-globe {
+  font-size: 15px !important;
+}
+
+.ui-private .nav-header .auth-lang-btn .feather-chevron-down {
+  margin-left: 0.125rem !important;
+}
+
+.ui-private .nav-header .auth-theme-btn {
+  padding: 0.3rem !important;
+  border-radius: 0.5rem !important;
+}
+
+.ui-private .nav-header .auth-theme-btn .feather,
+.ui-private .nav-header .auth-theme-btn .dark-mode-icon {
+  font-size: 1.25rem !important;
+}
+
+body.theme-dark.ui-private .nav-header .auth-nav-segment {
+  background: linear-gradient(180deg, #1a2332 0%, #161f2c 100%) !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+body.theme-dark.ui-private .nav-header .auth-nav-segment a {
+  color: #94a3b8 !important;
+  font-weight: 500;
+}
+
+body.theme-dark.ui-private .nav-header .auth-nav-segment a:hover:not(.active) {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.theme-dark.ui-private .nav-header .auth-nav-segment a.active {
+  font-weight: 600;
+  background: #334155 !important;
+  color: #f8fafc !important;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(148, 163, 184, 0.2);
+}
+
+body.theme-dark.ui-private .nav-header .auth-nav-divider {
+  background: #334155;
+}
+
+body.theme-dark.ui-private .nav-header .auth-lang-btn.header-btn {
+  background: var(--ui-surface-2) !important;
   color: var(--ui-text) !important;
-  border: 1px solid var(--ui-border) !important;
-  box-shadow: none;
-}
-
-.ui-private .nav-header .header-guest-btn--signin:hover {
-  background: var(--ui-icon-bg) !important;
-  color: var(--ui-text) !important;
-}
-
-.ui-private .nav-header .header-guest-btn--register,
-.ui-private .nav-header a.header-guest-btn--register {
-  background: var(--ui-accent) !important;
-  background-image: none !important;
-  color: var(--ui-accent-fg) !important;
-  border: 1px solid transparent !important;
-}
-
-.ui-private .nav-header .header-guest-btn--register:hover,
-.ui-private .nav-header a.header-guest-btn--register:hover {
-  filter: brightness(0.95);
-  color: var(--ui-accent-fg) !important;
+  border-color: var(--ui-border) !important;
+  box-shadow: none !important;
 }
 
 .ui-private .font-xssss::placeholder,

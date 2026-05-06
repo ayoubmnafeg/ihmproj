@@ -71,7 +71,8 @@
         $langFlagCurrent = app()->getLocale() === 'fr' ? $langFlagFr : $langFlagEn;
     @endphp
 
-    <!-- navigation top-->
+    <!-- navigation top + accent strip -->
+    <header class="app-header-chrome">
     <div class="nav-header bg-white shadow-xs border-0">
         <div class="nav-top d-flex align-items-center">
             <div class="nav-header-sidebar-cluster d-flex align-items-center min-w-0">
@@ -203,7 +204,8 @@
         </div>
         @endguest
     </div>
-    <!-- navigation top -->
+    <div class="app-header-subbar" role="presentation" aria-hidden="true"></div>
+    </header>
 
     <!-- navigation left -->
     <nav id="app-left-navigation" class="navigation scroll-bar" aria-label="{{ __('Main navigation') }}">

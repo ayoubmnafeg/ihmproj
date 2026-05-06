@@ -267,8 +267,8 @@
             max-width: 480px;
             animation: fadeIn 0.5s ease-out;
         }
-        body.theme-dark .auth-right-rail {
-            background: #020617 !important;
+        body.theme-dark.ui-private .auth-right-rail {
+            background: var(--ui-bg) !important;
         }
         body.theme-dark .auth-form-slide .header-title {
             color: #f8fafc;

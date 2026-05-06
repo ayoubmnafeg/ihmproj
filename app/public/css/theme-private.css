@@ -7,38 +7,42 @@
   --ui-radius: 10px;
   --ui-radius-sm: 6px;
   --ui-shadow: none;
-  --ui-border: #e2e6eb;
-  --ui-bg: #eceff3;
+  /* Light: airy canvas, clearer borders, readable muted text */
+  --ui-border: #e2e8f0;
+  --ui-bg: #f1f5f9;
   --ui-surface: #ffffff;
-  --ui-surface-2: #f6f7f9;
-  --ui-text: #1c2330;
-  --ui-text-muted: #5c6570;
-  --ui-accent: #3d4f60;
-  --ui-accent-fg: #f0f3f6;
-  --ui-icon-bg: #e8ecf1;
-  --ui-icon-fg: #2c3540;
-  --ui-focus: #4a6fa5;
+  --ui-surface-2: #f8fafc;
+  --ui-text: #0f172a;
+  --ui-text-muted: #64748b;
+  --ui-accent: #2563eb;
+  --ui-accent-fg: #ffffff;
+  --ui-icon-bg: #e8eef4;
+  --ui-icon-fg: #1e293b;
+  --ui-focus: #3b82f6;
   /* Matches fixed left `.navigation` column (expanded / collapsed rail) */
   --ui-left-rail-width: 280px;
   --ui-left-rail-collapsed-width: 90px;
   /* Header search width (shorter than full rail) */
   --ui-header-search-field-max-width: 200px;
   --ui-header-search-margin-left: 20px;
+  /* Thin accent bar below the fixed top header (see `.app-header-chrome`) */
+  --ui-header-subbar-height: 3px;
 }
 
 body.ui-private.theme-dark,
 .theme-dark .ui-private {
-  --ui-border: #2d3642;
-  --ui-bg: #0d1117;
-  --ui-surface: #161b22;
-  --ui-surface-2: #1c222c;
-  --ui-text: #e6edf3;
-  --ui-text-muted: #8b949e;
-  --ui-accent: #3d4d5c;
-  --ui-accent-fg: #e6edf3;
-  --ui-icon-bg: #21262d;
-  --ui-icon-fg: #c9d1d9;
-  --ui-focus: #6e8ac4;
+  /* Dark: cool slate stacks, softer than pure GH-black; accent reads on surfaces */
+  --ui-border: #334155;
+  --ui-bg: #0f172a;
+  --ui-surface: #1e293b;
+  --ui-surface-2: #273549;
+  --ui-text: #f1f5f9;
+  --ui-text-muted: #94a3b8;
+  --ui-accent: #3b82f6;
+  --ui-accent-fg: #ffffff;
+  --ui-icon-bg: #334155;
+  --ui-icon-fg: #e2e8f0;
+  --ui-focus: #60a5fa;
 }
 
 /* Global Dark Mode Overrides for Bootstrap Utilities */
@@ -132,7 +136,7 @@ body.ui-private.theme-dark .form-control:focus,
   background-color: var(--ui-surface) !important;
   border-color: var(--ui-focus) !important;
   color: var(--ui-text) !important;
-  box-shadow: 0 0 0 4px rgba(110, 138, 196, 0.15) !important;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.18) !important;
 }
 
 .ui-private,
@@ -151,11 +155,55 @@ body.ui-private.theme-dark .form-control:focus,
   color: var(--ui-text-muted) !important;
 }
 
-/* Header: flat, single hairline */
+/* Fixed stack: primary top bar + full-bleed strip below */
+.ui-private .app-header-chrome {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  z-index: 1003;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+body.ui-private .app-header-chrome .nav-header {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100%;
+  flex: 0 0 auto;
+  border-bottom: none;
+}
+
+.ui-private .app-header-subbar {
+  flex: 0 0 auto;
+  height: var(--ui-header-subbar-height);
+  width: 100%;
+  background: linear-gradient(90deg, var(--ui-accent) 0%, var(--ui-focus) 100%);
+}
+
+/* Main layout offsets include the accent strip height */
+body.ui-private .main-content {
+  padding-top: calc(90px + var(--ui-header-subbar-height)) !important;
+}
+
+@media (min-width: 992px) {
+  body.ui-private .navigation {
+    padding-top: calc(90px + 6px + var(--ui-header-subbar-height)) !important;
+  }
+
+  body.ui-private .right-chat {
+    padding-top: calc(90px + 6px + var(--ui-header-subbar-height)) !important;
+  }
+}
+
+/* Header: flat — bottom edge is the accent strip */
 .ui-private .nav-header {
   background: var(--ui-surface) !important;
   box-shadow: none !important;
-  border-bottom: 1px solid var(--ui-border);
+  border-bottom: none;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -646,8 +694,8 @@ body.ui-private .navigation .nav-wrap {
  */
 body.ui-private .left-sidebar-edge-toggle {
   position: fixed;
-  /* Align just under fixed header (~90–96px) + inset; avoids top clipping */
-  top: calc(env(safe-area-inset-top, 0px) + 104px);
+  /* Align just under fixed header (~90–96px) + accent strip + inset; avoids top clipping */
+  top: calc(env(safe-area-inset-top, 0px) + 104px + var(--ui-header-subbar-height));
   left: calc(var(--ui-left-rail-width) - 16px);
   z-index: 1002;
   display: none;
@@ -829,12 +877,12 @@ body.ui-private.theme-dark #notification-menu,
 }
 
 .ui-private .post-poll-option-bar {
-  background: rgba(74, 111, 165, 0.2) !important;
+  background: rgba(59, 130, 246, 0.18) !important;
 }
 
 body.ui-private.theme-dark .post-poll-option-bar,
 .theme-dark .ui-private .post-poll-option-bar {
-  background: rgba(110, 138, 196, 0.22) !important;
+  background: rgba(96, 165, 250, 0.2) !important;
 }
 
 /* Profile menu */
@@ -1273,9 +1321,9 @@ body.ui-private.theme-dark .connection-requests-panel,
 
 body.ui-private.theme-dark .connection-requests-btn--confirm,
 .theme-dark .ui-private .connection-requests-btn--confirm {
-  background: #30363d !important;
-  color: var(--ui-text) !important;
-  border-color: #454c55;
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: transparent;
 }
 
 .ui-private .connection-requests-btn--confirm:hover {

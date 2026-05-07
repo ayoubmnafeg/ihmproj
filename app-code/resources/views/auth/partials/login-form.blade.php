@@ -1,0 +1,31 @@
+<form method="POST" action="{{ route('login') }}">
+    @csrf
+
+    <div class="form-group icon-input mb-3">
+        <i class="font-sm ti-user text-grey-500 pe-0"></i>
+        <input type="text" name="username" value="{{ old('username') }}"
+               class="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
+               placeholder="{{ __('Your Username') }}" required autocomplete="username">
+    </div>
+
+    <div class="form-group icon-input mb-1">
+        <input type="password" name="password"
+               class="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
+               placeholder="{{ __('Password') }}" required autocomplete="current-password">
+        <i class="font-sm ti-lock text-grey-500 pe-0"></i>
+    </div>
+
+    <div class="form-check text-left mb-3">
+        <input type="checkbox" name="remember" class="form-check-input mt-2" id="remember">
+        <label class="form-check-label font-xsss text-grey-500" for="remember">{{ __('Remember me') }}</label>
+        <a href="{{ route('forgot-password') }}" class="fw-600 font-xsss text-grey-700 mt-1 float-end">{{ __('Forgot your Password?') }}</a>
+    </div>
+
+    <div class="col-sm-12 p-0 text-left mt-3">
+        <div class="form-group mb-1">
+            <button type="submit" class="form-control text-center text-white fw-600 border-0 p-0 btn-submit font-xss">
+                {{ __('Login') }}
+            </button>
+        </div>
+    </div>
+</form>
